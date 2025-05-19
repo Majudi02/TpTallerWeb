@@ -1,0 +1,86 @@
+.categoria-box {
+    background-color: #444040;
+    border: 1px solid #cfcfcf;
+    border-radius: 1em;
+    width: 13em;
+    height: 6em;
+    transition: transform 0.3s;
+}
+
+.main-color {
+    color: #38BD48;
+}
+
+.categoria-box:hover {
+    transform: scale(1.03);
+}
+
+.img-categoria {
+    width: 5em;
+    height: 5em;
+}
+
+.logo-restaurante {
+    width: 8em;
+    height: 8em;
+}
+
+.img-plato {
+    margin-top: 1em;
+    width: 11.5em;
+    height: 9em;
+    border-radius: 1.5em;
+    display: block;
+}
+
+.agregar {
+    position: absolute;
+    bottom: 0.05em;
+    right: 0.02em;
+    width: 3.5em;
+    height: 3.5em;
+}
+
+.signo {
+    bottom: 0.5em;
+    right: 0.4em;
+    position: absolute;
+    width: 2.5em;
+    height: 2.5em;
+}
+
+.mt-6 {
+    margin-top: 6em;
+}
+
+@media screen and (max-width: 458px) {
+
+
+    .plato{
+        font-size: 0.8em;
+        padding: 0 !important;
+    }
+
+    .categoria-box{
+        width: 11.5em;
+        height: 5em;
+        font-size: 0.77em;
+    }
+    .img-categoria {
+        width: 4.5em;
+        height: 4.5em;
+    }
+
+    .restaurante-container{
+        font-size: 0.81em;
+    }
+
+    .logo-restaurante {
+        width: 8em;
+        height: 8em;
+    }
+    .plato-container{
+        font-size: 0.9em;
+    }
+}
+
