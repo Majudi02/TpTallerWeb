@@ -20,7 +20,7 @@
                 <span class="fw-bold text-white ms-2">Restaurantes</span>
                 <img th:src="@{/assets/restaurante-icono.png}" alt="Restaurantes" class="img-categoria" />
             </a>
-            <a href="#" class="categoria-box d-flex justify-content-between align-items-center p-2 text-decoration-none">
+            <a th:href="@{/pedido/platos}" class="categoria-box d-flex justify-content-between align-items-center p-2 text-decoration-none">
                 <span class="fw-bold text-white ms-2">Platos</span>
                 <img th:src="@{/assets/restaurante-icono.png}" alt="Platos" class="img-categoria" />
             </a>
@@ -54,7 +54,6 @@
         <h2 class="main-color">Platos destacados</h2>
         <div class="d-flex flex-column">
             <article class="d-flex flex-row gap-3 mt-3 plato-container flex-wrap justify-content-center plato-container">
-
                 <div class="card pt-2" style="width: 30em " th:each="plato :${platos}">
                     <div class="d-flex flex-row gap-2 plato p-2">
                         <div class="d-flex flex-column w-75">
@@ -73,7 +72,6 @@
                         </div>
                     </div>
                 </div>
-
             </article>
         </div>
     </section>
