@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriYa</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/estilo-principal.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top px-3">
+    <div class="container-fluid">
+        <div class="d-flex w-100 justify-content-between align-items-center">
+            <a class="navbar-brand" th:href="@{nutriya.html}">Nutri<span style="color: #38BD48;">Ya</span></a>
+            <form class="d-none d-lg-flex mx-auto" role="search" style="width: 40%;">
+                <div class="input-group">
+                    <input class="form-control" type="search" placeholder="Buscá comidas, restaurantes..."
+                           aria-label="Buscar"/>
+                    <button class="btn buscar" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </form>
+            <div class="botones-nav">
+                <a class="btn btn-outline-secondary mx-1" th:href="@{nutriya-login.html}">
+                    <i class="bi bi-person"></i>
+                </a>
+
+                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#menuLateral" aria-controls="menuLateral">
+                    <i class="bi bi-list"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="menuLateral" aria-labelledby="menuLateralLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="menuLateralLabel">Opciones</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="navbar-nav gap-2">
+            <li class="nav-item">
+                <a class="nav-link active" th:href="@{nutriya.html}">Inicio</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Comidas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{restaurantes.html}">Restaurantes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{nutriya-login.html}">Mi Perfil</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<main>
+    <div class="container-lg p-4" style="margin-top: 100px">
+        <div class="row d-flex align-items-center justify-content-center gap-5 gap-lg-0">
+            <div class="col-12 col-lg-6 hero-left">
+                <h2>Comé rico, saludable y a tu medida.</h2>
+                <h4>
+                    Descubrí platos según tu dieta, objetivos y estilo de vida.
+                    Filtrá por etiquetas como sin TACC, vegano o alto en proteínas.
+                    Organizá tus comidas, contá calorías y recibí sugerencias personalizadas.
+                </h4>
+            </div>
+
+            <div class="col-12 col-lg-5 d-flex flex-column align-items-center hero-right">
+                <img th:src="@{assets/bowl-saludable.png}" alt="Bowl Saludable" class="img-fluid ms-5"
+                     style="max-width: 100%;">
+                <div class="d-flex flex-md-row gap-3" style="margin-top: -15px;">
+                    <button type="button" class="btn btn-lg btn-green">Explorar Platos</button>
+                    <button type="button" class="btn btn-lg btn-white">Registrarse</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <section
+            class="container-fluid d-flex flex-column justify-content-center align-items-center mt-5 gap-5 p-5 info-plataforma">
+        <h2 class="mt-3 fw-bold text-center">¿Qué podés hacer en la plataforma?</h2>
+
+        <section class="row w-100 justify-content-center text-center mb-5" style="gap: 5vw;">
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="p-5 contenedor-info h-100 d-flex flex-column justify-content-center">
+                    <h2 class="fw-semibold">Armá tu plan de comidas</h2>
+                    <h4 class="mt-2">Organizá tu dieta semanal personalizada</h4>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="p-5  contenedor-info h-100 d-flex flex-column justify-content-center">
+                    <h2 class="fw-semibold">Buscá por etiquetas</h2>
+                    <h4 class="mt-2">Encontrá platos sin TACC, veganos, bajos en sodio y más.</h4>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="p-5 contenedor-info h-100 d-flex flex-column justify-content-center">
+                    <h2 class="fw-semibold">Calculá tus calorías y seguí tu progreso</h2>
+                    <h4 class="mt-2">Cargá tus datos y controlá tu progreso nutricional de forma simple.</h4>
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <section
+            class="container-fluid d-flex flex-column justify-content-center align-items-center mt-5 gap-5 p-4 reseñas-plataforma">
+        <h2 class="mt-2 fw-bold">Reseñas de Usuarios</h2>
+        <section class="d-flex gap-5 justify-content-center align-items-stretch flex-wrap">
+            <div class="card shadow-lg rounded-4 p-4 mb-4" style="max-width: 500px;">
+                <div class="d-flex align-items-start gap-3">
+                    <div class="rounded-circle d-flex justify-content-center align-items-center"
+                         style="width: 60px; aspect-ratio: 1 / 1; overflow: hidden;">
+                        <i class="bi bi-person-fill" style="font-size: 30px;"></i>
+                    </div>
+                    <div class="w-100">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="mb-0 fw-bold">Usuario</h6>
+                                <div class="text-success small">
+                                    <i class="bi bi-geo-alt"></i> Palermo, CABA
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <div class="text-warning">
+                                    ★★★★★ <span class="text-dark small fw-medium">(5.0)</span>
+                                </div>
+                                <div class="text-muted small">
+                                    <i class="bi bi-clock"></i> 10 May 2025
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="mt-3 mb-0 text-body">
+                            Excelente plataforma. Me ayudó a encontrar platos sin TACC que se ajustan perfecto a mi
+                            dieta. 100% Recomendable.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="card shadow-lg rounded-4 p-4 mb-4" style="max-width: 500px;">
+                <div class="d-flex align-items-start gap-3">
+                    <div class="rounded-circle d-flex justify-content-center align-items-center"
+                         style="width: 60px; aspect-ratio: 1 / 1; overflow: hidden;">
+                        <i class="bi bi-person-fill" style="font-size: 30px;"></i>
+                    </div>
+                    <div class="w-100">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="mb-0 fw-bold">Usuario</h6>
+                                <div class="text-success small">
+                                    <i class="bi bi-geo-alt"></i> Rosario, Santa Fe
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <div class="text-warning">
+                                    ★★★★★ <span class="text-dark small fw-medium">(5.0)</span>
+                                </div>
+                                <div class="text-muted small">
+                                    <i class="bi bi-clock"></i> 3 Ene 2025
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="mt-3 mb-0 text-body">
+                            Me encanta la función para calcular calorías y armar el plan semanal. Muy útil si estás
+                            entrenando o cuidando lo que comés. Gran variedad de opciones veganas.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="card shadow-lg rounded-4 p-4 mb-4" style="max-width: 500px;">
+                <div class="d-flex align-items-start gap-3">
+                    <div class="rounded-circle d-flex justify-content-center align-items-center"
+                         style="width: 60px; aspect-ratio: 1 / 1; overflow: hidden;">
+                        <i class="bi bi-person-fill" style="font-size: 30px;"></i>
+                    </div>
+                    <div class="w-100">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="mb-0 fw-bold">Usuario</h6>
+                                <div class="text-success small">
+                                    <i class="bi bi-geo-alt"></i> Buenos Aires, Argentina
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <div class="text-warning">
+                                    ★★★★☆ <span class="text-dark small fw-medium">(4.0)</span>
+                                </div>
+                                <div class="text-muted small">
+                                    <i class="bi bi-clock"></i> 10 May 2025
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="mt-3 mb-0 text-body">
+                            La app es excelente, muy fácil de usar y con información muy útil. Lo malo es que hay
+                            muchas opciones de
+                            restaurantes cerca de mi zona todavía.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</main>
+<footer class="d-flex justify-content-between align-items-center p-4 footer">
+    <div class="fw-light">
+        © 2025 NutriYa
+    </div>
+
+    <div class="fw-semibold">
+        <a href="#">Política de privacidad</a>
+        <span class="mx-2">|</span>
+        <a href="#">Términos de uso</a>
+    </div>
+
+    <div>
+        <a href="#" class="mx-2"><i class="bi bi-facebook"></i></a>
+        <a href="#" class="mx-2"><i class="bi bi-twitter-x"></i></a>
+        <a href="#" class="mx-2"><i class="bi bi-instagram"></i></a>
+    </div>
+</footer>
+
+
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+</body>
+
+</html>
