@@ -20,7 +20,6 @@ public class PedidoControlador {
         this.pedidoService = pedidoService;
     }
 
-
     @GetMapping("/pedido")
     public ModelAndView irAPedido() {
         ModelMap modeloMap = new ModelMap();
@@ -29,23 +28,13 @@ public class PedidoControlador {
         return new ModelAndView("hacer-pedido-home",modeloMap);
     }
 
-
     @GetMapping("/pedido/platos")
     public ModelAndView irAHacerUnPedidoPlatos() {
         ModelMap modeloMap = new ModelMap();
-        modeloMap.put("platos", pedidoService.traerPlatosDestacados());
+        modeloMap.put("platos", pedidoService.traerTodosLosPlatos());
         return new ModelAndView("hacer-pedido-platos",modeloMap);
     }
 
 
 
-    /*
-
-    @GetMapping("/pedido/restaurantes")
-    public ModelAndView irARestaurantes() {
-        ModelMap modeloMap = new ModelMap();
-        return new ModelAndView("hacer-pedidio-restaurante",modeloMap);
-    }
-
-     */
 }

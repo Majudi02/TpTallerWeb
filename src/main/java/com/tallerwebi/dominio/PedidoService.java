@@ -6,4 +6,5 @@ public interface PedidoService {
 
     List<Restaurante> traerRestaurantesDestacados();
     List<Plato> traerPlatosDestacados();
+    List<Plato> traerTodosLosPlatos();
 }
