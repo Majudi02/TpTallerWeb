@@ -1,0 +1,53 @@
+
+.img-plato {
+    margin-top: 1em;
+    width: 11.5em;
+    height: 9em;
+    border-radius: 1.5em;
+    display: block;
+}
+
+.agregar {
+    position: absolute;
+    bottom: 0.05em;
+    right: 0.02em;
+    width: 3.5em;
+    height: 3.5em;
+}
+
+.signo {
+    bottom: 0.5em;
+    right: 0.4em;
+    position: absolute;
+    width: 2.5em;
+    height: 2.5em;
+}
+
+.mt-6 {
+    margin-top: 6em;
+}
+
+@media screen and (max-width: 458px) {
+
+    .plato{
+        font-size: 0.8em;
+        padding: 0.2em !important;
+    }
+    .plato-container{
+        font-size: 0.9em;
+        margin-inline: 0.1em;
+    }
+
+    .agregar {
+        bottom: 0.5em;
+        right: 0.02em;
+    }
+    .signo {
+        bottom: 0.8em;
+        right: 0.4em;
+    }
+    .img-plato{
+        margin-top: 0.5em;
+    }
+
+}

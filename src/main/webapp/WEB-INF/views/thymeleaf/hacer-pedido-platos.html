@@ -1,39 +1,129 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <title>Platos</title>
-</head>
-<body>
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Platos</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" th:href="@{/css/hacer-pedido-platos.css}" />
+        <link rel="stylesheet" th:href="@{/css/plato.css}" />
+        <link rel="stylesheet" th:href="@{/css/estilo-principal.css}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
 
-<main>
-    <section class="container mt-5">
-        <h2 class="main-color">Platos destacados</h2>
-        <div class="d-flex flex-column">
-            <article class="d-flex flex-row gap-3 mt-3 plato-container flex-wrap justify-content-center plato-container">
-                <div class="card pt-2" style="width: 30em " th:each="plato :${platos}">
-                    <div class="d-flex flex-row gap-2 plato p-2">
-                        <div class="d-flex flex-column w-75">
-                            <h5 class="card-title" th:text="${plato.getNombre()}"></h5>
-                            <p th:text="${plato.getDescripcion()}"></p>
-                            <strong class="card-text mt-3" th:text="'$' + ${plato.getPrecio()}"></strong>
+    </head>
+    <body>
+
+
+    <header>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top px-3">
+            <div class="container-fluid">
+                <div class="d-flex w-100 justify-content-between align-items-center">
+                    <a class="navbar-brand" href="#">Nutri<span style="color: #38BD48;">Ya</span></a>
+                    <form class="d-none d-lg-flex mx-auto" role="search" style="width: 40%;">
+                        <div class="input-group">
+                            <input class="form-control" type="search" placeholder="Buscá comidas, restaurantes..."
+                                   aria-label="Buscar"/>
+                            <button class="btn buscar" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
                         </div>
-                        <div class="position-relative">
-                            <img th:src="@{${plato.getImagen()}}" class="img-plato" alt="Plato" />
-                            <a href="">
-                                <div>
-                                    <img th:src="@{/assets/agregar.png}" class="agregar" alt="Agregar" />
-                                    <img th:src="@{/assets/signo-agregar-icono.png}" class="signo" alt="Signo agregar" />
-                                </div>
-                            </a>
-                        </div>
+                    </form>
+                    <div class="botones-nav">
+                        <a class="btn btn-outline-secondary mx-1" th:href="@{nutriya-login.html}">
+                            <i class="bi bi-person"></i>
+                        </a>
+
+                        <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
+                                data-bs-target="#menuLateral" aria-controls="menuLateral">
+                            <i class="bi bi-list"></i>
+                        </button>
                     </div>
                 </div>
-            </article>
-        </div>
-    </section>
-</main>
+            </div>
+        </nav>
 
-</body>
-</html>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="menuLateral" aria-labelledby="menuLateralLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="menuLateralLabel">Opciones</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav gap-2">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Comidas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Restaurantes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{nutriya-login.html}">Mi Perfil</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <main class="my-5 ">
+        <div class="contenido">
+            <aside class="col-12 order-1 order-md-0 col-md-3 h-100 filtro-menu">
+                <div class="p-3 rounded shadow-sm filtro-menu-container">
+                    <details>
+                        <summary class="d-flex justify-content-between align-items-center menu-item">
+                            <span>Ordenar</span>
+                            <span class="arrow">&#9660;</span>
+                        </summary>
+                        <ul class="list-unstyled ps-3 mt-2">
+                            <li class="submenu-item">Menor a mayor</li>
+                            <li class="submenu-item">Mayor a menor</li>
+                        </ul>
+                    </details>
+                    <details>
+                        <summary class="d-flex justify-content-between align-items-center menu-item">
+                            <span>Filtros</span>
+                            <span class="arrow">&#9660;</span>
+                        </summary>
+                        <ul class="list-unstyled ps-3 mt-2">
+                            <li class="submenu-item">Sin TACC</li>
+                            <li class="submenu-item">Vegano</li>
+                            <li class="submenu-item">Proteico</li>
+                        </ul>
+                    </details>
+                </div>
+            </aside>
+
+
+               <section class="col-12 col-md-9">
+                <h2 class="mb-4 text-center titulo" style="color:#38BD48">Platos Disponibles</h2>
+                <div class="d-flex flex-column container">
+                    <article class="d-flex flex-row gap-3 mt-3 justify-content-center flex-wrap plato-container">
+                        <div class="card pt-2" style="width: 35em" th:each="plato :${platos}">
+                            <div class="d-flex flex-row gap-3 plato p-3">
+                                <div class="d-flex flex-column w-75">
+                                    <h5 class="card-title" th:text="${plato.getNombre()}"></h5>
+                                    <p th:text="${plato.getDescripcion()}"></p>
+                                    <strong class="card-text mt-3" th:text="'$' + ${plato.getPrecio()}"></strong>
+                                </div>
+                                <div class="position-relative">
+                                    <img th:src="@{${plato.getImagen()}}" class="img-plato" alt="Plato" />
+                                    <a href="">
+                                        <div>
+                                            <img th:src="@{/assets/agregar.png}" class="agregar" alt="Agregar" />
+                                            <img th:src="@{/assets/signo-agregar-icono.png}" class="signo" alt="Signo agregar" />
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+    </body>
+    </html>
