@@ -29,6 +29,16 @@ public class PedidoControlador {
         return new ModelAndView("hacer-pedido-home",modeloMap);
     }
 
+
+    @GetMapping("/pedido/platos")
+    public ModelAndView irAHacerUnPedidoPlatos() {
+        ModelMap modeloMap = new ModelMap();
+        modeloMap.put("platos", pedidoService.traerPlatosDestacados());
+        return new ModelAndView("hacer-pedido-platos",modeloMap);
+    }
+
+
+
     /*
 
     @GetMapping("/pedido/restaurantes")
