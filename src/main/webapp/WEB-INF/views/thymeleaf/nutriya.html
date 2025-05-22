@@ -17,7 +17,7 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top px-3">
     <div class="container-fluid">
         <div class="d-flex w-100 justify-content-between align-items-center">
-            <a class="navbar-brand" th:href="@{nutriya.html}">Nutri<span style="color: #38BD48;">Ya</span></a>
+            <a class="navbar-brand" th:href="@{/nutriya}">Nutri<span style="color: #38BD48;">Ya</span></a>
             <form class="d-none d-lg-flex mx-auto" role="search" style="width: 40%;">
                 <div class="input-group">
                     <input class="form-control" type="search" placeholder="Buscá comidas, restaurantes..."
@@ -28,7 +28,7 @@
                 </div>
             </form>
             <div class="botones-nav">
-                <a class="btn btn-outline-secondary mx-1" th:href="@{nutriya-login.html}">
+                <a class="btn btn-outline-secondary mx-1" th:href="@{/nutriya-login}">
                     <i class="bi bi-person"></i>
                 </a>
 
@@ -49,16 +49,19 @@
     <div class="offcanvas-body">
         <ul class="navbar-nav gap-2">
             <li class="nav-item">
-                <a class="nav-link active" th:href="@{nutriya.html}">Inicio</a>
+                <a class="nav-link active" th:href="@{/nutriya}">Inicio</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{pedido.html}">Comidas</a>
+                <a class="nav-link" th:href="@{/pedido}">Comidas</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{restaurantes.html}">Restaurantes</a>
+                <a class="nav-link" th:href="@{/restaurantes}">Restaurantes</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{nutriya-login.html}">Mi Perfil</a>
+                <a class="nav-link" th:href="@{/medios-pago}">Medios de Pago</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/nutriya-login}">Mi Perfil</a>
             </li>
         </ul>
     </div>
@@ -80,8 +83,8 @@
                 <img th:src="@{assets/bowl-saludable.png}" alt="Bowl Saludable" class="img-fluid ms-5"
                      style="max-width: 100%;">
                 <div class="d-flex flex-md-row gap-3" style="margin-top: -15px;">
-                    <a th:href="@{pedido.html}" class="btn btn-lg btn-green">Explorar Platos</a>
-                    <a th:href="@{nutriya-register.html}" class="btn btn-lg btn-white">Registrarse</a>
+                    <a th:href="@{/pedido}" class="btn btn-lg btn-green">Explorar Platos</a>
+                    <a th:href="@{/nutriya-register}" class="btn btn-lg btn-white">Registrarse</a>
                 </div>
             </div>
 
@@ -111,6 +114,15 @@
                 <div class="p-5 contenedor-info h-100 d-flex flex-column justify-content-center">
                     <h2 class="fw-semibold">Calculá tus calorías y seguí tu progreso</h2>
                     <h4 class="mt-2">Cargá tus datos y controlá tu progreso nutricional de forma simple.</h4>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="p-5 contenedor-info h-100 d-flex flex-column justify-content-center">
+                    <a th:href="@{/medios-pago}" class="text-decoration-none text-dark">
+                        <h2 class="fw-semibold">Medios de pago</h2>
+                        <h4 class="mt-2">¡Conocé todas las opciones de ahorro y promociones disponibles!</h4>
+                    </a>
                 </div>
             </div>
         </section>

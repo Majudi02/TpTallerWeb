@@ -1,0 +1,163 @@
+/* Estilos generales */
+.main-container {
+    margin-top: 6em;
+    padding-bottom: 3em;
+}
+
+/* Estilos para el banner principal */
+.promo-banner {
+    background-color: #38BD48;
+    color: white;
+    padding: 40px;
+    border-radius: 12px;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.promo-banner-content {
+    flex: 1;
+}
+
+.promo-banner h2 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.promo-banner p {
+    margin: 0;
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+.promo-banner-image {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-left: 20px;
+}
+
+/* Estilos para las tarjetas de promociones */
+.section-title {
+    color: #38BD48;
+    font-weight: 700;
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+}
+
+.promo-card {
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    background-color: white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.promo-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.promo-item {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 18px;
+    transition: background-color 0.2s ease;
+}
+
+.promo-item:hover {
+    background-color: #f9f9f9;
+}
+
+.promo-item:last-child {
+    border-bottom: none;
+}
+
+.promo-logo {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    margin-right: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.promo-percentage {
+    background-color: #38BD48;
+    color: white;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.promo-bank {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.promo-days {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.visa-logo, .mastercard-logo {
+    width: 40px;
+    display: inline-block;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+/* Estilos para las tarjetas de métodos de pago */
+.payment-card {
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.payment-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.payment-card .card-title {
+    color: #38BD48;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.payment-card .badge {
+    background-color: #38BD48;
+    padding: 8px 12px;
+    font-weight: 500;
+    margin-right: 5px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .promo-banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 20px;
+    }
+    
+    .promo-banner-image {
+        margin-left: 0;
+        margin-top: 20px;
+        width: 150px;
+        height: 150px;
+    }
+    
+    .promo-banner h2 {
+        font-size: 2rem;
+    }
+}
