@@ -170,9 +170,9 @@ body {
     border: 3px solid #32823C;
 }
 
-.formulario-login {
-    border: 4px solid #38BD48;
-    border-radius: 25px;
+.contenedor-verde {
+    border: 4px solid #38BD48 !important;
+    border-radius: 25px !important;
 }
 
 .link-verde {
@@ -184,4 +184,8 @@ body {
 .link-verde:hover {
     color: #32823C;
     transition: all 100ms ease-in-out;
+}
+
+.titulo-verde{
+    color: #38bd48;
 }

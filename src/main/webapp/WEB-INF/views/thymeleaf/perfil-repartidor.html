@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NutriYa</title>
+    <meta charset="UTF-8"/>
+    <title>Perfil Repartidor - NutriYa</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" th:href="@{/css/estilo-principal.css}">
@@ -12,9 +10,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
 </head>
-
-<body class="d-flex flex-column min-vh-100">
-<nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top px-3 ">
+<body class="d-flex flex-column min-vh-100 justify-content-center">
+<nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top px-3">
     <div class="container-fluid">
         <div class="d-flex w-100 justify-content-between align-items-center">
             <a class="navbar-brand" th:href="@{nutriya.html}">Nutri<span style="color: #38BD48;">Ya</span></a>
@@ -31,6 +28,7 @@
                 <a class="btn btn-outline-secondary mx-1" th:href="@{nutriya-login.html}">
                     <i class="bi bi-person"></i>
                 </a>
+
                 <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
                         data-bs-target="#menuLateral" aria-controls="menuLateral">
                     <i class="bi bi-list"></i>
@@ -39,7 +37,6 @@
         </div>
     </div>
 </nav>
-
 <div class="offcanvas offcanvas-end" tabindex="-1" id="menuLateral" aria-labelledby="menuLateralLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="menuLateralLabel">Opciones</h5>
@@ -48,7 +45,7 @@
     <div class="offcanvas-body">
         <ul class="navbar-nav gap-2">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{nutriya.html}">Inicio</a>
+                <a class="nav-link" th:href="@{nutriya.htmlt}" href="#">Inicio</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Comidas</a>
@@ -57,59 +54,26 @@
                 <a class="nav-link" th:href="@{restaurantes.html}">Restaurantes</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" th:href="@{nutriya-login.html}">Mi Perfil</a>
+                <a class="nav-link active" th:href="@{login.html}">Mi Perfil</a>
             </li>
         </ul>
     </div>
 </div>
-
-<main class="flex-fill d-flex justify-content-center align-items-center">
-    <div class="container p-4" style="max-width: 500px; width: 100%;">
-        <form th:action="@{/nutriya-login}" th:object="${loginDTO}" method="post"
-              class="shadow bg-body-tertiary p-5 contenedor-verde" style="background-color: white">
-            <div class="mb-3">
-                <label for="inputEmail" class="form-label">Email</label>
-                <input th:field="*{email}" type="email" class="form-control" id="inputEmail"
-                       aria-describedby="emailHelp"
-                       placeholder="ejemplo@dominio.com" required>
+<main class="d-flex flex-column justify-content-center align-items-center">
+    <div class="card contenedor-verde w-50 p-5 shadow">
+        <h1 class="titulo-verde">Perfil del Restaurante</h1>
+        <div>
+            <p><strong>Nombre:</strong> <span th:text="${usuario.nombre}">Nombre</span> <span
+                    th:text="${usuario.apellido}">Apellido</span></p>
+            <p><strong>Email:</strong> <span th:text="${usuario.email}">email@ejemplo.com</span></p>
+            <p><strong>Teléfono:</strong> <span th:text="${usuario.telefono}">123456789</span></p>
+            <p><strong>Vehículo:</strong> <span th:text="${usuario.vehiculo}">Moto</span></p>
+            <div>
+                <a class="btn btn-lg btn-green" href="#">Editar</a>
             </div>
-            <div class="mb-3">
-                <label for="inputPassword" class="form-label">Contraseña</label>
-                <input th:field="*{password}" type="password" class="form-control" id="inputPassword">
-            </div>
-            <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Recordar mis datos</label>
-            </div>
-            <div class="d-flex flex-column gap-3 mb-3">
-                <span>¿No tenés cuenta?<a class="link-verde mx-1"
-                                          th:href="@{nutriya-register.html}">Registrate</a></span>
-                <button type="submit" class="btn btn-green">Iniciar Sesión</button>
-            </div>
-            <div th:if="${errorLogin}" class="alert alert-danger" role="alert" th:text="${errorLogin}"></div>
-        </form>
+        </div>
     </div>
 </main>
-<footer class="d-flex justify-content-between align-items-center p-4 footer">
-    <div class="fw-light">
-        © 2025 NutriYa
-    </div>
-
-    <div class="fw-semibold">
-        <a href="#">Política de privacidad</a>
-        <span class="mx-2">|</span>
-        <a href="#">Términos de uso</a>
-    </div>
-
-    <div>
-        <a href="#" class="mx-2"><i class="bi bi-facebook"></i></a>
-        <a href="#" class="mx-2"><i class="bi bi-twitter-x"></i></a>
-        <a href="#" class="mx-2"><i class="bi bi-instagram"></i></a>
-    </div>
-</footer>
-
-
 <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 </body>
-
 </html>
