@@ -16,6 +16,10 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
         this.restaurantes.addAll(restaurantesVista);
     }
 
+    public ServicioRestauranteImpl(Boolean iniciarVacio) {
+        this.restaurantes = new ArrayList<>();
+    }
+
     private static final List<Restaurante> restaurantesVista = List.of(
             new Restaurante("Green Bowl", "Comida Vegana", "/assets/restaurante.png", "calle", 123, "Don Torcuato", "Norte", List.of("Vegana")),
             new Restaurante("Natural Express", "Comida Vegana", "/assets/restaurante.png", "calle", 321, "La Matanza", "Oeste", List.of("Proteica")),
