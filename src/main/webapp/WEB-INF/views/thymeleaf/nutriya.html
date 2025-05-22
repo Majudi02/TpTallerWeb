@@ -52,7 +52,7 @@
                 <a class="nav-link active" th:href="@{nutriya.html}">Inicio</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Comidas</a>
+                <a class="nav-link" th:href="@{pedido.html}">Comidas</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{restaurantes.html}">Restaurantes</a>
@@ -80,7 +80,7 @@
                 <img th:src="@{assets/bowl-saludable.png}" alt="Bowl Saludable" class="img-fluid ms-5"
                      style="max-width: 100%;">
                 <div class="d-flex flex-md-row gap-3" style="margin-top: -15px;">
-                    <button type="button" class="btn btn-lg btn-green">Explorar Platos</button>
+                    <a th:href="@{pedido.html}" class="btn btn-lg btn-green">Explorar Platos</a>
                     <a th:href="@{nutriya-register.html}" class="btn btn-lg btn-white">Registrarse</a>
                 </div>
             </div>
