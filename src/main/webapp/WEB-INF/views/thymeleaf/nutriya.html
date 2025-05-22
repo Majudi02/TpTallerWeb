@@ -17,7 +17,7 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top px-3">
     <div class="container-fluid">
         <div class="d-flex w-100 justify-content-between align-items-center">
-            <a class="navbar-brand" href="#">Nutri<span style="color: #38BD48;">Ya</span></a>
+            <a class="navbar-brand" th:href="@{nutriya.html}">Nutri<span style="color: #38BD48;">Ya</span></a>
             <form class="d-none d-lg-flex mx-auto" role="search" style="width: 40%;">
                 <div class="input-group">
                     <input class="form-control" type="search" placeholder="Buscá comidas, restaurantes..."
@@ -49,13 +49,13 @@
     <div class="offcanvas-body">
         <ul class="navbar-nav gap-2">
             <li class="nav-item">
-                <a class="nav-link active" href="#">Inicio</a>
+                <a class="nav-link active" th:href="@{nutriya.html}">Inicio</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Comidas</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Restaurantes</a>
+                <a class="nav-link" th:href="@{restaurantes.html}">Restaurantes</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{nutriya-login.html}">Mi Perfil</a>
@@ -77,11 +77,11 @@
             </div>
 
             <div class="col-12 col-lg-5 d-flex flex-column align-items-center hero-right">
-                <img th:src="@{images/bowl-saludable.png}" alt="Bowl Saludable" class="img-fluid ms-5"
+                <img th:src="@{assets/bowl-saludable.png}" alt="Bowl Saludable" class="img-fluid ms-5"
                      style="max-width: 100%;">
                 <div class="d-flex flex-md-row gap-3" style="margin-top: -15px;">
                     <button type="button" class="btn btn-lg btn-green">Explorar Platos</button>
-                    <button type="button" class="btn btn-lg btn-white">Registrarse</button>
+                    <a th:href="@{nutriya-register.html}" class="btn btn-lg btn-white">Registrarse</a>
                 </div>
             </div>
 
@@ -136,12 +136,7 @@
                             </div>
                             <div class="text-end">
                                 <div class="text-warning">
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <span class="text-dark small fw-medium">(5.0)</span>
+                                    ★★★★★ <span class="text-dark small fw-medium">(5.0)</span>
                                 </div>
                                 <div class="text-muted small">
                                     <i class="bi bi-clock"></i> 10 May 2025
@@ -172,12 +167,7 @@
                             </div>
                             <div class="text-end">
                                 <div class="text-warning">
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <span class="text-dark small fw-medium">(5.0)</span>
+                                    ★★★★★ <span class="text-dark small fw-medium">(5.0)</span>
                                 </div>
                                 <div class="text-muted small">
                                     <i class="bi bi-clock"></i> 3 Ene 2025
@@ -208,12 +198,7 @@
                             </div>
                             <div class="text-end">
                                 <div class="text-warning">
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star text-warning"></i>
-                                    <span class="text-dark small fw-medium">(4.0)</span>
+                                    ★★★★☆ <span class="text-dark small fw-medium">(4.0)</span>
                                 </div>
                                 <div class="text-muted small">
                                     <i class="bi bi-clock"></i> 10 May 2025
