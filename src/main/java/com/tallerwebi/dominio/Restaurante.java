@@ -5,17 +5,17 @@ import java.util.List;
 public class Restaurante {
     private String nombre;
     private String descripcion;
-    private String imagen;
+    private String rutaImagen;
     private String calle;
     private Integer numero;
     private String localidad;
     private String zona;
     private List<String> tiposComida;
 
-    public Restaurante(String nombre, String descripcion, String imagen, String calle, Integer numero, String localidad, String zona, List<String> tiposComida) {
+    public Restaurante(String nombre, String descripcion, String rutaImagen, String calle, Integer numero, String localidad, String zona, List<String> tiposComida) {
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.imagen = imagen;
+        this.rutaImagen = rutaImagen;
         this.calle = calle;
         this.numero = numero;
         this.localidad = localidad;
@@ -48,11 +48,11 @@ public class Restaurante {
     }
 
     public String getImagen() {
-        return imagen;
+        return rutaImagen;
     }
 
     public void setImagen(String imagen) {
-        this.imagen = imagen;
+        this.rutaImagen = imagen;
     }
 
     public Integer getNumero() {
