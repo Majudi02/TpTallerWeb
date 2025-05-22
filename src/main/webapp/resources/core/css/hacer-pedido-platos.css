@@ -3,7 +3,7 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: white;
     margin-top: 10em;
-    width: 15%;
+    width: 100%;
     border-radius: 1em;
     transition: box-shadow 0.3s ease;
     margin-left: 2em;
@@ -14,8 +14,9 @@
 }
 
 .titulo{
-    margin-top:2em
+    margin-top:1em;
 }
+
 
 .filtro-menu:hover {
     box-shadow: 0 0 15px #aee7b5;
