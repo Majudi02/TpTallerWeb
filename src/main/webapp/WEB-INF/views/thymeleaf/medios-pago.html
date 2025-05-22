@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medios de Pago - NutriYa</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/estilo-principal.css}">
+    <link rel="stylesheet" th:href="@{/css/medios-pago.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top px-3 mb-3">
+        <div class="container-fluid">
+            <div class="d-flex w-100 justify-content-between align-items-center">
+                <a class="navbar-brand" th:href="@{/nutriya}">Nutri<span style="color: #38BD48;">Ya</span></a>
+                <form class="d-none d-lg-flex mx-auto" role="search" style="width: 40%;">
+                    <div class="input-group">
+                        <input class="form-control" type="search" placeholder="Buscá comidas, restaurantes..."
+                               aria-label="Buscar"/>
+                        <button class="btn buscar" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+                <div class="botones-nav">
+                    <a class="btn btn-outline-secondary mx-1" th:href="@{/nutriya-login}">
+                        <i class="bi bi-person"></i>
+                    </a>
+
+                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
+                            data-bs-target="#menuLateral" aria-controls="menuLateral">
+                        <i class="bi bi-list"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="menuLateral" aria-labelledby="menuLateralLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="menuLateralLabel">Opciones</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="navbar-nav gap-2">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/nutriya}">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/pedido}">Comidas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/restaurantes}">Restaurantes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/medios-pago}">Medios de Pago</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/nutriya-login}">Mi Perfil</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<main class="container main-container">
+    <div class="promo-banner">
+        <div class="promo-banner-content">
+            <h2>Medios de pago</h2>
+            <p>¡Conocé todas las opciones de ahorro y aprovechá las mejores promociones!</p>
+        </div>
+    </div>
+
+    <h2 class="section-title">Promociones</h2>
+    
+    <div class="promo-card">
+        <div class="promo-item d-flex align-items-center">
+            <img src="https://pedidosya.dhmedia.io/image/pedidosya/deals-navigations/issuers/Argentina/BancoCorrientes.jpg?width=100" class="promo-logo" alt="Banco de Corrientes">
+            <div class="flex-grow-1">
+                <div class="promo-percentage">30% de Reintegro</div>
+                <div class="promo-bank">Banco de Corrientes <img src="https://pedidosya.dhmedia.io/image/pedidosya/deals-navigations/payment-method-logos/Payment_Method_Logo_Visa.png" class="visa-logo" alt="Visa"></div>
+                <div class="promo-days">Martes - Jueves</div>
+            </div>
+        </div>
+        
+        <div class="promo-item d-flex align-items-center">
+            <img src="https://pedidosya.dhmedia.io/image/pedidosya/deals-navigations/issuers/Argentina/REBA.jpg?width=100" class="promo-logo" alt="Reba">
+            <div class="flex-grow-1">
+                <div class="promo-percentage">30% de Reintegro</div>
+                <div class="promo-bank">Reba <img src="https://pedidosya.dhmedia.io/image/pedidosya/deals-navigations/payment-method-logos/Payment_Method_Logo_Visa.png" class="mastercard-logo" alt="Visa"></div>
+                <div class="promo-days">Todos los jueves</div>
+            </div>
+        </div>
+        
+        <div class="promo-item d-flex align-items-center">
+            <img src="https://pedidosya.dhmedia.io/image/pedidosya/deals-navigations/issuers/Argentina/BancoCoinag.jpg?width=100" class="promo-logo" alt="Banco Coinag">
+            <div class="flex-grow-1">
+                <div class="promo-percentage">35% de Reintegro</div>
+                <div class="promo-bank">Banco Coinag <img src="https://pedidosya.dhmedia.io/image/pedidosya/deals-navigations/payment-method-logos/Payment_Method_Logo_Visa.png" class="visa-logo" alt="Visa"></div>
+                <div class="promo-days">Todos los días</div>
+            </div>
+        </div>
+        
+        <div class="promo-item d-flex align-items-center">
+            <img src="https://pedidosya.dhmedia.io/image/pedidosya/deals-navigations/issuers/Argentina/YoY.jpg?width=100" class="promo-logo" alt="Yoy!">
+            <div class="flex-grow-1">
+                <div class="promo-percentage">50% de Reintegro</div>
+                <div class="promo-bank">Yoy!</div>
+                <div class="promo-days">En restaurantes, café y deli</div>
+            </div>
+        </div>
+    </div>
+    
+    <h2 class="section-title mt-5">Métodos de pago aceptados</h2>
+    
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card payment-card">
+                <div class="card-body">
+                    <h5 class="card-title">Tarjetas de crédito</h5>
+                    <p class="card-text">Aceptamos todas las tarjetas de crédito principales.</p>
+                    <div class="d-flex flex-wrap align-items-center gap-3 mt-3">
+                        <img src="https://pedidosya.dhmedia.io/image/pedidosya/deals-navigations/payment-method-logos/Payment_Method_Logo_Visa.png" alt="Visa" style="height: 30px;">
+                        <img src="https://pedidosya.dhmedia.io/image/pedidosya/deals-navigations/payment-method-logos/Payment_Method_Logo_AmericanExpress.png" alt="American Express" style="height: 30px;">
+                        <span class="badge">Mastercard</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card payment-card">
+                <div class="card-body">
+                    <h5 class="card-title">Tarjetas de débito</h5>
+                    <p class="card-text">Paga directamente con tu tarjeta de débito.</p>
+                    <div class="d-flex flex-wrap gap-2 mt-3">
+                        <span class="badge">Visa Débito</span>
+                        <span class="badge">Maestro</span>
+                        <span class="badge">Cabal Débito</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card payment-card">
+                <div class="card-body">
+                    <h5 class="card-title">Efectivo</h5>
+                    <p class="card-text">Paga en efectivo al momento de la entrega.</p>
+                    <div class="d-flex flex-wrap gap-2 mt-3">
+                        <span class="badge">Pago contra entrega</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-5 p-4 bg-light rounded-3">
+        <h3 class="mb-3" style="color: #38BD48;">¿Por qué elegir NutriYa?</h3>
+        <div class="row">
+            <div class="col-md-6">
+                <ul class="list-unstyled">
+                    <li class="mb-3"><i class="bi bi-check-circle-fill me-2" style="color: #38BD48;"></i> Pagos 100% seguros</li>
+                    <li class="mb-3"><i class="bi bi-check-circle-fill me-2" style="color: #38BD48;"></i> Múltiples opciones de pago</li>
+                    <li class="mb-3"><i class="bi bi-check-circle-fill me-2" style="color: #38BD48;"></i> Promociones exclusivas</li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <ul class="list-unstyled">
+                    <li class="mb-3"><i class="bi bi-check-circle-fill me-2" style="color: #38BD48;"></i> Descuentos con tarjetas seleccionadas</li>
+                    <li class="mb-3"><i class="bi bi-check-circle-fill me-2" style="color: #38BD48;"></i> Beneficios para usuarios frecuentes</li>
+                    <li class="mb-3"><i class="bi bi-check-circle-fill me-2" style="color: #38BD48;"></i> Soporte al cliente 24/7</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="bg-dark text-white py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h5>NutriYa</h5>
+                <p>Tu plataforma de comida saludable a domicilio.</p>
+            </div>
+            <div class="col-md-3">
+                <h5>Enlaces</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-white">Sobre nosotros</a></li>
+                    <li><a href="#" class="text-white">Términos y condiciones</a></li>
+                    <li><a href="#" class="text-white">Política de privacidad</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5>Contacto</h5>
+                <ul class="list-unstyled">
+                    <li><i class="bi bi-envelope-fill me-2"></i> info@nutriya.com</li>
+                    <li><i class="bi bi-telephone-fill me-2"></i> (011) 4567-8900</li>
+                </ul>
+            </div>
+        </div>
+        <hr>
+        <div class="text-center">
+            <p class="mb-0">© 2025 NutriYa</p>
+        </div>
+    </div>
+</footer>
+
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+</body>
+</html>
