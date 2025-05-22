@@ -16,12 +16,20 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
         this.restaurantes.addAll(restaurantesVista);
     }
 
-    // Lista mock de restaurantes para pruebas
+    public ServicioRestauranteImpl(Boolean iniciarVacio) {
+        this.restaurantes = new ArrayList<>();
+    }
+
     private static final List<Restaurante> restaurantesVista = List.of(
-            new Restaurante("Green Bowl", "Comida Vegana", "/assets/restaurante.png", "calle", 123, "Don Torcuato", "Norte", List.of(new TipoComida(1, "Vegana"))),
-            new Restaurante("Natural Express", "Comida Vegana", "/assets/restaurante.png", "calle", 321, "La Matanza", "Oeste", List.of(new TipoComida(2, "Proteica"))),
-            new Restaurante("Vital Food", "Comida Proteica", "/assets/restaurante.png", "calle", 213, "La Matanza", "Oeste", List.of(new TipoComida(1, "Vegana"), new TipoComida(2, "Proteica")))
+            new Restaurante("Green Bowl", "Comida Vegana", "/assets/restaurante.png", "calle", 123, "Don Torcuato", "Norte", List.of("Vegana")),
+            new Restaurante("Natural Express", "Comida Vegana", "/assets/restaurante.png", "calle", 321, "La Matanza", "Oeste", List.of("Proteica")),
+            new Restaurante("Vital Food", "Comida Proteica", "/assets/restaurante.png", "calle", 213, "La Matanza", "Oeste", List.of("Vegana", "Proteica")),
+            new Restaurante("La Parrilla del Sur", "Especialidad en carnes a la parrilla", "/assets/restaurante-logo.png", "Av. Corrientes", 1234, "Buenos Aires", "Microcentro", List.of("Proteica")),
+            new Restaurante("Sushi Zen", "Lo mejor de la cocina japonesa", "/assets/restaurante-logo.png", "Calle Defensa", 567, "Buenos Aires", "San Telmo", List.of("Proteica", "Sin gluten")),
+            new Restaurante("Pizza Napoli", "Pizzas artesanales al horno de leña", "/assets/restaurante-logo.png", "Av. Santa Fe", 890, "Buenos Aires", "Recoleta", List.of("Opciones vegetarianas")),
+            new Restaurante("Verde Vivo", "Comida saludable y vegana", "/assets/restaurante-logo.png", "Calle Mendoza", 234, "Mendoza", "Centro", List.of("Vegana", "Vegetariana", "Sin gluten"))
     );
+
 
     @Override
     public boolean agregarRestaurante(Restaurante restaurante) {
@@ -53,7 +61,7 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
     public List<Restaurante> obtenerRestaurantesPorZona(String zona) {
         List<Restaurante> restaurantesObtenidos = new ArrayList<>();
         for (Restaurante rest : restaurantes) {
-            if(rest.getZona().equalsIgnoreCase(zona)){
+            if (rest.getZona().equalsIgnoreCase(zona)) {
                 restaurantesObtenidos.add(rest);
             }
         }
@@ -63,12 +71,9 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
     @Override
     public List<Restaurante> buscarPorTipoComida(String tipoComida) {
         List<Restaurante> restaurantesObtenidos = new ArrayList<>();
-        for (Restaurante rest : restaurantes) {
-            for (TipoComida tipo : rest.getTiposComida()) {
-                if (tipo.getNombre().equalsIgnoreCase(tipoComida)) {
-                    restaurantesObtenidos.add(rest);
-                    break; // Ya lo encontramos, no hace falta seguir con los demás
-                }
+        for (Restaurante r : restaurantes) {
+            if (r.getTiposComida().contains(tipoComida)) {
+                restaurantesObtenidos.add(r);
             }
         }
         return restaurantesObtenidos;
@@ -79,16 +84,25 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
         List<Restaurante> resultados = new ArrayList<>();
         for (Restaurante rest : restaurantes) {
             boolean coincideZona = (zona == null || zona.isEmpty()) || rest.getZona().equalsIgnoreCase(zona);
-            boolean coincideTipo = (tipoComida == null || tipoComida.isEmpty()) || rest.getTiposComida().stream()
-                    .anyMatch(tc -> tc.getNombre().equalsIgnoreCase(tipoComida));
+
+            boolean coincideTipo = false;
+            if (tipoComida == null || tipoComida.isEmpty()) {
+                coincideTipo = true;
+            } else {
+                for (String tipo : rest.getTiposComida()) {
+                    if (tipo.equalsIgnoreCase(tipoComida)) {
+                        coincideTipo = true;
+                        break;
+                    }
+                }
+            }
+
             if (coincideZona && coincideTipo) {
                 resultados.add(rest);
             }
         }
         return resultados;
     }
-
-
 
 
 }

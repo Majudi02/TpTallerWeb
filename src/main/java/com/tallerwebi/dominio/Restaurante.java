@@ -10,9 +10,9 @@ public class Restaurante {
     private Integer numero;
     private String localidad;
     private String zona;
-    private List<TipoComida> tiposComida;
+    private List<String> tiposComida;
 
-    public Restaurante(String nombre, String descripcion, String imagen, String calle, Integer numero, String localidad, String zona, List<TipoComida> tiposComida) {
+    public Restaurante(String nombre, String descripcion, String imagen, String calle, Integer numero, String localidad, String zona, List<String> tiposComida) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.imagen = imagen;
@@ -79,11 +79,11 @@ public class Restaurante {
         this.zona = zona;
     }
 
-    public List<TipoComida> getTiposComida() {
+    public List<String> getTiposComida() {
         return tiposComida;
     }
 
-    public void setTiposComida(List<TipoComida> tiposComida) {
+    public void setTiposComida(List<String> tiposComida) {
         this.tiposComida = tiposComida;
     }
 }

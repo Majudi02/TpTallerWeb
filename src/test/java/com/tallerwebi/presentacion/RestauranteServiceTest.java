@@ -3,7 +3,6 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.Restaurante;
 import com.tallerwebi.dominio.ServicioRestaurante;
 import com.tallerwebi.dominio.ServicioRestauranteImpl;
-import com.tallerwebi.dominio.TipoComida;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -15,12 +14,11 @@ public class RestauranteServiceTest {
 
     @Test
     public void DadoQueExisteUnServicioRestauranteSePuedeAgregarUno() {
-        ServicioRestaurante servicioRestaurante = new ServicioRestauranteImpl();
-        TipoComida vegana = new TipoComida(1, "Vegana");
-        Restaurante restaurante1 = new Restaurante("Green Bowl", "Comida Vegana", "core/images/restaurante.png", "calle", 123, "Don Torcuato", "Norte", List.of(vegana));
+        ServicioRestaurante servicioRestaurante = new ServicioRestauranteImpl(true);
+        Restaurante restaurante1 = new Restaurante("Restaurante", "Comida Vegana", "core/images/restaurante.png", "calle", 555, "Don Torcuato", "Norte", List.of("Vegana"));
 
         Boolean agregado = servicioRestaurante.agregarRestaurante(restaurante1);
-        Restaurante restauranteObtenido = servicioRestaurante.obtenerRestaurante("Green Bowl");
+        Restaurante restauranteObtenido = servicioRestaurante.obtenerRestaurante("Restaurante");
 
 
         assertThat(agregado, is(true));
@@ -29,12 +27,10 @@ public class RestauranteServiceTest {
 
     @Test
     public void DadoQueExistenRestaurantesNoSePuedeAgregarUnoConLaMismaCalleYElMismoNumero() {
-        ServicioRestaurante servicioRestaurante = new ServicioRestauranteImpl();
-        TipoComida vegana = new TipoComida(1, "Vegana");
-        TipoComida proteica = new TipoComida(2, "Proteica");
+        ServicioRestaurante servicioRestaurante = new ServicioRestauranteImpl(true);
 
-        Restaurante restaurante1 = new Restaurante("Green Bowl", "Comida Vegana", "core/images/restaurante.png", "calle", 123, "Don Torcuato", "Norte", List.of(vegana));
-        Restaurante restaurante2 = new Restaurante("Natural Express", "Comida Vegana", "core/images/restaurante.png", "calle", 123, "La Matanza", "Oeste", List.of(proteica));
+        Restaurante restaurante1 = new Restaurante("Green Bowl", "Comida Vegana", "core/images/restaurante.png", "calle", 123, "Don Torcuato", "Norte", List.of("Vegana"));
+        Restaurante restaurante2 = new Restaurante("Natural Express", "Comida Vegana", "core/images/restaurante.png", "calle", 123, "La Matanza", "Oeste", List.of("Proteica"));
 
         servicioRestaurante.agregarRestaurante(restaurante1);
         Boolean agregado = servicioRestaurante.agregarRestaurante(restaurante2);
@@ -45,17 +41,13 @@ public class RestauranteServiceTest {
 
     @Test
     public void DadoQueExistenCincoRestaurantesLosObtengo() {
-        ServicioRestaurante servicioRestaurante = new ServicioRestauranteImpl();
+        ServicioRestaurante servicioRestaurante = new ServicioRestauranteImpl(true);
 
-        TipoComida vegana = new TipoComida(1, "Vegana");
-        TipoComida proteica = new TipoComida(2, "Proteica");
-        TipoComida sinGluten = new TipoComida(3, "Sin Gluten");
-
-        Restaurante restaurante1 = new Restaurante("Green Bowl", "Comida Vegana", "core/images/restaurante.png", "calle", 123, "Don Torcuato", "Norte", List.of(vegana));
-        Restaurante restaurante2 = new Restaurante("Natural Express", "Comida Vegana", "core/images/restaurante.png", "calle", 321, "La Matanza", "Oeste", List.of(proteica));
-        Restaurante restaurante3 = new Restaurante("Vital Food", "Comida Vegana", "core/images/restaurante.png", "calle", 213, "La Matanza", "Oeste", List.of(vegana, proteica));
-        Restaurante restaurante4 = new Restaurante("Greem Bowl", "Comida Vegana", "core/images/restaurante.png", "calle", 231, "La Matanza", "Oeste", List.of(vegana));
-        Restaurante restaurante5 = new Restaurante("Vital Food", "Comida Vegana", "core/images/restaurante.png", "calle", 345, "Banfield", "Sur", List.of(sinGluten));
+        Restaurante restaurante1 = new Restaurante("Green Bowl", "Comida Vegana", "core/images/restaurante.png", "calle", 123, "Don Torcuato", "Norte", List.of("Vegana"));
+        Restaurante restaurante2 = new Restaurante("Natural Express", "Comida Vegana", "core/images/restaurante.png", "calle", 321, "La Matanza", "Oeste", List.of("Proteica"));
+        Restaurante restaurante3 = new Restaurante("Vital Food", "Comida Vegana", "core/images/restaurante.png", "calle", 213, "La Matanza", "Oeste", List.of("Vegana", "Proteica"));
+        Restaurante restaurante4 = new Restaurante("Greem Bowl", "Comida Vegana", "core/images/restaurante.png", "calle", 231, "La Matanza", "Oeste", List.of("Vegana"));
+        Restaurante restaurante5 = new Restaurante("Vital Food", "Comida Vegana", "core/images/restaurante.png", "calle", 345, "Banfield", "Sur", List.of("Sin Gluten"));
 
         servicioRestaurante.agregarRestaurante(restaurante1);
         servicioRestaurante.agregarRestaurante(restaurante2);
@@ -72,16 +64,11 @@ public class RestauranteServiceTest {
     public void DadoQueExistenCincoRestaurantesObtengoSoloLosDeLaZonaFiltrada() {
         ServicioRestaurante servicioRestaurante = new ServicioRestauranteImpl();
 
-        TipoComida vegana = new TipoComida(1, "Vegana");
-        TipoComida proteica = new TipoComida(2, "Proteica");
-        TipoComida sinGluten = new TipoComida(3, "Sin Gluten");
-
-
-        Restaurante restaurante1 = new Restaurante("Green Bowl", "Comida Vegana", "core/images/restaurante.png", "calle", 123, "Don Torcuato", "Norte", List.of(vegana));
-        Restaurante restaurante2 = new Restaurante("Natural Express", "Comida Vegana", "core/images/restaurante.png", "calle", 321, "La Matanza", "Oeste", List.of(proteica));
-        Restaurante restaurante3 = new Restaurante("Vital Food", "Comida Vegana", "core/images/restaurante.png", "calle", 213, "La Matanza", "Oeste", List.of(vegana, proteica));
-        Restaurante restaurante4 = new Restaurante("Greem Bowl", "Comida Vegana", "core/images/restaurante.png", "calle", 231, "La Matanza", "Oeste", List.of(vegana));
-        Restaurante restaurante5 = new Restaurante("Vital Food", "Comida Vegana", "core/images/restaurante.png", "calle", 345, "Banfield", "Sur", List.of(sinGluten));
+        Restaurante restaurante1 = new Restaurante("Green Bowl", "Comida Vegana", "core/images/restaurante.png", "calle", 123, "Don Torcuato", "Norte", List.of("Vegana"));
+        Restaurante restaurante2 = new Restaurante("Natural Express", "Comida Vegana", "core/images/restaurante.png", "calle", 321, "La Matanza", "Oeste", List.of("Proteica"));
+        Restaurante restaurante3 = new Restaurante("Vital Food", "Comida Vegana", "core/images/restaurante.png", "calle", 213, "La Matanza", "Oeste", List.of("Vegana", "Proteica"));
+        Restaurante restaurante4 = new Restaurante("Greem Bowl", "Comida Vegana", "core/images/restaurante.png", "calle", 231, "La Matanza", "Oeste", List.of("Vegana"));
+        Restaurante restaurante5 = new Restaurante("Vital Food", "Comida Vegana", "core/images/restaurante.png", "calle", 345, "Banfield", "Sur", List.of("Sin Gluten"));
 
         servicioRestaurante.agregarRestaurante(restaurante1);
         servicioRestaurante.agregarRestaurante(restaurante2);
@@ -96,17 +83,14 @@ public class RestauranteServiceTest {
 
     @Test
     public void DadoQueExistenCincoRestaurantesObtengoSoloLosDelTipoDeComidaFiltrada() {
-        ServicioRestaurante servicioRestaurante = new ServicioRestauranteImpl();
+        ServicioRestaurante servicioRestaurante = new ServicioRestauranteImpl(true);
 
-        TipoComida vegana = new TipoComida(1, "Vegana");
-        TipoComida proteica = new TipoComida(2, "Proteica");
-        TipoComida sinGluten = new TipoComida(3, "Sin Gluten");
 
-        Restaurante restaurante1 = new Restaurante("Green Bowl", "Comida Vegana", "core/images/restaurante.png", "calle", 123, "Don Torcuato", "Norte", List.of(vegana));
-        Restaurante restaurante2 = new Restaurante("Natural Express", "Comida Vegana", "core/images/restaurante.png", "calle", 321, "La Matanza", "Oeste", List.of(proteica));
-        Restaurante restaurante3 = new Restaurante("Vital Food", "Comida Vegana", "core/images/restaurante.png", "calle", 213, "La Matanza", "Oeste", List.of(vegana, proteica));
-        Restaurante restaurante4 = new Restaurante("Greem Bowl", "Comida Vegana", "core/images/restaurante.png", "calle", 231, "La Matanza", "Oeste", List.of(vegana));
-        Restaurante restaurante5 = new Restaurante("Vital Food", "Comida Vegana", "core/images/restaurante.png", "calle", 345, "Banfield", "Sur", List.of(sinGluten));
+        Restaurante restaurante1 = new Restaurante("Green Bowl", "Comida Vegana", "core/images/restaurante.png", "calle", 123, "Don Torcuato", "Norte", List.of("Vegana"));
+        Restaurante restaurante2 = new Restaurante("Natural Express", "Comida Vegana", "core/images/restaurante.png", "calle", 321, "La Matanza", "Oeste", List.of("Proteica"));
+        Restaurante restaurante3 = new Restaurante("Vital Food", "Comida Vegana", "core/images/restaurante.png", "calle", 213, "La Matanza", "Oeste", List.of("Vegana", "Proteica"));
+        Restaurante restaurante4 = new Restaurante("Greem Bowl", "Comida Vegana", "core/images/restaurante.png", "calle", 231, "La Matanza", "Oeste", List.of("Vegana"));
+        Restaurante restaurante5 = new Restaurante("Vital Food", "Comida Vegana", "core/images/restaurante.png", "calle", 345, "Banfield", "Sur", List.of("Sin Gluten"));
 
         servicioRestaurante.agregarRestaurante(restaurante1);
         servicioRestaurante.agregarRestaurante(restaurante2);
@@ -123,15 +107,11 @@ public class RestauranteServiceTest {
     public void DadoQueExistenCincoRestaurantesObtengoSoloLosDelTipoDeComidaYZonaFiltrada() {
         ServicioRestaurante servicioRestaurante = new ServicioRestauranteImpl();
 
-        TipoComida vegana = new TipoComida(1, "Vegana");
-        TipoComida proteica = new TipoComida(2, "Proteica");
-        TipoComida sinGluten = new TipoComida(3, "Sin Gluten");
-
-        Restaurante restaurante1 = new Restaurante("Green Bowl", "Comida Vegana", "core/images/restaurante.png", "calle", 123, "Don Torcuato", "Norte", List.of(vegana));
-        Restaurante restaurante2 = new Restaurante("Natural Express", "Comida Vegana", "core/images/restaurante.png", "calle", 321, "La Matanza", "Oeste", List.of(proteica));
-        Restaurante restaurante3 = new Restaurante("Vital Food", "Comida Vegana", "core/images/restaurante.png", "calle", 213, "La Matanza", "Oeste", List.of(vegana, proteica));
-        Restaurante restaurante4 = new Restaurante("Greem Bowl", "Comida Vegana", "core/images/restaurante.png", "calle", 231, "La Matanza", "Oeste", List.of(vegana));
-        Restaurante restaurante5 = new Restaurante("Vital Food", "Comida Vegana", "core/images/restaurante.png", "calle", 345, "Banfield", "Sur", List.of(sinGluten));
+        Restaurante restaurante1 = new Restaurante("Green Bowl", "Comida Vegana", "core/images/restaurante.png", "calle", 123, "Don Torcuato", "Norte", List.of("Vegana"));
+        Restaurante restaurante2 = new Restaurante("Natural Express", "Comida Vegana", "core/images/restaurante.png", "calle", 321, "La Matanza", "Oeste", List.of("Proteica"));
+        Restaurante restaurante3 = new Restaurante("Vital Food", "Comida Vegana", "core/images/restaurante.png", "calle", 213, "La Matanza", "Oeste", List.of("Vegana", "Proteica"));
+        Restaurante restaurante4 = new Restaurante("Greem Bowl", "Comida Vegana", "core/images/restaurante.png", "calle", 231, "La Matanza", "Oeste", List.of("Vegana"));
+        Restaurante restaurante5 = new Restaurante("Vital Food", "Comida Vegana", "core/images/restaurante.png", "calle", 345, "Banfield", "Sur", List.of("Sin Gluten"));
 
         servicioRestaurante.agregarRestaurante(restaurante1);
         servicioRestaurante.agregarRestaurante(restaurante2);
