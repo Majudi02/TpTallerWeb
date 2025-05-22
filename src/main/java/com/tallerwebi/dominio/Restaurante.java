@@ -47,11 +47,11 @@ public class Restaurante {
         this.calle = calle;
     }
 
-    public String getRutaImagen() {
+    public String getImagen() {
         return rutaImagen;
     }
 
-    public void setRutaImagen(String imagen) {
+    public void setImagen(String imagen) {
         this.rutaImagen = imagen;
     }
 

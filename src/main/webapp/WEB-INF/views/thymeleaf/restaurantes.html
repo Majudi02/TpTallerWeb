@@ -59,7 +59,7 @@
                 <a class="nav-link" th:href="@{nutriya.html}">Inicio</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Comidas</a>
+                <a class="nav-link" th:href="@{pedido.html}">Comidas</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link active" th:href="@{restaurantes.html}">Restaurantes</a>
@@ -110,7 +110,7 @@
         <!-- Restaurante 1 -->
         <div class="col-md-4" th:each="restaurante : ${restaurantes}">
             <div class="card restaurant-card">
-                <img th:src="@{${restaurante.getRutaImagen()}}" class="restaurant-img" th:alt="${restaurante.nombre}"/>
+                <img th:src="@{${restaurante.getImagen()}}" class="restaurant-img" th:alt="${restaurante.nombre}"/>
                 <div class="card-body">
                     <h5 class="restaurant-name" th:text="${restaurante.nombre}"></h5>
                     <p class="restaurant-info"
@@ -122,6 +122,6 @@
     </div>
 </div>
 <!-- Bootstrap 5.2.0 JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 </body>
 </html>

@@ -14,22 +14,58 @@ public class PedidoServiceImplTest {
     @Test
     public void dadoQueHayRestaurantesDestacadosLosPuedoQuieroMostras() {
         List<Restaurante> restaurantesEsperados = List.of(
-                new Restaurante("La Parrilla del Sur", "Especialidad en carnes a la parrilla", "/assets/restaurante-logo.png"),
-                new Restaurante("Sushi Zen", "Lo mejor de la cocina japonesa", "/assets/restaurante-logo.png"),
-                new Restaurante("Pizza Napoli", "Pizzas artesanales al horno de leña", "/assets/restaurante-logo.png"),
-                new Restaurante("Verde Vivo", "Comida saludable y vegana", "/assets/restaurante-logo.png")
+                new Restaurante(
+                        "La Parrilla del Sur",
+                        "Especialidad en carnes a la parrilla",
+                        "/assets/restaurante-logo.png",
+                        "Av. Corrientes",
+                        1234,
+                        "Buenos Aires",
+                        "Microcentro",
+                        List.of("Proteica")
+                ),
+                new Restaurante(
+                        "Sushi Zen",
+                        "Lo mejor de la cocina japonesa",
+                        "/assets/restaurante-logo.png",
+                        "Calle Defensa",
+                        567,
+                        "Buenos Aires",
+                        "San Telmo",
+                        List.of("Proteica", "Sin gluten")
+                ),
+                new Restaurante(
+                        "Pizza Napoli",
+                        "Pizzas artesanales al horno de leña",
+                        "/assets/restaurante-logo.png",
+                        "Av. Santa Fe",
+                        890,
+                        "Buenos Aires",
+                        "Recoleta",
+                        List.of("Opciones vegetarianas")
+                ),
+                new Restaurante(
+                        "Verde Vivo",
+                        "Comida saludable y vegana",
+                        "/assets/restaurante-logo.png",
+                        "Calle Mendoza",
+                        234,
+                        "Mendoza",
+                        "Centro",
+                        List.of("Vegana", "Vegetariana", "Sin gluten")
+                )
         );
 
         PedidoServiceImpl pedidoService = new PedidoServiceImpl();
 
         List<Restaurante> restaurantesObtenidos = pedidoService.traerRestaurantesDestacados();
 
-        assertThat(restaurantesObtenidos.size(),equalTo(restaurantesEsperados.size()));
+        assertThat(restaurantesObtenidos.size(), equalTo(restaurantesEsperados.size()));
     }
 
 
     @Test
-    public void dadoQueHayPlatosDestacadosLosQuieroMostrarEnLaPantalla(){
+    public void dadoQueHayPlatosDestacadosLosQuieroMostrarEnLaPantalla() {
         List<Plato> platos = List.of(
                 new Plato("Milanesa con papas fritas", "Clásica milanesa de carne acompañada con papas fritas crujientes.", "/assets/imagen-plato.png", 2500.0),
                 new Plato("Ravioles de ricota", "Ravioles caseros rellenos de ricota y nuez, servidos con salsa bolognesa.", "/assets/imagen-plato.png", 2800.0),
@@ -39,11 +75,11 @@ public class PedidoServiceImplTest {
                 new Plato("Tarta de espinaca", "Tarta casera de espinaca y queso con masa hojaldrada.", "/assets/imagen-plato.png", 2000.0)
         );
 
-        PedidoServiceImpl pedidoService= new PedidoServiceImpl();
+        PedidoServiceImpl pedidoService = new PedidoServiceImpl();
 
         List<Plato> platosObtenidos = pedidoService.traerPlatosDestacados();
 
-        assertThat(platosObtenidos.size(),equalTo(platos.size()));
+        assertThat(platosObtenidos.size(), equalTo(platos.size()));
     }
 
 }
