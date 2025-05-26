@@ -1,16 +1,28 @@
 package com.tallerwebi.dominio;
 
+import java.util.List;
+
 public class Plato {
     private String nombre;
     private String descripcion;
     private String imagen;
     private Double precio;
+    private List<String> etiquetas;
 
-    public Plato(String nombre, String descripcion, String imagen, Double precio){
+    public Plato(String nombre, String descripcion, String imagen, Double precio, List<String> etiquetas){
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.imagen = imagen;
         this.precio = precio;
+        this.etiquetas = etiquetas;
+    }
+
+    public List<String> getEtiquetas() {
+        return etiquetas;
+    }
+
+    public void setEtiquetas(List<String> etiquetas) {
+        this.etiquetas = etiquetas;
     }
 
     public String getDescripcion() {
