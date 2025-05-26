@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -71,63 +71,59 @@
         </div>
     </div>
 </header>
-<main class="my-5 ">
-    <div class="contenido">
-        <aside class="col-12 order-1 order-md-0 col-md-3 h-100 filtro-menu">
-            <div class="p-3 rounded shadow-sm filtro-menu-container">
-                <details>
-                    <summary class="d-flex justify-content-between align-items-center menu-item">
-                        <span>Ordenar</span>
-                        <span class="arrow">&#9660;</span>
-                    </summary>
-                    <ul class="list-unstyled ps-3 mt-2">
-                        <li class="submenu-item">Menor a mayor</li>
-                        <li class="submenu-item">Mayor a menor</li>
-                    </ul>
-                </details>
-                <details>
-                    <summary class="d-flex justify-content-between align-items-center menu-item">
-                        <span>Filtros</span>
-                        <span class="arrow">&#9660;</span>
-                    </summary>
-                    <ul class="list-unstyled ps-3 mt-2">
-                        <li class="submenu-item">Sin TACC</li>
-                        <li class="submenu-item">Vegano</li>
-                        <li class="submenu-item">Proteico</li>
-                    </ul>
-                </details>
+<main class="my-5">
+    <!-- Filtros -->
+    <form method="get" class="filters container mb-2 mt-5" th:action="@{/pedido/platos}">
+        <div class="row g-3 mt-5">
+            <div class="col-md-6 mt-4">
+                <label for="ordenar" class="form-label">Ordenar</label>
+                <select id="ordenar" name="ordenar" class="form-select">
+                    <option value="" >Ordenar</option>
+                    <option th:value="menorAMayor" >Menor a mayor</option>
+                    <option th:value="mayorAMenor" >Mayor a menor</option>
+                </select>
             </div>
-        </aside>
+            <div class="col-md-6 mt-4">
+                <label for="tipo" class="form-label">Tipo de comida</label>
+                <select id="tipo" name="tipo" class="form-select">
+                    <option value="" th:selected="${tipo == null}">Todas las comidas</option>
+                    <option th:value="Vegana" th:selected="${tipo == 'Vegana'}">Vegana</option>
+                    <option th:value="Vegetariana" th:selected="${tipo == 'Vegetariana'}">Vegetariana</option>
+                    <option th:value="'Sin Gluten'" th:selected="${tipo == 'Sin Gluten'}">Sin gluten</option>
+                    <option th:value="Proteica" th:selected="${tipo == 'Proteica'}">Alta en proteína</option>
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-green mt-3">Filtrar</button>
+    </form>
 
-
-        <section class="col-12 col-md-9">
-            <h2 class="mb-4 text-center titulo" style="color:#38BD48">Platos Disponibles</h2>
-            <div class="d-flex flex-column container">
-                <article class="d-flex flex-row gap-3 mt-3 justify-content-center flex-wrap plato-container">
-                    <div class="card pt-2" style="width: 35em" th:each="plato :${platos}">
-                        <div class="d-flex flex-row gap-3 plato p-3">
-                            <div class="d-flex flex-column w-75">
-                                <h5 class="card-title" th:text="${plato.getNombre()}"></h5>
-                                <p th:text="${plato.getDescripcion()}"></p>
-                                <strong class="card-text mt-3" th:text="'$' + ${plato.getPrecio()}"></strong>
-                            </div>
-                            <div class="position-relative">
-                                <img th:src="@{${plato.getImagen()}}" class="img-plato" alt="Plato"/>
-                                <a href="">
-                                    <div>
-                                        <img th:src="@{/assets/agregar.png}" class="agregar" alt="Agregar"/>
-                                        <img th:src="@{/assets/signo-agregar-icono.png}" class="signo"
-                                             alt="Signo agregar"/>
-                                    </div>
-                                </a>
-                            </div>
+    <section class="col-12 col-md-9 container">
+        <h2 class="mb-3 text-center titulo" style="color:#38BD48">Platos Disponibles</h2>
+        <div class="d-flex flex-column container">
+            <article class="d-flex flex-row gap-3 mt-3 justify-content-center flex-wrap plato-container">
+                <div class="card pt-2" style="width: 35em" th:each="plato :${platos}">
+                    <div class="d-flex flex-row gap-3 plato p-3">
+                        <div class="d-flex flex-column w-75">
+                            <h5 class="card-title" th:text="${plato.getNombre()}"></h5>
+                            <p th:text="${plato.getDescripcion()}"></p>
+                            <strong class="card-text mt-3" th:text="'$' + ${plato.getPrecio()}"></strong>
+                        </div>
+                        <div class="position-relative">
+                            <img th:src="@{${plato.getImagen()}}" class="img-plato" alt="Plato"/>
+                            <a href="">
+                                <div>
+                                    <img th:src="@{/assets/agregar.png}" class="agregar" alt="Agregar"/>
+                                    <img th:src="@{/assets/signo-agregar-icono.png}" class="signo"
+                                         alt="Signo agregar"/>
+                                </div>
+                            </a>
                         </div>
                     </div>
-                </article>
-            </div>
+                </div>
+            </article>
+        </div>
 
-        </section>
-    </div>
+    </section>
 </main>
 <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 </body>

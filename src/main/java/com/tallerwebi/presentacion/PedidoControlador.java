@@ -1,11 +1,15 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.PedidoService;
+import com.tallerwebi.dominio.Plato;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 @Controller
 public class PedidoControlador {
@@ -26,9 +30,22 @@ public class PedidoControlador {
     }
 
     @GetMapping("/pedido/platos")
-    public ModelAndView irAHacerUnPedidoPlatos() {
+    public ModelAndView listarPlatos(@RequestParam(required = false) String ordenar,
+                                     @RequestParam(required = false) String tipo) {
         ModelMap modeloMap = new ModelMap();
-        modeloMap.put("platos", pedidoService.traerTodosLosPlatos());
-        return new ModelAndView("hacer-pedido-platos",modeloMap);
+        List<Plato> platosMostrados;
+
+        if (tipo != null && !tipo.isEmpty()) {
+            platosMostrados = pedidoService.buscarPlatosPorTipoComida(tipo);
+        } else {
+            platosMostrados = pedidoService.traerTodosLosPlatos();
+        }
+
+        if (ordenar != null && !ordenar.isEmpty()) {
+            platosMostrados = pedidoService.ordenarPlatos(platosMostrados, ordenar);
+        }
+
+        modeloMap.addAttribute("platos", platosMostrados);
+        return new ModelAndView("hacer-pedido-platos", modeloMap);
     }
 }
