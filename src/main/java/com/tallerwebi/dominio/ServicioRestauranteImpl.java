@@ -1,6 +1,8 @@
 package com.tallerwebi.dominio;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +10,13 @@ import java.util.List;
 @Service
 public class ServicioRestauranteImpl implements ServicioRestaurante {
 
+    private RepostitorioPlato repostitorioPlato;
     List<Restaurante> restaurantes;
+
+    @Autowired
+    public ServicioRestauranteImpl(RepostitorioPlato repostitorioPlato) {
+        this.repostitorioPlato = repostitorioPlato;
+    }
 
     public ServicioRestauranteImpl() {
         this.restaurantes = new ArrayList<>();
@@ -16,9 +24,13 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
         this.restaurantes.addAll(restaurantesVista);
     }
 
+
+
     public ServicioRestauranteImpl(Boolean iniciarVacio) {
         this.restaurantes = new ArrayList<>();
     }
+
+
 
     private static final List<Restaurante> restaurantesVista = List.of(
             new Restaurante("Green Bowl", "Comida Vegana", "/assets/restaurante.png", "calle", 123, "Don Torcuato", "Norte", List.of("Vegana")),
@@ -103,6 +115,14 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
         }
         return resultados;
     }
+
+    @Override
+    @Transactional
+    public Boolean guardarPlato(PlatoDto platoDto) {
+        return this.repostitorioPlato.crearPlato(platoDto.obtenerEntidad());
+    }
+
+
 
 
 }
