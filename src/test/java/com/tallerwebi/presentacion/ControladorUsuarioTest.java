@@ -17,11 +17,12 @@ public class ControladorUsuarioTest {
     private ControladorUsuario controlador;
     private ServicioUsuario servicioUsuario;
     private ServicioRestaurante servicioRestaurante;
+    private RepostitorioPlato respositorioPlato;
 
     @BeforeEach
     public void init() {
         servicioUsuario = new ServicioUsuarioImpl();
-        servicioRestaurante = new ServicioRestauranteImpl();
+        servicioRestaurante = new ServicioRestauranteImpl(respositorioPlato);
         controlador = new ControladorUsuario(servicioUsuario, servicioRestaurante);
 
     }

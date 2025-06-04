@@ -1,7 +1,8 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.PedidoService;
-import com.tallerwebi.dominio.Plato;
+import com.tallerwebi.dominio.Entity.Plato;
+import com.tallerwebi.dominio.PlatoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,6 +17,7 @@ public class PedidoControlador {
 
     private PedidoService pedidoService;
 
+
     @Autowired
     public PedidoControlador(PedidoService pedidoService) {
         this.pedidoService = pedidoService;
@@ -26,6 +28,7 @@ public class PedidoControlador {
         ModelMap modeloMap = new ModelMap();
         modeloMap.put("restaurantes", pedidoService.traerRestaurantesDestacados());
         modeloMap.put("platos", pedidoService.traerPlatosDestacados());
+
         return new ModelAndView("pedido",modeloMap);
     }
 
@@ -33,7 +36,9 @@ public class PedidoControlador {
     public ModelAndView listarPlatos(@RequestParam(required = false) String ordenar,
                                      @RequestParam(required = false) String tipo) {
         ModelMap modeloMap = new ModelMap();
-        List<Plato> platosMostrados;
+        List<PlatoDto> platosMostrados;
+        System.out.println("Tipo recibido: " + tipo);
+
 
         if (tipo != null && !tipo.isEmpty()) {
             platosMostrados = pedidoService.buscarPlatosPorTipoComida(tipo);

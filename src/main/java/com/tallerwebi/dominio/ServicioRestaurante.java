@@ -14,4 +14,6 @@ public interface ServicioRestaurante {
     List<Restaurante> buscarPorTipoComida(String tipoComida);
 
     List<Restaurante> buscarPorTipoComidaYZona(String zona, String tipoComida);
+
+    Boolean guardarPlato(PlatoDto platoDto);
 }
