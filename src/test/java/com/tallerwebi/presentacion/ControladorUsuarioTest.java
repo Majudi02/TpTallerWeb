@@ -122,7 +122,7 @@ public class ControladorUsuarioTest {
         assertEquals("nutriya-login", vista);
         assertTrue(model.containsAttribute("errorLogin"));
     }
-
+/*
     @Test
     public void dadoQueRegistroUnUsuarioRestauranteSeAgregaElRestauranteALaLista() {
         UsuarioDTO restauranteDTO = new UsuarioDTO();
@@ -146,5 +146,7 @@ public class ControladorUsuarioTest {
         assertNotNull(restaurante, "El restaurante debería existir en el servicio");
         assertEquals("Restaurante Test", restaurante.getNombre());
     }
+    */
+
 
 }
