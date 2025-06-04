@@ -43,19 +43,17 @@ public class ControladorCrearPlatoRestaurante {
                                      HttpServletRequest request) {
         if (!imagen.isEmpty()) {
             try {
-                String rutaBase = request.getServletContext().getRealPath("/") + "assets/imagenesPlatos/";
-                Files.createDirectories(Paths.get(rutaBase)); // Crea la carpeta si no existe
 
-
+                String rutaProyecto = System.getProperty("user.dir");
+                String rutaBase = rutaProyecto + "/src/main/webapp/resources/assets/imagenesPlatos/";
+                Files.createDirectories(Paths.get(rutaBase));
 
                 String extension = imagen.getOriginalFilename().substring(imagen.getOriginalFilename().lastIndexOf("."));
                 String nombreArchivo = UUID.randomUUID() + extension;
                 Path rutaDestino = Paths.get(rutaBase, nombreArchivo);
 
-                // Copiamos el archivo
                 Files.copy(imagen.getInputStream(), rutaDestino);
 
-                // Guardamos la ruta en el DTO
                 platoDto.setImagen("/assets/imagenesPlatos/" + nombreArchivo);
 
             } catch (Exception e) {
