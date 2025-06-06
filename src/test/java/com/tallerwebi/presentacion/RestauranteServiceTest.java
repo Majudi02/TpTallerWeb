@@ -15,7 +15,10 @@ public class RestauranteServiceTest {
 
     @Test
     public void DadoQueExisteUnServicioRestauranteSePuedeAgregarUno() {
-        ServicioRestaurante servicioRestaurante = new ServicioRestauranteImpl(true);
+  //     ServicioRestaurante servicioRestaurante = new ServicioRestauranteImpl(true);
+        ServicioRestaurante servicioRestaurante = new ServicioRestauranteImpl();
+        servicioRestaurante.limpiarRestaurantes();
+
         Restaurante restaurante1 = new Restaurante("Restaurante", "Comida Vegana", "core/images/restaurante.png", "calle", 555, "Don Torcuato", "Norte", List.of("Vegana"));
 
         Boolean agregado = servicioRestaurante.agregarRestaurante(restaurante1);
@@ -28,7 +31,10 @@ public class RestauranteServiceTest {
 
     @Test
     public void DadoQueExistenRestaurantesNoSePuedeAgregarUnoConLaMismaCalleYElMismoNumero() {
-        ServicioRestaurante servicioRestaurante = new ServicioRestauranteImpl(true);
+        //     ServicioRestaurante servicioRestaurante = new ServicioRestauranteImpl(true);
+        ServicioRestaurante servicioRestaurante = new ServicioRestauranteImpl();
+        servicioRestaurante.limpiarRestaurantes();
+
 
         Restaurante restaurante1 = new Restaurante("Green Bowl", "Comida Vegana", "core/images/restaurante.png", "calle", 123, "Don Torcuato", "Norte", List.of("Vegana"));
         Restaurante restaurante2 = new Restaurante("Natural Express", "Comida Vegana", "core/images/restaurante.png", "calle", 123, "La Matanza", "Oeste", List.of("Proteica"));
@@ -42,7 +48,10 @@ public class RestauranteServiceTest {
 
     @Test
     public void DadoQueExistenCincoRestaurantesLosObtengo() {
-        ServicioRestaurante servicioRestaurante = new ServicioRestauranteImpl(true);
+        //     ServicioRestaurante servicioRestaurante = new ServicioRestauranteImpl(true);
+        ServicioRestaurante servicioRestaurante = new ServicioRestauranteImpl();
+        servicioRestaurante.limpiarRestaurantes();
+
 
         Restaurante restaurante1 = new Restaurante("Green Bowl", "Comida Vegana", "core/images/restaurante.png", "calle", 123, "Don Torcuato", "Norte", List.of("Vegana"));
         Restaurante restaurante2 = new Restaurante("Natural Express", "Comida Vegana", "core/images/restaurante.png", "calle", 321, "La Matanza", "Oeste", List.of("Proteica"));
@@ -63,7 +72,9 @@ public class RestauranteServiceTest {
 
     @Test
     public void DadoQueExistenCincoRestaurantesObtengoSoloLosDeLaZonaFiltrada() {
+        //     ServicioRestaurante servicioRestaurante = new ServicioRestauranteImpl(true);
         ServicioRestaurante servicioRestaurante = new ServicioRestauranteImpl();
+        servicioRestaurante.limpiarRestaurantes();
 
         Restaurante restaurante1 = new Restaurante("Green Bowl", "Comida Vegana", "core/images/restaurante.png", "calle", 123, "Don Torcuato", "Norte", List.of("Vegana"));
         Restaurante restaurante2 = new Restaurante("Natural Express", "Comida Vegana", "core/images/restaurante.png", "calle", 321, "La Matanza", "Oeste", List.of("Proteica"));
@@ -84,8 +95,9 @@ public class RestauranteServiceTest {
 
     @Test
     public void DadoQueExistenCincoRestaurantesObtengoSoloLosDelTipoDeComidaFiltrada() {
-        ServicioRestaurante servicioRestaurante = new ServicioRestauranteImpl(true);
-
+      //       ServicioRestaurante servicioRestaurante = new ServicioRestauranteImpl(true);
+        ServicioRestaurante servicioRestaurante = new ServicioRestauranteImpl();
+        servicioRestaurante.limpiarRestaurantes();
 
         Restaurante restaurante1 = new Restaurante("Green Bowl", "Comida Vegana", "core/images/restaurante.png", "calle", 123, "Don Torcuato", "Norte", List.of("Vegana"));
         Restaurante restaurante2 = new Restaurante("Natural Express", "Comida Vegana", "core/images/restaurante.png", "calle", 321, "La Matanza", "Oeste", List.of("Proteica"));
@@ -107,6 +119,8 @@ public class RestauranteServiceTest {
     @Test
     public void DadoQueExistenCincoRestaurantesObtengoSoloLosDelTipoDeComidaYZonaFiltrada() {
         ServicioRestaurante servicioRestaurante = new ServicioRestauranteImpl();
+        servicioRestaurante.limpiarRestaurantes();
+
 
         Restaurante restaurante1 = new Restaurante("Green Bowl", "Comida Vegana", "core/images/restaurante.png", "calle", 123, "Don Torcuato", "Norte", List.of("Vegana"));
         Restaurante restaurante2 = new Restaurante("Natural Express", "Comida Vegana", "core/images/restaurante.png", "calle", 321, "La Matanza", "Oeste", List.of("Proteica"));
@@ -126,5 +140,9 @@ public class RestauranteServiceTest {
     }
 
 
+
 }
+
+
+
 

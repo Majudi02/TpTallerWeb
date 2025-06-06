@@ -22,7 +22,8 @@ public class RepositorioPlatoImpl implements RepostitorioPlato {
 
     @Override
     public Plato buscarPlatoPorId(Integer id) {
-      return sessionFactory.getCurrentSession().get(Plato.class,id);
+
+        return sessionFactory.getCurrentSession().get(Plato.class,id);
     }
 
     @Override
@@ -33,8 +34,8 @@ public class RepositorioPlatoImpl implements RepostitorioPlato {
     @Override
     public List<Plato> buscarPlatosPorTipoComida(String tipoComida) {
         return sessionFactory.getCurrentSession()
-                .createQuery("SELECT p FROM Plato p JOIN p.etiquetas e WHERE e = :etiqueta", Plato.class)
-                .setParameter("etiqueta", tipoComida)
+                .createQuery("SELECT p FROM Plato p JOIN p.etiquetas e WHERE e.nombre = :nombreEtiqueta", Plato.class)
+                .setParameter("nombreEtiqueta", tipoComida)
                 .getResultList();
     }
 
@@ -44,4 +45,15 @@ public class RepositorioPlatoImpl implements RepostitorioPlato {
                 .createQuery("FROM Plato", Plato.class)
                 .getResultList();
     }
+
+    @Override
+    public Boolean editarEtiquetas(Plato plato) {
+        int actualizados = sessionFactory.getCurrentSession()
+                .createQuery("UPDATE Plato p SET p.etiquetas = :etiquetas WHERE p.id = :id")
+                .setParameter("etiquetas", plato.getEtiquetas())
+                .setParameter("id", plato.getId())
+                .executeUpdate();
+        return actualizados > 0;
+    }
+
 }

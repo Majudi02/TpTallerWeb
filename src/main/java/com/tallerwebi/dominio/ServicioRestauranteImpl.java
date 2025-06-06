@@ -1,13 +1,16 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.Entity.Plato;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.StyledEditorKit;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class ServicioRestauranteImpl implements ServicioRestaurante {
 
     private RepostitorioPlato repostitorioPlato;
@@ -16,20 +19,18 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
     @Autowired
     public ServicioRestauranteImpl(RepostitorioPlato repostitorioPlato) {
         this.repostitorioPlato = repostitorioPlato;
+        this.restaurantes = new ArrayList<>(restaurantesVista);
     }
 
     public ServicioRestauranteImpl() {
         this.restaurantes = new ArrayList<>();
-        // Copiamos los datos de la lista estática a la instancia
         this.restaurantes.addAll(restaurantesVista);
     }
 
-
-
-    public ServicioRestauranteImpl(Boolean iniciarVacio) {
-        this.restaurantes = new ArrayList<>();
+    // DESPUES SACRA
+    public void limpiarRestaurantes() {
+        restaurantes.clear();
     }
-
 
 
     private static final List<Restaurante> restaurantesVista = List.of(
@@ -119,10 +120,21 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
     @Override
     @Transactional
     public Boolean guardarPlato(PlatoDto platoDto) {
-        return this.repostitorioPlato.crearPlato(platoDto.obtenerEntidad());
+        Plato plato = platoDto.obtenerDto(platoDto.getEtiquetas());
+        return this.repostitorioPlato.crearPlato(plato);
     }
 
+    @Override
+    public Boolean editarEtiquetas(PlatoDto platoDto){
+        Plato plato = platoDto.obtenerDto(platoDto.getEtiquetas());
+        return this.repostitorioPlato.editarEtiquetas(plato);
+    }
 
+    @Override
+    public PlatoDto obtenerPlatoPorId(Integer id) {
+        Plato plato = this.repostitorioPlato.buscarPlatoPorId(id);
+        return  plato.obtenerDto();
+    }
 
 
 }

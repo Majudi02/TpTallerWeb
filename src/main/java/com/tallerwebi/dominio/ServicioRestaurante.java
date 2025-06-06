@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.Entity.Plato;
+
 import java.util.List;
 
 public interface ServicioRestaurante {
@@ -16,4 +18,12 @@ public interface ServicioRestaurante {
     List<Restaurante> buscarPorTipoComidaYZona(String zona, String tipoComida);
 
     Boolean guardarPlato(PlatoDto platoDto);
+
+    Boolean editarEtiquetas(PlatoDto platoDto);
+
+    PlatoDto obtenerPlatoPorId(Integer id);
+
+    // DESPUES SACAR
+    void limpiarRestaurantes();
+
 }

@@ -87,10 +87,10 @@
                 <label for="tipo" class="form-label">Tipo de comida</label>
                 <select id="tipo" name="tipo" class="form-select">
                     <option value="" th:selected="${tipo == null}">Todas las comidas</option>
-                    <option th:value="VEGANO" th:selected="${tipo == 'VEGANO'}">Vegana</option>
-                    <option th:value="VEGETARIANO" th:selected="${tipo == 'VEGETARIANO'}">Vegetariana</option>
-                    <option th:value="'SIN_GLUTEN'" th:selected="${tipo == 'SIN_GLUTEN'}">Sin gluten</option>
-                    <option th:value="PROTEICO" th:selected="${tipo == 'PROTEICO'}">Alta en proteína</option>
+                    <option th:value="Vegano" th:selected="${tipo == 'Vegano'}">Vegana</option>
+                    <option th:value="Vegetariano" th:selected="${tipo == 'Vegetariano'}">Vegetariana</option>
+                    <option th:value="Sin_Gluten" th:selected="${tipo == 'Sin_Gluten'}">Sin gluten</option>
+                    <option th:value="Proteico" th:selected="${tipo == 'Proteico'}">Alta en proteína</option>
                 </select>
             </div>
         </div>
@@ -106,11 +106,12 @@
                         <div class="d-flex flex-column w-75">
                             <h5 class="card-title" th:text="${plato.getNombre()}"></h5>
                             <p th:text="${plato.getDescripcion()}"></p>
+                            <p th:text="${plato.getId()}"></p>
                             <strong class="card-text mt-3" th:text="'$' + ${plato.getPrecio()}"></strong>
                         </div>
                         <div class="position-relative">
 
-                            <img src="/resources/assets/imagenesPlatos/plato-null-1749061065910.png">
+                            <img th:src="@{${plato.getImagen()}}" class="img-plato">
                             <a href="">
                                 <div>
                                     <img th:src="@{/assets/agregar.png}" class="agregar" alt="Agregar"/>
