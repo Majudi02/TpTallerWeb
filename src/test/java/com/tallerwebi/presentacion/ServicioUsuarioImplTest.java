@@ -1,7 +1,6 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.*;
-import com.tallerwebi.presentacion.UsuarioDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -34,6 +33,7 @@ public class ServicioUsuarioImplTest {
         dto.setAltura(1.65);
         dto.setObjetivo("bajar");
 
+        // Simulo que el email no existe en la bd
         when(repositorioMock.buscarPorEmail("cliente@mail.com")).thenReturn(null);
 
         servicioUsuario.registrarUsuario(dto);

@@ -87,10 +87,10 @@
                 <label for="tipo" class="form-label">Tipo de comida</label>
                 <select id="tipo" name="tipo" class="form-select">
                     <option value="" th:selected="${tipo == null}">Todas las comidas</option>
-                    <option th:value="Vegana" th:selected="${tipo == 'Vegana'}">Vegana</option>
-                    <option th:value="Vegetariana" th:selected="${tipo == 'Vegetariana'}">Vegetariana</option>
-                    <option th:value="'Sin Gluten'" th:selected="${tipo == 'Sin Gluten'}">Sin gluten</option>
-                    <option th:value="Proteica" th:selected="${tipo == 'Proteica'}">Alta en proteína</option>
+                    <option th:value="VEGANO" th:selected="${tipo == 'VEGANO'}">Vegana</option>
+                    <option th:value="VEGETARIANO" th:selected="${tipo == 'VEGETARIANO'}">Vegetariana</option>
+                    <option th:value="'SIN_GLUTEN'" th:selected="${tipo == 'SIN_GLUTEN'}">Sin gluten</option>
+                    <option th:value="PROTEICO" th:selected="${tipo == 'PROTEICO'}">Alta en proteína</option>
                 </select>
             </div>
         </div>
@@ -109,7 +109,8 @@
                             <strong class="card-text mt-3" th:text="'$' + ${plato.getPrecio()}"></strong>
                         </div>
                         <div class="position-relative">
-                            <img th:src="@{${plato.getImagen()}}" class="img-plato" alt="Plato"/>
+
+                            <img src="/resources/assets/imagenesPlatos/plato-null-1749061065910.png">
                             <a href="">
                                 <div>
                                     <img th:src="@{/assets/agregar.png}" class="agregar" alt="Agregar"/>
