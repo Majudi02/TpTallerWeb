@@ -1,18 +1,20 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.Entity.Plato;
-import com.tallerwebi.dominio.RepostitorioPlato;
+import com.tallerwebi.dominio.RepositorioPlato;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository("repositorioPlato")
-public class RepositorioPlatoImpl implements RepostitorioPlato {
+public class RepositorioPlatoImpl implements RepositorioPlato {
 
     private SessionFactory sessionFactory;
 
-    public RepositorioPlatoImpl(SessionFactory sessionFactory){this.sessionFactory = sessionFactory;}
+    public RepositorioPlatoImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public Boolean crearPlato(Plato plato) {
@@ -22,11 +24,16 @@ public class RepositorioPlatoImpl implements RepostitorioPlato {
 
     @Override
     public Plato buscarPlatoPorId(Integer id) {
-      return sessionFactory.getCurrentSession().get(Plato.class,id);
+        return sessionFactory.getCurrentSession().get(Plato.class, id);
     }
 
     @Override
     public boolean eliminarPlato(Integer id) {
+        Plato plato = sessionFactory.getCurrentSession().get(Plato.class, id);
+        if (plato != null) {
+            sessionFactory.getCurrentSession().delete(plato);
+            return true;
+        }
         return false;
     }
 

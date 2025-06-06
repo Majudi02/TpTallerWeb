@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.*;
 import com.tallerwebi.presentacion.ControladorUsuario;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.ui.ConcurrentModel;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
@@ -46,7 +47,7 @@ public class ControladorUsuarioTest {
         when(repositorioUsuario.buscarPorEmail("ana@mail.com")).thenReturn(null);
 
         RedirectAttributesModelMap redirect = new RedirectAttributesModelMap();
-        String resultado = controlador.registrarUsuario(cliente, redirect);
+        String resultado = controlador.registrarUsuario(cliente, null, redirect);
 
         // Verificamos que se haya guardado
         verify(repositorioUsuario).guardar(any(Cliente.class));
@@ -73,7 +74,7 @@ public class ControladorUsuarioTest {
 
         RedirectAttributesModelMap redirect = new RedirectAttributesModelMap();
 
-        String resultado = controlador.registrarUsuario(cliente, redirect);
+        String resultado = controlador.registrarUsuario(cliente, null, redirect);
 
         assertEquals("nutriya-register", resultado);
     }
@@ -164,7 +165,7 @@ public class ControladorUsuarioTest {
 
         RedirectAttributesModelMap redirect = new RedirectAttributesModelMap();
 
-        controlador.registrarUsuario(restauranteDTO, redirect);
+        controlador.registrarUsuario(restauranteDTO, null, redirect);
 
         Restaurante restauranteMock = new Restaurante();
         restauranteMock.setNombre("Restaurante Test");

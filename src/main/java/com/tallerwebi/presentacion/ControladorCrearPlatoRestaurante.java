@@ -30,7 +30,6 @@ public class ControladorCrearPlatoRestaurante {
         this.servicioRestaurante = servicioRestaurante;
     }
 
-
     @GetMapping("/crear-plato")
     public ModelAndView crearPlato(){
         ModelMap modelMap = new ModelMap();
@@ -43,7 +42,6 @@ public class ControladorCrearPlatoRestaurante {
                                      HttpServletRequest request) {
         if (!imagen.isEmpty()) {
             try {
-
                 String rutaProyecto = System.getProperty("user.dir");
                 String rutaBase = rutaProyecto + "/src/main/webapp/resources/assets/imagenesPlatos/";
                 Files.createDirectories(Paths.get(rutaBase));
@@ -65,7 +63,7 @@ public class ControladorCrearPlatoRestaurante {
         System.out.println("Imagen vacía? " + imagen.isEmpty());
         System.out.println("Resultado guardado: " + guardado);
 
-        return new ModelAndView(guardado ? "redirect:/hacer-pedido-platos" : "redirect:/perfil-home");
+        return new ModelAndView(guardado ? "redirect:/pedido/platos/" : "redirect:/perfil-home/");
     }
 }
 

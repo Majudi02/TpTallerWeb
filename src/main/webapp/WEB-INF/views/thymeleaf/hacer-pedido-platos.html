@@ -18,10 +18,10 @@
 
 
 <header>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top px-3">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top px-3 mb-3">
         <div class="container-fluid">
             <div class="d-flex w-100 justify-content-between align-items-center">
-                <a class="navbar-brand" th:href="@{/nutriya.html}">Nutri<span style="color: #38BD48;">Ya</span></a>
+                <a class="navbar-brand" th:href="@{/nutriya}">Nutri<span style="color: #38BD48;">Ya</span></a>
                 <form class="d-none d-lg-flex mx-auto" role="search" style="width: 40%;">
                     <div class="input-group">
                         <input class="form-control" type="search" placeholder="Buscá comidas, restaurantes..."
@@ -32,7 +32,7 @@
                     </div>
                 </form>
                 <div class="botones-nav">
-                    <a class="btn btn-outline-secondary mx-1" th:href="@{nutriya-login.html}">
+                    <a class="btn btn-outline-secondary mx-1" th:href="@{/nutriya-login}">
                         <i class="bi bi-person"></i>
                     </a>
 
@@ -53,24 +53,25 @@
         <div class="offcanvas-body">
             <ul class="navbar-nav gap-2">
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/nutriya.html}">Inicio</a>
+                    <a class="nav-link" th:href="@{/nutriya}">Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" th:href="@{/pedido.html}">Comidas</a>
+                    <a class="nav-link active" th:href="@{/pedido}">Comidas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/restaurantes.html}">Restaurantes</a>
+                    <a class="nav-link" th:href="@{/restaurantes}">Restaurantes</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/medios-pago.html}">Medios de Pago</a>
+                    <a class="nav-link" th:href="@{/medios-pago}">Medios de Pago</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/nutriya-login.html}">Mi Perfil</a>
+                    <a class="nav-link" th:href="@{/nutriya-login}">Mi Perfil</a>
                 </li>
             </ul>
         </div>
     </div>
 </header>
+
 <main class="my-5">
     <!-- Filtros -->
     <form method="get" class="filters container mb-2 mt-5" th:action="@{/pedido/platos}">
@@ -109,8 +110,7 @@
                             <strong class="card-text mt-3" th:text="'$' + ${plato.getPrecio()}"></strong>
                         </div>
                         <div class="position-relative">
-
-                            <img src="/resources/assets/imagenesPlatos/plato-null-1749061065910.png">
+                            <img th:src="${plato.imagen}" alt="Plato" style="width: 200px; height: auto"/>
                             <a href="">
                                 <div>
                                     <img th:src="@{/assets/agregar.png}" class="agregar" alt="Agregar"/>
@@ -126,6 +126,6 @@
 
     </section>
 </main>
-<script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 </body>
 </html>

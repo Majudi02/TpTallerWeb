@@ -52,7 +52,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
             restaurante.setLocalidad(usuarioDTO.getLocalidad());
             restaurante.setZona(usuarioDTO.getZona());
             restaurante.setTiposComida(usuarioDTO.getTipoComidas());
-
+            restaurante.setImagen(usuarioDTO.getImagen());
             usuarioRestaurante.setRestaurante(restaurante);
 
             usuario = usuarioRestaurante;

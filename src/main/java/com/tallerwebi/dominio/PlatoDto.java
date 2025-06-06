@@ -42,10 +42,6 @@ public class PlatoDto {
         return plato;
     }
 
-
-
-
-
     public List<String> getEtiquetas() {
         return etiquetas;
     }

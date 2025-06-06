@@ -10,7 +10,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
 
 @Controller
 public class ControladorUsuario {
@@ -33,7 +40,7 @@ public class ControladorUsuario {
     }
 
     @PostMapping("/nutriya-register")
-    public String registrarUsuario(@ModelAttribute("registroUsuarioDTO") UsuarioDTO usuarioDTO, RedirectAttributes redirectAttributes) {
+    public String registrarUsuario(@ModelAttribute("registroUsuarioDTO") UsuarioDTO usuarioDTO, @RequestParam("imagenRestaurante") MultipartFile imagen, RedirectAttributes redirectAttributes) {
         if (usuarioDTO.getTipoUsuario() == null || usuarioDTO.getTipoUsuario().isEmpty()) {
             return "nutriya-register";
         }
@@ -65,6 +72,8 @@ public class ControladorUsuario {
         }
 
         // Verificar si ya hay un usuario con ese email
+        System.out.println("DTO: " + usuarioDTO.getImagenRestaurante());
+        System.out.println("RESTAURANTE?: " + usuarioDTO.getTipoUsuario());
         UsuarioDTO usuarioEncontrado = servicioUsuario.getUsuario(usuarioDTO.getEmail());
 
         if (usuarioEncontrado != null) {
@@ -72,10 +81,29 @@ public class ControladorUsuario {
             return "redirect:/resultado-registro";
         }
 
+        if ("restaurante".equals(usuarioDTO.getTipoUsuario())) {
+            if (imagen != null && !imagen.isEmpty()) {
+                try {
+                    String rutaProyecto = System.getProperty("user.dir");
+                    String rutaBase = rutaProyecto + "/src/main/webapp/resources/assets/imagenesRestaurantes/";
+                    Files.createDirectories(Paths.get(rutaBase));
+
+                    String extension = imagen.getOriginalFilename()
+                            .substring(imagen.getOriginalFilename().lastIndexOf("."));
+                    String nombreArchivo = UUID.randomUUID() + extension;
+                    Path rutaDestino = Paths.get(rutaBase, nombreArchivo);
+
+                    Files.copy(imagen.getInputStream(), rutaDestino);
+
+                    usuarioDTO.setImagen("/assets/imagenesRestaurantes/" + nombreArchivo);
+                } catch (Exception e) {
+                }
+            }
+        }
+
         // SOLO UNA LLAMADA AL SERVICIO
         servicioUsuario.registrarUsuario(usuarioDTO);
 
-        System.out.println("DTO recibido: " + usuarioDTO);
         return "redirect:/resultado-registro";
     }
 

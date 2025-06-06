@@ -13,5 +13,7 @@ public interface ServicioRestaurante {
 
     List<Restaurante> buscarPorTipoComidaYZona(String zona, String tipoComida);
 
+    Boolean guardarPlato(PlatoDto platoDto);
+
     void inicializarDatos();
 }

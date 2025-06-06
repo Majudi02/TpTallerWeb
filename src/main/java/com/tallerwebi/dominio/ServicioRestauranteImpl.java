@@ -3,6 +3,9 @@ package com.tallerwebi.dominio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tallerwebi.dominio.RepositorioPlato;
+import com.tallerwebi.dominio.RepositorioUsuarioRestaurante;
+
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +25,12 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
     );
     */
     private final RepositorioUsuarioRestaurante repositorioUsuarioRestaurante;
+    private final RepositorioPlato repositorioPlato;
 
     @Autowired
-    public ServicioRestauranteImpl(RepositorioUsuarioRestaurante repositorioUsuarioRestaurante) {
+    public ServicioRestauranteImpl(RepositorioUsuarioRestaurante repositorioUsuarioRestaurante, RepositorioPlato repositorioPlato) {
         this.repositorioUsuarioRestaurante = repositorioUsuarioRestaurante;
+        this.repositorioPlato = repositorioPlato;
     }
 
     @Override
@@ -116,6 +121,12 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
             }
         }
         return resultados;
+    }
+
+    @Override
+    @Transactional
+    public Boolean guardarPlato(PlatoDto platoDto) {
+        return this.repositorioPlato.crearPlato(platoDto.obtenerEntidad());
     }
 }
 

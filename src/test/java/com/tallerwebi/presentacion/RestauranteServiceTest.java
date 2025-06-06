@@ -6,18 +6,18 @@ import static org.mockito.Mockito.*;
 import com.tallerwebi.dominio.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.util.List;
 
 public class RestauranteServiceTest {
-
-    private RepositorioUsuarioRestaurante repositorioMock;
+    private RepositorioUsuarioRestaurante repositorioUsuarioRestauranteMock;
+    private RepositorioPlato repositorioPlatoMock;
     private ServicioRestauranteImpl servicio;
 
     @BeforeEach
     public void setup() {
-        repositorioMock = mock(RepositorioUsuarioRestaurante.class);
+        repositorioUsuarioRestauranteMock = mock(RepositorioUsuarioRestaurante.class);
+        repositorioPlatoMock = mock(RepositorioPlato.class);
 
         // Datos controlados para el test
         List<Restaurante> restaurantesMock = List.of(
@@ -26,9 +26,9 @@ public class RestauranteServiceTest {
                 new Restaurante("Natural Express", "Comida Vegana", "/assets/restaurante.png", "calle", 321, "La Matanza", "Oeste", List.of("Proteica"))
         );
 
-        when(repositorioMock.buscarTodosLosRestaurantes()).thenReturn(restaurantesMock);
+        when(repositorioUsuarioRestauranteMock.buscarTodosLosRestaurantes()).thenReturn(restaurantesMock);
 
-        servicio = new ServicioRestauranteImpl(repositorioMock);
+        servicio = new ServicioRestauranteImpl(repositorioUsuarioRestauranteMock, repositorioPlatoMock);
     }
 
     @Test

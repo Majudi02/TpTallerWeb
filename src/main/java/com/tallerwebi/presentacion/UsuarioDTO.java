@@ -1,5 +1,7 @@
 package com.tallerwebi.presentacion;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 public class UsuarioDTO {
@@ -27,6 +29,7 @@ public class UsuarioDTO {
 
     // Campos Restaurante
     private String descripcion;
+    private MultipartFile imagenRestaurante;
     private String imagen;
     private String calle;
     private Integer numero;
@@ -47,7 +50,6 @@ public class UsuarioDTO {
                 ", tipoUsuario='" + tipoUsuario + '\'' +
                 '}';
     }
-
 
     public Double getAltura() {
         return altura;
@@ -215,6 +217,14 @@ public class UsuarioDTO {
 
     public void setTipoComidas(List<String> tipoComidas) {
         this.tipoComidas = tipoComidas;
+    }
+
+    public MultipartFile getImagenRestaurante() {
+        return imagenRestaurante;
+    }
+
+    public void setImagenRestaurante(MultipartFile imagenRestaurante) {
+        this.imagenRestaurante = imagenRestaurante;
     }
 }
 

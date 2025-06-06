@@ -89,7 +89,7 @@ public class RepositorioUsuarioNutriyaImplTest {
 
         assertNotNull(usuarioEncontrado);
         assertEquals("repartidor@prueba.com", usuarioEncontrado.getEmail());
-        assertInstanceOf(UsuarioRestaurante.class, usuarioEncontrado);
+        assertInstanceOf(Repartidor.class, usuarioEncontrado);
     }
 
     @Test
