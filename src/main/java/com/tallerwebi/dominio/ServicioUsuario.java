@@ -11,8 +11,6 @@ public interface ServicioUsuario {
 
     void registrarUsuario(UsuarioDTO usuarioDTO);
 
-    List<UsuarioDTO> getUsuarios();
-
     UsuarioDTO getUsuario(String email);
 
     UsuarioDTO validarUsuario(String email, String password);

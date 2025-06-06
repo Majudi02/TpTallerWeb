@@ -3,6 +3,7 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.Restaurante;
 import com.tallerwebi.dominio.ServicioRestaurante;
 import com.tallerwebi.dominio.ServicioUsuario;
+import com.tallerwebi.dominio.UsuarioRestaurante;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -71,25 +72,13 @@ public class ControladorUsuario {
             return "redirect:/resultado-registro";
         }
 
+        // SOLO UNA LLAMADA AL SERVICIO
         servicioUsuario.registrarUsuario(usuarioDTO);
 
-        if ("restaurante".equals(usuarioDTO.getTipoUsuario())) {
-            Restaurante restaurante = new Restaurante(
-                    usuarioDTO.getNombre(),
-                    usuarioDTO.getDescripcion(),
-                    usuarioDTO.getImagen(),
-                    usuarioDTO.getCalle(),
-                    usuarioDTO.getNumero(),
-                    usuarioDTO.getLocalidad(),
-                    usuarioDTO.getZona(),
-                    usuarioDTO.getTipoComidas()
-            );
-            servicioRestaurante.agregarRestaurante(restaurante);
-        }
-
-
+        System.out.println("DTO recibido: " + usuarioDTO);
         return "redirect:/resultado-registro";
     }
+
 
     @GetMapping("/resultado-registro")
     public String mostrarRegistroExitoso() {

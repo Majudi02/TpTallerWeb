@@ -11,7 +11,7 @@ public class UsuarioDTO {
     // Campos Repartidor
     private String nombre;
     private String apellido;
-    private String dni;
+    private Integer dni;
     private String telefono;
     private String vehiculo;
 
@@ -33,6 +33,21 @@ public class UsuarioDTO {
     private String localidad;
     private String zona;
     private List<String> tipoComidas;
+
+    @Override
+    public String toString() {
+        return "UsuarioDTO{" +
+                "nombre='" + nombre + '\'' +
+                ", apellido='" + apellido + '\'' +
+                ", dni='" + dni + '\'' +
+                ", telefono='" + telefono + '\'' +
+                ", vehiculo='" + vehiculo + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", tipoUsuario='" + tipoUsuario + '\'' +
+                '}';
+    }
+
 
     public Double getAltura() {
         return altura;
@@ -82,11 +97,11 @@ public class UsuarioDTO {
         this.apellido = apellido;
     }
 
-    public String getDni() {
+    public Integer getDni() {
         return dni;
     }
 
-    public void setDni(String dni) {
+    public void setDni(Integer dni) {
         this.dni = dni;
     }
 
