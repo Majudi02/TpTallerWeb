@@ -1,6 +1,9 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.entidades.Cliente;
+import com.tallerwebi.dominio.entidades.Repartidor;
+import com.tallerwebi.dominio.entidades.UsuarioRestaurante;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

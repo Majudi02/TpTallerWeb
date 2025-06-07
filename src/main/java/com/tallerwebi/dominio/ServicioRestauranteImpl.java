@@ -1,10 +1,10 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.entidades.Plato;
+import com.tallerwebi.dominio.entidades.Restaurante;
+import com.tallerwebi.dominio.entidades.UsuarioRestaurante;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.tallerwebi.dominio.RepositorioPlato;
-import com.tallerwebi.dominio.RepositorioUsuarioRestaurante;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -126,7 +126,20 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
     @Override
     @Transactional
     public Boolean guardarPlato(PlatoDto platoDto) {
-        return this.repositorioPlato.crearPlato(platoDto.obtenerEntidad());
+        Plato plato = platoDto.obtenerDto(platoDto.getEtiquetas());
+        return this.repositorioPlato.crearPlato(plato);
+    }
+
+    @Override
+    public Boolean editarEtiquetas(PlatoDto platoDto){
+        Plato plato = platoDto.obtenerDto(platoDto.getEtiquetas());
+        return this.repositorioPlato.editarEtiquetas(plato);
+    }
+
+    @Override
+    public PlatoDto obtenerPlatoPorId(Integer id) {
+        Plato plato = this.repositorioPlato.buscarPlatoPorId(id);
+        return  plato.obtenerDto();
     }
 }
 

@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.entidades.Restaurante;
+
 import java.util.List;
 
 public interface ServicioRestaurante {
@@ -16,4 +18,8 @@ public interface ServicioRestaurante {
     Boolean guardarPlato(PlatoDto platoDto);
 
     void inicializarDatos();
+
+    Boolean editarEtiquetas(PlatoDto platoDto);
+
+    PlatoDto obtenerPlatoPorId(Integer id);
 }

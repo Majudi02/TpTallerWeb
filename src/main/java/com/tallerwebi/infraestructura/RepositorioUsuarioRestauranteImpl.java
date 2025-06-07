@@ -1,8 +1,8 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.RepositorioUsuarioRestaurante;
-import com.tallerwebi.dominio.Restaurante;
-import com.tallerwebi.dominio.UsuarioRestaurante;
+import com.tallerwebi.dominio.entidades.Restaurante;
+import com.tallerwebi.dominio.entidades.UsuarioRestaurante;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
