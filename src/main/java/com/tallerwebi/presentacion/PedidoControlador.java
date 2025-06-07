@@ -1,7 +1,6 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.PedidoService;
-import com.tallerwebi.dominio.Entity.Plato;
 import com.tallerwebi.dominio.PlatoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

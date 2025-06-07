@@ -1,5 +1,7 @@
 package com.tallerwebi.presentacion;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 public class UsuarioDTO {
@@ -11,7 +13,7 @@ public class UsuarioDTO {
     // Campos Repartidor
     private String nombre;
     private String apellido;
-    private String dni;
+    private Integer dni;
     private String telefono;
     private String vehiculo;
 
@@ -27,12 +29,27 @@ public class UsuarioDTO {
 
     // Campos Restaurante
     private String descripcion;
+    private MultipartFile imagenRestaurante;
     private String imagen;
     private String calle;
     private Integer numero;
     private String localidad;
     private String zona;
     private List<String> tipoComidas;
+
+    @Override
+    public String toString() {
+        return "UsuarioDTO{" +
+                "nombre='" + nombre + '\'' +
+                ", apellido='" + apellido + '\'' +
+                ", dni='" + dni + '\'' +
+                ", telefono='" + telefono + '\'' +
+                ", vehiculo='" + vehiculo + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", tipoUsuario='" + tipoUsuario + '\'' +
+                '}';
+    }
 
     public Double getAltura() {
         return altura;
@@ -82,11 +99,11 @@ public class UsuarioDTO {
         this.apellido = apellido;
     }
 
-    public String getDni() {
+    public Integer getDni() {
         return dni;
     }
 
-    public void setDni(String dni) {
+    public void setDni(Integer dni) {
         this.dni = dni;
     }
 
@@ -200,6 +217,14 @@ public class UsuarioDTO {
 
     public void setTipoComidas(List<String> tipoComidas) {
         this.tipoComidas = tipoComidas;
+    }
+
+    public MultipartFile getImagenRestaurante() {
+        return imagenRestaurante;
+    }
+
+    public void setImagenRestaurante(MultipartFile imagenRestaurante) {
+        this.imagenRestaurante = imagenRestaurante;
     }
 }
 

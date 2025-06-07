@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.entidades.Restaurante;
+
 import java.util.List;
 
 public interface PedidoService {

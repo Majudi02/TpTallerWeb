@@ -1,18 +1,20 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Entity.Plato;
-import com.tallerwebi.dominio.RepostitorioPlato;
+import com.tallerwebi.dominio.entidades.Plato;
+import com.tallerwebi.dominio.RepositorioPlato;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository("repositorioPlato")
-public class RepositorioPlatoImpl implements RepostitorioPlato {
+public class RepositorioPlatoImpl implements RepositorioPlato {
 
     private SessionFactory sessionFactory;
 
-    public RepositorioPlatoImpl(SessionFactory sessionFactory){this.sessionFactory = sessionFactory;}
+    public RepositorioPlatoImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public Boolean crearPlato(Plato plato) {
@@ -22,7 +24,8 @@ public class RepositorioPlatoImpl implements RepostitorioPlato {
 
     @Override
     public Plato buscarPlatoPorId(Integer id) {
-      return sessionFactory.getCurrentSession().get(Plato.class,id);
+
+        return sessionFactory.getCurrentSession().get(Plato.class, id);
     }
 
     @Override
@@ -33,8 +36,8 @@ public class RepositorioPlatoImpl implements RepostitorioPlato {
     @Override
     public List<Plato> buscarPlatosPorTipoComida(String tipoComida) {
         return sessionFactory.getCurrentSession()
-                .createQuery("SELECT p FROM Plato p JOIN p.etiquetas e WHERE e = :etiqueta", Plato.class)
-                .setParameter("etiqueta", tipoComida)
+                .createQuery("SELECT p FROM Plato p JOIN p.etiquetas e WHERE e.nombre = :nombreEtiqueta", Plato.class)
+                .setParameter("nombreEtiqueta", tipoComida)
                 .getResultList();
     }
 
@@ -44,4 +47,15 @@ public class RepositorioPlatoImpl implements RepostitorioPlato {
                 .createQuery("FROM Plato", Plato.class)
                 .getResultList();
     }
+
+    @Override
+    public Boolean editarEtiquetas(Plato plato) {
+        int actualizados = sessionFactory.getCurrentSession()
+                .createQuery("UPDATE Plato p SET p.etiquetas = :etiquetas WHERE p.id = :id")
+                .setParameter("etiquetas", plato.getEtiquetas())
+                .setParameter("id", plato.getId())
+                .executeUpdate();
+        return actualizados > 0;
+    }
+
 }

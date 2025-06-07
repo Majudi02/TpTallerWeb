@@ -1,34 +1,36 @@
-    package com.tallerwebi.dominio;
+package com.tallerwebi.dominio;
 
-    import com.tallerwebi.dominio.Entity.Plato;
-    import com.tallerwebi.infraestructura.RepositorioPlatoImpl;
-    import org.springframework.beans.factory.annotation.Autowired;
-    import org.springframework.stereotype.Service;
-    import org.springframework.transaction.annotation.Transactional;
+import com.tallerwebi.dominio.entidades.Plato;
+import com.tallerwebi.dominio.entidades.Restaurante;
+import com.tallerwebi.infraestructura.RepositorioPlatoImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-    import java.util.ArrayList;
-    import java.util.Comparator;
-    import java.util.List;
-    import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
-    @Service
-    public class PedidoServiceImpl implements PedidoService {
-        private final RepositorioPlatoImpl repositorioPlatoImpl;
 
-        @Autowired
-        public PedidoServiceImpl(RepositorioPlatoImpl repositorioPlatoImpl) {
-            this.repositorioPlatoImpl = repositorioPlatoImpl;
-        }
+@Service
+public class PedidoServiceImpl implements PedidoService {
+    private final RepositorioPlatoImpl repositorioPlatoImpl;
 
+    @Autowired
+    public PedidoServiceImpl(RepositorioPlatoImpl repositorioPlatoImpl) {
+        this.repositorioPlatoImpl = repositorioPlatoImpl;
+    }
+/*
         List<PlatoDto> platosDestacados = List.of(
-                new PlatoDto("Milanesa con papas fritas", "Clásica milanesa de carne acompañada con papas fritas crujientes.", "/assets/imagen-plato.png", 2500.0, List.of("Proteica")),
-                new PlatoDto( "Ravioles de ricota", "Ravioles caseros rellenos de ricota y nuez, servidos con salsa bolognesa.", "/assets/imagen-plato.png", 2800.0, List.of("Vegetariana")),
-                new PlatoDto( "Pizza napolitana", "Pizza con tomate, mozzarella, ajo, y albahaca fresca.", "/assets/imagen-plato.png", 3200.0, List.of("Vegetariana")),
-                new PlatoDto( "Hamburguesa completa", "Hamburguesa con lechuga, tomate, queso, panceta y papas fritas.", "/assets/imagen-plato.png", 2900.0, List.of("Proteica")),
-                new PlatoDto( "Ensalada César", "Ensalada con lechuga romana, pollo, crutones, parmesano y aderezo César.", "/assets/imagen-plato.png", 2300.0, List.of("Proteica")),
-                new PlatoDto( "Tarta de espinaca", "Tarta casera de espinaca y queso con masa hojaldrada.", "/assets/imagen-plato.png", 2000.0, List.of("Vegetariana"))
+                new PlatoDto(1,"Milanesa con papas fritas", "Clásica milanesa de carne acompañada con papas fritas crujientes.", "/assets/imagen-plato.png", 2500.0, List.of("Proteica")),
+                new PlatoDto( 2,"Ravioles de ricota", "Ravioles caseros rellenos de ricota y nuez, servidos con salsa bolognesa.", "/assets/imagen-plato.png", 2800.0, List.of("Vegetariana")),
+                new PlatoDto( 3,"Pizza napolitana", "Pizza con tomate, mozzarella, ajo, y albahaca fresca.", "/assets/imagen-plato.png", 3200.0, List.of("Vegetariana")),
+                new PlatoDto( 4,"Hamburguesa completa", "Hamburguesa con lechuga, tomate, queso, panceta y papas fritas.", "/assets/imagen-plato.png", 2900.0, List.of("Proteica")),
+                new PlatoDto( 5,"Ensalada César", "Ensalada con lechuga romana, pollo, crutones, parmesano y aderezo César.", "/assets/imagen-plato.png", 2300.0, List.of("Proteica")),
+                new PlatoDto( 6,"Tarta de espinaca", "Tarta casera de espinaca y queso con masa hojaldrada.", "/assets/imagen-plato.png", 2000.0, List.of("Vegetariana"))
         );
-
+/*
         List<PlatoDto> platosTotales = List.of(
                 new PlatoDto( "Milanesa con papas fritas", "Clásica milanesa de carne acompañada con papas fritas crujientes.", "/assets/imagen-plato.png", 2500.0, List.of("Proteica")),
                 new PlatoDto( "Ravioles de ricota", "Ravioles caseros rellenos de ricota y nuez, servidos con salsa bolognesa.", "/assets/imagen-plato.png", 2800.0, List.of("Vegetariana")),
@@ -51,53 +53,53 @@
                 new PlatoDto( "Canelones de verdura", "Pasta rellena de verdura con salsa blanca y gratinada al horno.", "/assets/imagen-plato.png", 3000.0, List.of("Vegetariana")),
                 new PlatoDto( "Helado artesanal", "Helado de elaboración artesanal, sabores surtidos.", "/assets/imagen-plato.png", 1500.0, List.of("Sin Gluten"))
         );
+*/
+
+    List<Restaurante> restaurantes = List.of(
+            new Restaurante("Green Bowl", "Comida Vegana", "/assets/restaurante.png", "calle", 123, "Don Torcuato", "Norte", List.of("Vegana")),
+            new Restaurante("Natural Express", "Comida Vegana", "/assets/restaurante.png", "calle", 321, "La Matanza", "Oeste", List.of("Proteica")),
+            new Restaurante("Vital Food", "Comida Proteica", "/assets/restaurante.png", "calle", 213, "La Matanza", "Oeste", List.of("Vegana", "Proteica")),
+            new Restaurante("La Parrilla del Sur", "Especialidad en carnes a la parrilla", "/assets/restaurante-logo.png", "Av. Corrientes", 1234, "Buenos Aires", "Microcentro", List.of("Proteica")),
+            new Restaurante("Sushi Zen", "Lo mejor de la cocina japonesa", "/assets/restaurante-logo.png", "Calle Defensa", 567, "Buenos Aires", "San Telmo", List.of("Proteica", "Sin gluten")),
+            new Restaurante("Pizza Napoli", "Pizzas artesanales al horno de leña", "/assets/restaurante-logo.png", "Av. Santa Fe", 890, "Buenos Aires", "Recoleta", List.of("Opciones vegetarianas")),
+            new Restaurante("Verde Vivo", "Comida saludable y vegana", "/assets/restaurante-logo.png", "Calle Mendoza", 234, "Mendoza", "Centro", List.of("Vegana", "Vegetariana", "Sin gluten"))
+    );
 
 
-        List<Restaurante> restaurantes = List.of(
-                new Restaurante("Green Bowl", "Comida Vegana", "/assets/restaurante.png", "calle", 123, "Don Torcuato", "Norte", List.of("Vegana")),
-                new Restaurante("Natural Express", "Comida Vegana", "/assets/restaurante.png", "calle", 321, "La Matanza", "Oeste", List.of("Proteica")),
-                new Restaurante("Vital Food", "Comida Proteica", "/assets/restaurante.png", "calle", 213, "La Matanza", "Oeste", List.of("Vegana", "Proteica")),
-                new Restaurante("La Parrilla del Sur", "Especialidad en carnes a la parrilla", "/assets/restaurante-logo.png", "Av. Corrientes", 1234, "Buenos Aires", "Microcentro", List.of("Proteica")),
-                new Restaurante("Sushi Zen", "Lo mejor de la cocina japonesa", "/assets/restaurante-logo.png", "Calle Defensa", 567, "Buenos Aires", "San Telmo", List.of("Proteica", "Sin gluten")),
-                new Restaurante("Pizza Napoli", "Pizzas artesanales al horno de leña", "/assets/restaurante-logo.png", "Av. Santa Fe", 890, "Buenos Aires", "Recoleta", List.of("Opciones vegetarianas")),
-                new Restaurante("Verde Vivo", "Comida saludable y vegana", "/assets/restaurante-logo.png", "Calle Mendoza", 234, "Mendoza", "Centro", List.of("Vegana", "Vegetariana", "Sin gluten"))
-        );
+    @Override
+    public List<Restaurante> traerRestaurantesDestacados() {
+        return this.restaurantes;
+    }
 
+    @Override
+    public List<PlatoDto> traerPlatosDestacados() {
 
-        @Override
-        public List<Restaurante> traerRestaurantesDestacados() {
-            return this.restaurantes;
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public List<PlatoDto> traerTodosLosPlatos() {
+        List<Plato> platos = this.repositorioPlatoImpl.traerTodosLosPlatos();
+        return platos.stream().map(Plato::obtenerDto).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public List<PlatoDto> buscarPlatosPorTipoComida(String tipoComida) {
+        List<Plato> platos = this.repositorioPlatoImpl.buscarPlatosPorTipoComida(tipoComida);
+        return platos.stream().map(Plato::obtenerDto).collect(Collectors.toList());
+    }
+
+    public List<PlatoDto> ordenarPlatos(List<PlatoDto> platos, String tipoOrdenar) {
+        List<PlatoDto> platosOrdenados = new ArrayList<>(platos);
+        if (tipoOrdenar.equals("mayorAMenor")) {
+            platosOrdenados.sort(Comparator.comparing(PlatoDto::getPrecio).reversed());
+        } else {
+            platosOrdenados.sort(Comparator.comparing(PlatoDto::getPrecio));
         }
-
-        @Override
-        public List<PlatoDto> traerPlatosDestacados() {
-
-            return this.platosDestacados;
-        }
-
-        @Override
-        @Transactional
-        public List<PlatoDto> traerTodosLosPlatos() {
-            List<Plato> platos = this.repositorioPlatoImpl.traerTodosLosPlatos();
-            return platos.stream().map(Plato::obtenerDto).collect(Collectors.toList());
-        }
-
-        @Override
-        @Transactional
-        public List<PlatoDto> buscarPlatosPorTipoComida(String tipoComida) {
-            List<Plato> platos=this.repositorioPlatoImpl.buscarPlatosPorTipoComida(tipoComida);
-            return platos.stream().map(Plato::obtenerDto).collect(Collectors.toList());
-        }
-
-        public List<PlatoDto> ordenarPlatos(List<PlatoDto> platos, String tipoOrdenar) {
-            List<PlatoDto> platosOrdenados = new ArrayList<>(platos);
-            if (tipoOrdenar.equals("mayorAMenor")) {
-                platosOrdenados.sort(Comparator.comparing(PlatoDto::getPrecio).reversed());
-            } else {
-                platosOrdenados.sort(Comparator.comparing(PlatoDto::getPrecio));
-            }
-            return platosOrdenados;
-        }
+        return platosOrdenados;
+    }
 
 /*        @Override
         public void guardarPlatoDb(Plato plato) {
@@ -107,7 +109,4 @@
  */
 
 
-    }
-
-
-
+}

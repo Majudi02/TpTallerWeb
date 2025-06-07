@@ -50,7 +50,7 @@
 
 <main class="flex-fill d-flex justify-content-center align-items-center">
     <div class="container p-4" style="max-width: 700px; width: 100%;">
-        <form action="/guardarPlato" method="post" enctype="multipart/form-data" class="shadow bg-body-tertiary p-5 contenedor-verde" style="background-color: white">
+        <form action="/crear-plato/guardar" method="post" enctype="multipart/form-data" class="shadow bg-body-tertiary p-5 contenedor-verde" style="background-color: white">
             <h2 class="text-center mb-4">Crear un nuevo Plato</h2>
 
             <div class="mb-3">
@@ -75,25 +75,10 @@
 
             <div class="mb-3">
                 <label class="form-label">Etiquetas</label><br>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="etiquetas" value="VEGANO" id="vegano">
-                    <label class="form-check-label" for="vegano">Vegano</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="etiquetas" value="PROTEICO" id="proteico">
-                    <label class="form-check-label" for="proteico">Proteico</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="etiquetas" value="Sin_Tacc" id="sin_tacc">
-                    <label class="form-check-label" for="sin_tacc">SIN TACC</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="etiquetas" value="VEGETARIANO" id="vegetariano">
-                    <label class="form-check-label" for="vegetariano">Vegetariano</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="etiquetas" value="SIN_GLUTEN" id="sin_gluten">
-                    <label class="form-check-label" for="sin_gluten">Sin Gluten</label>
+                <div th:each="etiqueta : ${etiquetasDisponibles}" class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="etiquetasIds"
+                           th:value="${etiqueta.id}" th:id="'etiqueta_' + ${etiqueta.id}">
+                    <label class="form-check-label" th:for="'etiqueta_' + ${etiqueta.id}" th:text="${etiqueta.nombre}"></label>
                 </div>
             </div>
 

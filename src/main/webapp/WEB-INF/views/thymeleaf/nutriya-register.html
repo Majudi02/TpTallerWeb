@@ -98,7 +98,7 @@
 </div>
 <main class="flex-grow-1 p-5" style="margin-top: 170px;">
     <div class="form-container contenedor-verde">
-        <form id="formRegistro" th:action="@{/nutriya-register}" th:object="${registroUsuarioDTO}" method="post">
+        <form id="formRegistro" th:action="@{/nutriya-register}" th:object="${registroUsuarioDTO}" method="post"  enctype="multipart/form-data" accept-charset="UTF-8">
             <!-- Paso 1: Tipo de usuario -->
             <div id="paso1" class="paso activo">
                 <div class="d-flex flex-column gap-5 align-center">
@@ -249,8 +249,8 @@
                     <input th:field="*{descripcion}" type="text" class="form-control restaurante-input" required/>
                 </div>
                 <div class="mb-3">
-                    <label for="imagen" class="form-label">Subir imagen</label>
-                    <input class="form-control" type="file" th:field="*{imagen}" id="imagen" name="imagen"
+                    <label for="imagenRestaurante" class="form-label">Subir imagen</label>
+                    <input class="form-control restaurante-input" type="file" th:field="*{imagenRestaurante}" id="imagenRestaurante" name="imagenRestaurante"
                            accept="image/*"/>
                 </div>
                 <div class="mb-3">
@@ -338,7 +338,7 @@
                 </div>
                 <div class="mb-3">
                     <label>Teléfono</label>
-                    <input th:field="*{telefono}" type="number" class="form-control repartidor-input" required/>
+                    <input th:field="*{telefono}" type="text" class="form-control repartidor-input" required/>
                 </div>
                 <div class="mb-3">
                     <label>Email</label>

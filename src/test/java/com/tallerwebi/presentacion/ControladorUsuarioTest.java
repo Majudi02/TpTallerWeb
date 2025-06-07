@@ -1,7 +1,8 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.*;
-import com.tallerwebi.presentacion.ControladorUsuario;
+import com.tallerwebi.dominio.entidades.Cliente;
+import com.tallerwebi.dominio.entidades.Restaurante;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.ui.ConcurrentModel;
@@ -12,29 +13,21 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import static org.mockito.Mockito.*;
+
 public class ControladorUsuarioTest {
 
     private ControladorUsuario controlador;
     private ServicioUsuario servicioUsuario;
     private ServicioRestaurante servicioRestaurante;
-    private RepostitorioPlato respositorioPlato;
+    private RepositorioUsuarioNutriya repositorioUsuario;
 
     @BeforeEach
     public void init() {
-        servicioUsuario = new ServicioUsuarioImpl();
-        servicioRestaurante = new ServicioRestauranteImpl(respositorioPlato);
+        repositorioUsuario = mock(RepositorioUsuarioNutriya.class); // <-- simulamos el repo
+        servicioUsuario = new ServicioUsuarioImpl(repositorioUsuario);
+        servicioRestaurante = mock(ServicioRestaurante.class);
         controlador = new ControladorUsuario(servicioUsuario, servicioRestaurante);
-
-    }
-
-    @Test
-    public void DadoQueTengoUnControladorUsuaruioMeMuestraElFormularioDeRegistroConUnUsuarioDTOVacio() {
-        Model model = new ConcurrentModel();
-
-        String vista = controlador.mostrarFormularioRegistro(model);
-
-        assertEquals("nutriya-register", vista);
-        assertTrue(model.containsAttribute("registroUsuarioDTO"));
     }
 
     @Test
@@ -50,12 +43,27 @@ public class ControladorUsuarioTest {
         cliente.setAltura(1.65);
         cliente.setObjetivo("bajar de peso");
 
-        RedirectAttributesModelMap redirect = new RedirectAttributesModelMap();
+        // Simulamos que no existe previamente
+        when(repositorioUsuario.buscarPorEmail("ana@mail.com")).thenReturn(null);
 
-        String resultado = controlador.registrarUsuario(cliente, redirect);
+        RedirectAttributesModelMap redirect = new RedirectAttributesModelMap();
+        String resultado = controlador.registrarUsuario(cliente, null, redirect);
+
+        // Verificamos que se haya guardado
+        verify(repositorioUsuario).guardar(any(Cliente.class));
 
         assertEquals("redirect:/resultado-registro", resultado);
-        assertNotNull(servicioUsuario.getUsuario("ana@mail.com"));
+    }
+
+
+    @Test
+    public void DadoQueTengoUnControladorUsuaruioMeMuestraElFormularioDeRegistroConUnUsuarioDTOVacio() {
+        Model model = new ConcurrentModel();
+
+        String vista = controlador.mostrarFormularioRegistro(model);
+
+        assertEquals("nutriya-register", vista);
+        assertTrue(model.containsAttribute("registroUsuarioDTO"));
     }
 
     @Test
@@ -66,7 +74,7 @@ public class ControladorUsuarioTest {
 
         RedirectAttributesModelMap redirect = new RedirectAttributesModelMap();
 
-        String resultado = controlador.registrarUsuario(cliente, redirect);
+        String resultado = controlador.registrarUsuario(cliente, null, redirect);
 
         assertEquals("nutriya-register", resultado);
     }
@@ -87,8 +95,26 @@ public class ControladorUsuarioTest {
         cliente.setTipoUsuario("cliente");
         cliente.setEmail("login@mail.com");
         cliente.setPassword("clave");
+        cliente.setNombre("Ana");
+        cliente.setEdad(30);
+        cliente.setPesoActual(70);
+        cliente.setPesoDeseado(65);
+        cliente.setAltura(1.70);
+        cliente.setObjetivo("mantener peso");
 
-        servicioUsuario.registrarUsuario(cliente);
+        // Simulamos que el usuario ya existe cuando se busca por email y password
+        Cliente usuarioMock = new Cliente();
+        usuarioMock.setEmail("login@mail.com");
+        usuarioMock.setPassword("clave");
+        usuarioMock.setNombre("Ana");
+        usuarioMock.setEdad(30);
+        usuarioMock.setPesoActual(70);
+        usuarioMock.setPesoDeseado(65);
+        usuarioMock.setAltura(1.70);
+        usuarioMock.setObjetivo("mantener peso");
+
+        when(repositorioUsuario.buscarPorEmailYPassword("login@mail.com", "clave"))
+                .thenReturn(usuarioMock);
 
         Model model = new ConcurrentModel();
 
@@ -97,10 +123,10 @@ public class ControladorUsuarioTest {
         intentoLogin.setPassword("clave");
 
         String vista = controlador.procesarLogin(intentoLogin, model);
-
         assertEquals("perfil-cliente", vista);
         assertTrue(model.containsAttribute("usuario"));
     }
+
 
     @Test
     public void DadoQueTengoUnControladorUsuarioAlIntentarLogearmeConDatosInvalidosDevuelveError() {
@@ -122,7 +148,7 @@ public class ControladorUsuarioTest {
         assertEquals("nutriya-login", vista);
         assertTrue(model.containsAttribute("errorLogin"));
     }
-/*
+
     @Test
     public void dadoQueRegistroUnUsuarioRestauranteSeAgregaElRestauranteALaLista() {
         UsuarioDTO restauranteDTO = new UsuarioDTO();
@@ -139,14 +165,17 @@ public class ControladorUsuarioTest {
 
         RedirectAttributesModelMap redirect = new RedirectAttributesModelMap();
 
-        controlador.registrarUsuario(restauranteDTO, redirect);
+        controlador.registrarUsuario(restauranteDTO, null, redirect);
+
+        Restaurante restauranteMock = new Restaurante();
+        restauranteMock.setNombre("Restaurante Test");
+
+        when(servicioRestaurante.obtenerRestaurante("Restaurante Test")).thenReturn(restauranteMock);
 
         Restaurante restaurante = servicioRestaurante.obtenerRestaurante("Restaurante Test");
 
         assertNotNull(restaurante, "El restaurante debería existir en el servicio");
         assertEquals("Restaurante Test", restaurante.getNombre());
     }
-    */
-
 
 }
