@@ -11,6 +11,7 @@ public interface RepostitorioPlato {
     List<Plato> buscarPlatosPorTipoComida(String tipoComida);
     List<Plato> traerTodosLosPlatos();
     Boolean editarEtiquetas(Plato plato);
+    Boolean actualizarPlato(Plato plato);
 
 
 

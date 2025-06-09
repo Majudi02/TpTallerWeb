@@ -37,16 +37,6 @@ public class ControladorRestaurante {
             return "restaurantes";
         }
 
-    @GetMapping("/administrarPlatos")
-    public ModelAndView administrarPlatos() {
-        ModelMap modelo = new ModelMap();
-
-        PlatoDto platoObtenido= servicioRestaurante.obtenerPlatoPorId(5);
-
-        modelo.put("plato", platoObtenido);
-
-        return new ModelAndView("plato-gestion", modelo);
-    }
     }
 
 

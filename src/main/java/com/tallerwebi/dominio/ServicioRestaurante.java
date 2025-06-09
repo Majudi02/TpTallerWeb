@@ -19,11 +19,17 @@ public interface ServicioRestaurante {
 
     Boolean guardarPlato(PlatoDto platoDto);
 
+    Boolean actualizarPlato(PlatoDto platoDto);
+
     Boolean editarEtiquetas(PlatoDto platoDto);
 
     PlatoDto obtenerPlatoPorId(Integer id);
 
     // DESPUES SACAR
     void limpiarRestaurantes();
+
+    List<PlatoDto> traerTodosLosPlatos();
+
+
 
 }

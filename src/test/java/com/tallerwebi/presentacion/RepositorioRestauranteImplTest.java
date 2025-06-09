@@ -1,10 +1,7 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.config.HibernateConfig;
 import com.tallerwebi.dominio.Entity.Etiqueta;
 import com.tallerwebi.dominio.Entity.Plato;
-import com.tallerwebi.dominio.EtiquetaDto;
-import com.tallerwebi.dominio.PlatoDto;
 import com.tallerwebi.dominio.RepostitorioPlato;
 import com.tallerwebi.infraestructura.RepositorioPlatoImpl;
 import org.hibernate.Session;
@@ -12,16 +9,13 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -33,7 +27,8 @@ public class RepositorioRestauranteImplTest {
 
     private SessionFactory sessionFactoryMock;
     private Session sessionMock;
-    private RepostitorioPlato repostorioPlato;
+
+    private RepostitorioPlato repositorioPlato;
 
     @BeforeEach
     public void setUp() {
@@ -42,7 +37,7 @@ public class RepositorioRestauranteImplTest {
 
         when(sessionFactoryMock.getCurrentSession()).thenReturn(sessionMock);
 
-        repostorioPlato = new RepositorioPlatoImpl(sessionFactoryMock);
+        repositorioPlato = new RepositorioPlatoImpl(sessionFactoryMock);
     }
 
 
@@ -75,7 +70,7 @@ public class RepositorioRestauranteImplTest {
         when(queryMock.executeUpdate()).thenReturn(1);
 
         // Act
-        Boolean actualizado = repostorioPlato.editarEtiquetas(platoMock);
+        Boolean actualizado = repositorioPlato.editarEtiquetas(platoMock);
 
         // Assert
         assertThat(actualizado, is(true));
@@ -83,6 +78,71 @@ public class RepositorioRestauranteImplTest {
         verify(queryMock).setParameter("id", 1);
         verify(queryMock).executeUpdate();
     }
+
+    @Test
+    public void dadoQueCreoUnPlatoLoQuieroGuardarEnLaBaseDeDatos(){
+        List<String> nombres = List.of("Saludable", "Vegetariano");
+        List<Etiqueta> etiquetas = new ArrayList<>();
+        Integer contador=0;
+        for (String nombre : nombres) {
+            contador+=1;
+            Etiqueta etiqueta = new Etiqueta();
+            etiqueta.setId(contador);
+            etiqueta.setNombre(nombre);
+            etiquetas.add(etiqueta);
+        }
+
+        Plato platoMock = mock(Plato.class);
+        when(platoMock.getId()).thenReturn(1);
+        when(platoMock.getNombre()).thenReturn("Milanesa");
+        when(platoMock.getDescripcion()).thenReturn("Milanesa con pasa muy ricas");
+        when(platoMock.getPrecio()).thenReturn(1000.5);
+        when(platoMock.getEtiquetas()).thenReturn(etiquetas);
+
+
+        repositorioPlato = mock(RepostitorioPlato.class);
+        when(repositorioPlato.crearPlato(platoMock)).thenReturn(true);
+
+        Boolean resultado = repositorioPlato.crearPlato(platoMock);
+
+        assertThat(resultado, is(true));
+        verify(repositorioPlato).crearPlato(platoMock);
+    }
+
+    @Test
+    public void dadoQueTengoUnPlatoLoQuieroActualizar(){
+        List<String> nombres = List.of("Saludable", "Vegetariano");
+        List<Etiqueta> etiquetas = new ArrayList<>();
+        Integer contador=0;
+        for (String nombre : nombres) {
+            contador+=1;
+            Etiqueta etiqueta = new Etiqueta();
+            etiqueta.setId(contador);
+            etiqueta.setNombre(nombre);
+            etiquetas.add(etiqueta);
+        }
+
+        // Crear objeto real de Plato
+        Plato plato = new Plato();
+        plato.setId(1);
+        plato.setNombre("Milanesa");
+        plato.setDescripcion("Milanesa con pasa muy ricas");
+        plato.setPrecio(1000.5);
+        plato.setEtiquetas(etiquetas);
+
+        RepostitorioPlato repositorioPlato = mock(RepostitorioPlato.class);
+        when(repositorioPlato.actualizarPlato(any(Plato.class))).thenReturn(true);
+
+        plato.setDescripcion("xdasdx");
+
+        // Ejecutar
+        Boolean actualizado = repositorioPlato.actualizarPlato(plato);
+
+        assertTrue(actualizado);
+        assertThat(plato.getDescripcion(), is("xdasdx"));
+
+    }
+
 
 
 }

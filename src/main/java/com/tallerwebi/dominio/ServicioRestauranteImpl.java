@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.Entity.Etiqueta;
 import com.tallerwebi.dominio.Entity.Plato;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.swing.text.StyledEditorKit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -15,12 +17,15 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
 
     private RepostitorioPlato repostitorioPlato;
     List<Restaurante> restaurantes;
+    private EtiquetaSevice etiquetaService;
 
     @Autowired
-    public ServicioRestauranteImpl(RepostitorioPlato repostitorioPlato) {
+    public ServicioRestauranteImpl(RepostitorioPlato repostitorioPlato, EtiquetaSevice etiquetaService) {
         this.repostitorioPlato = repostitorioPlato;
+        this.etiquetaService = etiquetaService;
         this.restaurantes = new ArrayList<>(restaurantesVista);
     }
+
 
     public ServicioRestauranteImpl() {
         this.restaurantes = new ArrayList<>();
@@ -30,6 +35,12 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
     // DESPUES SACRA
     public void limpiarRestaurantes() {
         restaurantes.clear();
+    }
+
+    @Override
+    public List<PlatoDto> traerTodosLosPlatos() {
+        List<Plato> platos = this.repostitorioPlato.traerTodosLosPlatos();
+        return platos.stream().map(Plato::obtenerDto).collect(Collectors.toList());
     }
 
 
@@ -135,6 +146,44 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
         Plato plato = this.repostitorioPlato.buscarPlatoPorId(id);
         return  plato.obtenerDto();
     }
+
+    @Override
+    public Boolean actualizarPlato(PlatoDto platoDto) {
+        Plato platoExistente = this.repostitorioPlato.buscarPlatoPorId(platoDto.getId());
+        if (platoExistente == null) {
+            return false;
+        }
+
+        if (platoDto.getNombre() != null && !platoDto.getNombre().trim().isEmpty()) {
+            platoExistente.setNombre(platoDto.getNombre());
+        }
+
+        if(platoDto.getDescripcion()!=null && !platoDto.getDescripcion().trim().isEmpty()){
+            platoExistente.setDescripcion(platoDto.getDescripcion());
+        }
+
+        if (platoDto.getPrecio() != null) {
+            platoExistente.setPrecio(platoDto.getPrecio());
+        }
+        if (platoDto.getEtiquetasIds() != null && !platoDto.getEtiquetasIds().isEmpty()) {
+            List<Etiqueta> etiquetas = new ArrayList<>();
+            for (Integer idEtiqueta : platoDto.getEtiquetasIds()) {
+                EtiquetaDto etiqueta = etiquetaService.buscarEtiquetaPorId(idEtiqueta);
+                if (etiqueta != null) {
+                    etiquetas.add(etiqueta.obtenerEntidad());
+                }
+            }
+            platoExistente.setEtiquetas(etiquetas);
+
+        }
+
+        if (platoDto.getImagen()!=null && !platoDto.getImagen().trim().isEmpty()){
+            platoExistente.setImagen(platoDto.getImagen());
+        }
+
+        return this.repostitorioPlato.actualizarPlato(platoExistente);
+    }
+
 
 
 }

@@ -56,4 +56,10 @@ public class RepositorioPlatoImpl implements RepostitorioPlato {
         return actualizados > 0;
     }
 
+    @Override
+    public Boolean actualizarPlato(Plato plato) {
+        this.sessionFactory.getCurrentSession().update(plato);
+        return true;
+    }
+
 }

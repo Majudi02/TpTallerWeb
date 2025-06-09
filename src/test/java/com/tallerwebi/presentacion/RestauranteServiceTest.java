@@ -1,14 +1,20 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.Entity.Etiqueta;
+import com.tallerwebi.dominio.Entity.Plato;
+import com.tallerwebi.dominio.EtiquetaDto;
 import com.tallerwebi.dominio.Restaurante;
 import com.tallerwebi.dominio.ServicioRestaurante;
 import com.tallerwebi.dominio.ServicioRestauranteImpl;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 public class RestauranteServiceTest {
@@ -137,6 +143,17 @@ public class RestauranteServiceTest {
         List<Restaurante> restaurantesObtenidos = servicioRestaurante.buscarPorTipoComidaYZona("Oeste", "Vegana");
 
         assertThat(restaurantesObtenidos.size(), is(2));
+    }
+
+
+    @Test
+    public void dadoQueCreoUnPlatoLoQuieroGuardarEnLaBaseDeDatos(){
+
+    }
+
+    @Test
+    public void dadoQueTengoUnPlatoLoQuieroActualizar(){
+
     }
 
 
