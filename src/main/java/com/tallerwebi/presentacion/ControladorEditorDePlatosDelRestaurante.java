@@ -1,9 +1,6 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.EtiquetaDto;
-import com.tallerwebi.dominio.EtiquetaSevice;
-import com.tallerwebi.dominio.PlatoDto;
-import com.tallerwebi.dominio.ServicioRestaurante;
+import com.tallerwebi.dominio.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -13,23 +10,19 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+
 
 @Controller
 public class ControladorEditorDePlatosDelRestaurante {
 
     private ServicioRestaurante servicioRestaurante;
-    private EtiquetaSevice etiquetaSevice;
+    private EtiquetaService etiquetaSevice;
 
 
     @Autowired
-    public ControladorEditorDePlatosDelRestaurante(ServicioRestaurante servicioRestaurante, EtiquetaSevice etiquetaSevice){
+    public ControladorEditorDePlatosDelRestaurante(ServicioRestaurante servicioRestaurante, EtiquetaService etiquetaSevice){
         this.etiquetaSevice=etiquetaSevice;
         this.servicioRestaurante=servicioRestaurante;
     }

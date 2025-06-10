@@ -14,11 +14,13 @@ public class RestauranteServiceTest {
     private RepositorioUsuarioRestaurante repositorioUsuarioRestauranteMock;
     private RepositorioPlato repositorioPlatoMock;
     private ServicioRestauranteImpl servicio;
+    private EtiquetaService etiquetaServiceMock;
 
     @BeforeEach
     public void setup() {
         repositorioUsuarioRestauranteMock = mock(RepositorioUsuarioRestaurante.class);
         repositorioPlatoMock = mock(RepositorioPlato.class);
+        etiquetaServiceMock= mock(EtiquetaService.class);
 
         // Datos controlados para el test
         List<Restaurante> restaurantesMock = List.of(
@@ -29,7 +31,8 @@ public class RestauranteServiceTest {
 
         when(repositorioUsuarioRestauranteMock.buscarTodosLosRestaurantes()).thenReturn(restaurantesMock);
 
-        servicio = new ServicioRestauranteImpl(repositorioUsuarioRestauranteMock, repositorioPlatoMock);
+        servicio = new ServicioRestauranteImpl(repositorioUsuarioRestauranteMock, repositorioPlatoMock,etiquetaServiceMock)
+        ;
     }
 
     @Test

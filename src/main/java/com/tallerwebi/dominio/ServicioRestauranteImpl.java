@@ -1,14 +1,22 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.entidades.Etiqueta;
 import com.tallerwebi.dominio.entidades.Plato;
 import com.tallerwebi.dominio.entidades.Restaurante;
 import com.tallerwebi.dominio.entidades.UsuarioRestaurante;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -26,11 +34,14 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
     */
     private final RepositorioUsuarioRestaurante repositorioUsuarioRestaurante;
     private final RepositorioPlato repositorioPlato;
+    private EtiquetaService etiquetaService;
+
 
     @Autowired
-    public ServicioRestauranteImpl(RepositorioUsuarioRestaurante repositorioUsuarioRestaurante, RepositorioPlato repositorioPlato) {
+    public ServicioRestauranteImpl(RepositorioUsuarioRestaurante repositorioUsuarioRestaurante, RepositorioPlato repositorioPlato,EtiquetaService etiquetaService) {
         this.repositorioUsuarioRestaurante = repositorioUsuarioRestaurante;
         this.repositorioPlato = repositorioPlato;
+        this.etiquetaService=etiquetaService;
     }
 
     @Override
@@ -131,15 +142,74 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
     }
 
     @Override
-    public Boolean editarEtiquetas(PlatoDto platoDto){
-        Plato plato = platoDto.obtenerDto(platoDto.getEtiquetas());
-        return this.repositorioPlato.editarEtiquetas(plato);
+    public Boolean actualizarPlato(PlatoDto platoDto) {
+        Plato platoExistente = this.repositorioPlato.buscarPlatoPorId(platoDto.getId());
+        if (platoExistente == null) {
+            return false;
+        }
+
+        if (platoDto.getNombre() != null && !platoDto.getNombre().trim().isEmpty()) {
+            platoExistente.setNombre(platoDto.getNombre());
+        }
+
+        if(platoDto.getDescripcion()!=null && !platoDto.getDescripcion().trim().isEmpty()){
+            platoExistente.setDescripcion(platoDto.getDescripcion());
+        }
+
+        if (platoDto.getPrecio() != null) {
+            platoExistente.setPrecio(platoDto.getPrecio());
+        }
+        if (platoDto.getEtiquetasIds() != null && !platoDto.getEtiquetasIds().isEmpty()) {
+            List<Etiqueta> etiquetas = new ArrayList<>();
+            for (Integer idEtiqueta : platoDto.getEtiquetasIds()) {
+                EtiquetaDto etiqueta = etiquetaService.buscarEtiquetaPorId(idEtiqueta);
+                if (etiqueta != null) {
+                    etiquetas.add(etiqueta.obtenerEntidad());
+                }
+            }
+            platoExistente.setEtiquetas(etiquetas);
+
+        }
+
+        if (platoDto.getImagen()!=null && !platoDto.getImagen().trim().isEmpty()){
+            platoExistente.setImagen(platoDto.getImagen());
+        }
+
+        return this.repositorioPlato.actualizarPlato(platoExistente);
     }
 
     @Override
     public PlatoDto obtenerPlatoPorId(Integer id) {
         Plato plato = this.repositorioPlato.buscarPlatoPorId(id);
         return  plato.obtenerDto();
+    }
+
+    @Override
+    public List<PlatoDto> traerTodosLosPlatos() {
+        List<Plato> platos = this.repositorioPlato.traerTodosLosPlatos();
+        return platos.stream().map(Plato::obtenerDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public void guardarImagen(PlatoDto platoDto, MultipartFile imagen) {
+        if (!imagen.isEmpty()) {
+            try {
+                String rutaProyecto = System.getProperty("user.dir");
+                String rutaBase = rutaProyecto + "/src/main/webapp/resources/assets/imagenesPlatos/";
+                Files.createDirectories(Paths.get(rutaBase));
+
+                String extension = imagen.getOriginalFilename().substring(imagen.getOriginalFilename().lastIndexOf("."));
+                String nombreArchivo = UUID.randomUUID() + extension;
+                Path rutaDestino = Paths.get(rutaBase, nombreArchivo);
+
+                Files.copy(imagen.getInputStream(), rutaDestino);
+
+                platoDto.setImagen("/assets/imagenesPlatos/" + nombreArchivo);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
 

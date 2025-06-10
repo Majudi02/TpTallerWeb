@@ -1,13 +1,13 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Entity.Etiqueta;
-import com.tallerwebi.dominio.Entity.Plato;
+
 import com.tallerwebi.dominio.PlatoDto;
-import com.tallerwebi.dominio.RepostitorioPlato;
+import com.tallerwebi.dominio.RepositorioPlato;
+import com.tallerwebi.dominio.entidades.Etiqueta;
+import com.tallerwebi.dominio.entidades.Plato;
 import com.tallerwebi.infraestructura.RepositorioPlatoImpl;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +29,7 @@ public class ServicioRestauranteImplTest {
         private SessionFactory sessionFactoryMock;
         private Session sessionMock;
 
-        private RepostitorioPlato repositorioPlato;
+        private RepositorioPlato repositorioPlato;
 
         @BeforeEach
         public void setUp() {
@@ -52,7 +52,7 @@ public class ServicioRestauranteImplTest {
             plato.setEtiquetas(new ArrayList<>());
 
 
-            RepostitorioPlato repositorioPlatoMock = mock(RepostitorioPlato.class);
+            RepositorioPlato repositorioPlatoMock = mock(RepositorioPlato.class);
             when(repositorioPlatoMock.buscarPlatoPorId(idBuscado)).thenReturn(plato);
 
             Plato platoObtenido = repositorioPlatoMock.buscarPlatoPorId(idBuscado);
@@ -86,7 +86,7 @@ public class ServicioRestauranteImplTest {
             when(platoMock.getEtiquetas()).thenReturn(etiquetas);
 
 
-            repositorioPlato = mock(RepostitorioPlato.class);
+            repositorioPlato = mock(RepositorioPlato.class);
             when(repositorioPlato.crearPlato(platoMock)).thenReturn(true);
 
             Boolean resultado = repositorioPlato.crearPlato(platoMock);
@@ -103,7 +103,7 @@ public class ServicioRestauranteImplTest {
         plato.setDescripcion("Original");
         plato.setPrecio(1000.5);
 
-        RepostitorioPlato repositorioPlato = mock(RepostitorioPlato.class);
+        RepositorioPlato repositorioPlato = mock(RepositorioPlato.class);
         when(repositorioPlato.actualizarPlato(any(Plato.class))).thenReturn(true);
 
         plato.setDescripcion("Milanesa con pure");

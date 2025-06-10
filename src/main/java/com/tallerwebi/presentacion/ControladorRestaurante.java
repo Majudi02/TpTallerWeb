@@ -1,9 +1,9 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.PlatoDto;
-import com.tallerwebi.dominio.Restaurante;
 import com.tallerwebi.dominio.ServicioRestaurante;
 import com.tallerwebi.dominio.ServicioRestauranteImpl;
+import com.tallerwebi.dominio.entidades.Restaurante;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

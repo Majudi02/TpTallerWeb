@@ -1,8 +1,8 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Entity.Etiqueta;
-import com.tallerwebi.dominio.Entity.Plato;
-import com.tallerwebi.dominio.RepostitorioPlato;
+import com.tallerwebi.dominio.RepositorioPlato;
+import com.tallerwebi.dominio.entidades.Etiqueta;
+import com.tallerwebi.dominio.entidades.Plato;
 import com.tallerwebi.infraestructura.RepositorioPlatoImpl;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,7 +10,6 @@ import org.hibernate.query.Query;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import javax.transaction.Transactional;
@@ -28,7 +27,7 @@ public class RepositorioRestauranteImplTest {
     private SessionFactory sessionFactoryMock;
     private Session sessionMock;
 
-    private RepostitorioPlato repositorioPlato;
+    private RepositorioPlato repositorioPlato;
 
     @BeforeEach
     public void setUp() {
@@ -97,7 +96,7 @@ public class RepositorioRestauranteImplTest {
         when(platoMock.getEtiquetas()).thenReturn(etiquetas);
 
 
-        repositorioPlato = mock(RepostitorioPlato.class);
+        repositorioPlato = mock(RepositorioPlato.class);
         when(repositorioPlato.crearPlato(platoMock)).thenReturn(true);
 
         Boolean resultado = repositorioPlato.crearPlato(platoMock);
@@ -127,7 +126,7 @@ public class RepositorioRestauranteImplTest {
         plato.setPrecio(1000.5);
         plato.setEtiquetas(etiquetas);
 
-        RepostitorioPlato repositorioPlato = mock(RepostitorioPlato.class);
+        RepositorioPlato repositorioPlato = mock(RepositorioPlato.class);
         when(repositorioPlato.actualizarPlato(any(Plato.class))).thenReturn(true);
 
         plato.setDescripcion("xdasdx");
