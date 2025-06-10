@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.Entity.Plato;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,8 +22,6 @@ public interface ServicioRestaurante {
 
     Boolean actualizarPlato(PlatoDto platoDto);
 
-    Boolean editarEtiquetas(PlatoDto platoDto);
-
     PlatoDto obtenerPlatoPorId(Integer id);
 
     // DESPUES SACAR
@@ -30,6 +29,7 @@ public interface ServicioRestaurante {
 
     List<PlatoDto> traerTodosLosPlatos();
 
+    void guardarImagen(PlatoDto platoDto, MultipartFile imagen);
 
 
 }

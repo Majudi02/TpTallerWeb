@@ -5,10 +5,16 @@ import com.tallerwebi.dominio.Entity.Plato;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.swing.text.StyledEditorKit;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,6 +47,28 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
     public List<PlatoDto> traerTodosLosPlatos() {
         List<Plato> platos = this.repostitorioPlato.traerTodosLosPlatos();
         return platos.stream().map(Plato::obtenerDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public void guardarImagen(PlatoDto platoDto, MultipartFile imagen) {
+        if (!imagen.isEmpty()) {
+            try {
+                String rutaProyecto = System.getProperty("user.dir");
+                String rutaBase = rutaProyecto + "/src/main/webapp/resources/assets/imagenesPlatos/";
+                Files.createDirectories(Paths.get(rutaBase));
+
+                String extension = imagen.getOriginalFilename().substring(imagen.getOriginalFilename().lastIndexOf("."));
+                String nombreArchivo = UUID.randomUUID() + extension;
+                Path rutaDestino = Paths.get(rutaBase, nombreArchivo);
+
+                Files.copy(imagen.getInputStream(), rutaDestino);
+
+                platoDto.setImagen("/assets/imagenesPlatos/" + nombreArchivo);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
@@ -135,11 +163,6 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
         return this.repostitorioPlato.crearPlato(plato);
     }
 
-    @Override
-    public Boolean editarEtiquetas(PlatoDto platoDto){
-        Plato plato = platoDto.obtenerDto(platoDto.getEtiquetas());
-        return this.repostitorioPlato.editarEtiquetas(plato);
-    }
 
     @Override
     public PlatoDto obtenerPlatoPorId(Integer id) {
@@ -183,6 +206,7 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
 
         return this.repostitorioPlato.actualizarPlato(platoExistente);
     }
+
 
 
 

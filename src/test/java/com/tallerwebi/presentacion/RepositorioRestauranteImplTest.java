@@ -44,7 +44,7 @@ public class RepositorioRestauranteImplTest {
 
     @Test
     public void dadoQueTengoUnPlatoEntoncesLeQuieroModificarSusEtiquetas() {
-        // Arrange
+
         Plato platoMock = mock(Plato.class);
         when(platoMock.getId()).thenReturn(1);
 
@@ -61,7 +61,6 @@ public class RepositorioRestauranteImplTest {
 
         when(platoMock.getEtiquetas()).thenReturn(etiquetas);
 
-        // Mock Query
         Query queryMock = mock(Query.class);
         when(sessionMock.createQuery("UPDATE Plato p SET p.etiquetas = :etiquetas WHERE p.id = :id"))
                 .thenReturn(queryMock);
@@ -69,10 +68,8 @@ public class RepositorioRestauranteImplTest {
         when(queryMock.setParameter(eq("id"), eq(1))).thenReturn(queryMock);
         when(queryMock.executeUpdate()).thenReturn(1);
 
-        // Act
         Boolean actualizado = repositorioPlato.editarEtiquetas(platoMock);
 
-        // Assert
         assertThat(actualizado, is(true));
         verify(queryMock).setParameter("etiquetas", etiquetas);
         verify(queryMock).setParameter("id", 1);
@@ -122,7 +119,7 @@ public class RepositorioRestauranteImplTest {
             etiquetas.add(etiqueta);
         }
 
-        // Crear objeto real de Plato
+
         Plato plato = new Plato();
         plato.setId(1);
         plato.setNombre("Milanesa");

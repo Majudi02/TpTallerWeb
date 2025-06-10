@@ -59,32 +59,11 @@ public class ControladorEditorDePlatosDelRestaurante {
             platoDto.setEtiquetas(etiquetas);
         }
 
-        guardarImagen(platoDto, imagen);
+        servicioRestaurante.guardarImagen(platoDto,imagen);
 
         Boolean guardado = servicioRestaurante.guardarPlato(platoDto);
 
         return new ModelAndView(guardado ? "redirect:/hacer-pedido-platos" : "redirect:/perfil-home");
-    }
-
-    private static void guardarImagen(PlatoDto platoDto, MultipartFile imagen) {
-        if (!imagen.isEmpty()) {
-            try {
-                String rutaProyecto = System.getProperty("user.dir");
-                String rutaBase = rutaProyecto + "/src/main/webapp/resources/assets/imagenesPlatos/";
-                Files.createDirectories(Paths.get(rutaBase));
-
-                String extension = imagen.getOriginalFilename().substring(imagen.getOriginalFilename().lastIndexOf("."));
-                String nombreArchivo = UUID.randomUUID() + extension;
-                Path rutaDestino = Paths.get(rutaBase, nombreArchivo);
-
-                Files.copy(imagen.getInputStream(), rutaDestino);
-
-                platoDto.setImagen("/assets/imagenesPlatos/" + nombreArchivo);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     @GetMapping("/editarPlatos")
@@ -127,7 +106,7 @@ public class ControladorEditorDePlatosDelRestaurante {
         }
 
 
-            guardarImagen(platoDto,imagen);
+        servicioRestaurante.guardarImagen(platoDto,imagen);
 
         Boolean actualizado = servicioRestaurante.actualizarPlato(platoDto);
 
