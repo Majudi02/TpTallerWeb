@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+
 import com.tallerwebi.dominio.entidades.Plato;
 
 import java.util.List;
@@ -11,4 +12,9 @@ public interface RepositorioPlato {
     List<Plato> buscarPlatosPorTipoComida(String tipoComida);
     List<Plato> traerTodosLosPlatos();
     Boolean editarEtiquetas(Plato plato);
+    Boolean actualizarPlato(Plato plato);
+
+
+
+
 }
