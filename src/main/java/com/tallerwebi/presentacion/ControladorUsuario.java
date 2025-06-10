@@ -5,10 +5,7 @@ import com.tallerwebi.dominio.ServicioUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -38,7 +35,7 @@ public class ControladorUsuario {
     }
 
     @PostMapping("/nutriya-register")
-    public String registrarUsuario(@ModelAttribute("registroUsuarioDTO") UsuarioDTO usuarioDTO, @RequestParam("imagenRestaurante") MultipartFile imagen, RedirectAttributes redirectAttributes) {
+    public String registrarUsuario(@ModelAttribute("registroUsuarioDTO") UsuarioDTO usuarioDTO, @RequestParam(value = "imagenRestaurante", required = false) MultipartFile imagen, RedirectAttributes redirectAttributes) {
         if (usuarioDTO.getTipoUsuario() == null || usuarioDTO.getTipoUsuario().isEmpty()) {
             return "nutriya-register";
         }
@@ -140,6 +137,13 @@ public class ControladorUsuario {
             return "perfil-restaurante";
         }
         return "nutriya-login";
+    }
+
+    @GetMapping(value = "/validar-email", produces = "application/json")
+    @ResponseBody
+    public String validarEmail(@RequestParam String email) {
+        boolean disponible = servicioUsuario.getUsuario(email) == null;
+        return "{\"disponible\": " + disponible + "}";
     }
 
 }
