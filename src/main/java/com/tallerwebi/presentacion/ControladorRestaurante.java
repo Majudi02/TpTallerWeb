@@ -1,8 +1,9 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.PlatoDto;
-import com.tallerwebi.dominio.entidades.Restaurante;
+import com.tallerwebi.dominio.Restaurante;
 import com.tallerwebi.dominio.ServicioRestaurante;
+import com.tallerwebi.dominio.ServicioRestauranteImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,32 +17,27 @@ import java.util.List;
 @Controller
 public class ControladorRestaurante {
 
-    @Autowired
+
     private ServicioRestaurante servicioRestaurante;
 
-    @GetMapping("/restaurantes")
-    public String listarRestaurantes(@RequestParam(required = false) String zona,
-                                     @RequestParam(required = false) String tipo,
-                                     Model model) {
-        servicioRestaurante.inicializarDatos();
-        List<Restaurante> restaurantes = servicioRestaurante.buscarPorTipoComidaYZona(zona, tipo);
-        model.addAttribute("restaurantes", restaurantes);
-        model.addAttribute("zona", zona);  // para mantener filtro en la vista
-        model.addAttribute("tipo", tipo);  // para mantener filtro en la vista
-        return "restaurantes";
+
+    @Autowired
+    public ControladorRestaurante(ServicioRestaurante servicioRestaurante){
+        this.servicioRestaurante=servicioRestaurante;
     }
 
-    @GetMapping("/administrarPlatos")
-    public ModelAndView administrarPlatos() {
-        ModelMap modelo = new ModelMap();
+        @GetMapping("/restaurantes")
+        public String listarRestaurantes(@RequestParam(required = false) String zona,
+                                         @RequestParam(required = false) String tipo,
+                                         Model model) {
+            List<Restaurante> restaurantes = servicioRestaurante.buscarPorTipoComidaYZona(zona, tipo);
+            model.addAttribute("restaurantes", restaurantes);
+            model.addAttribute("zona", zona);  // para mantener filtro en la vista
+            model.addAttribute("tipo", tipo);  // para mantener filtro en la vista
+            return "restaurantes";
+        }
 
-        PlatoDto platoObtenido = servicioRestaurante.obtenerPlatoPorId(5);
-
-        modelo.put("plato", platoObtenido);
-
-        return new ModelAndView("plato-gestion", modelo);
     }
-}
 
 
 
