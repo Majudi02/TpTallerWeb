@@ -17,6 +17,9 @@ public class Restaurante {
     private String localidad;
     private String zona;
 
+    @OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Plato> platos;
+
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> tiposComida;
 
@@ -99,4 +102,27 @@ public class Restaurante {
         this.tiposComida = tiposComida;
     }
 
+    public List<Plato> getPlatos() {
+        return platos;
+    }
+
+    public void setPlatos(List<Plato> platos) {
+        this.platos = platos;
+    }
+
+    public String getRutaImagen() {
+        return rutaImagen;
+    }
+
+    public void setRutaImagen(String rutaImagen) {
+        this.rutaImagen = rutaImagen;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
