@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>NutriYa - Detalle de Restaurante</title>
+
+    <!-- Bootstrap 5.2.0 CSS & Icons -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/estilo-principal.css}">
+    <link rel="stylesheet" th:href="@{/css/estilo-detalle-restaurante.css}">
+    <link rel="stylesheet" th:href="@{/css/estilo-restaurante.css}">
+
+    <!-- Fuente Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap" rel="stylesheet">
+
+
+</head>
+
+<body>
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top px-3">
+    <div class="container-fluid">
+        <div class="d-flex w-100 justify-content-between align-items-center">
+            <a class="navbar-brand" th:href="@{/nutriya.html}">Nutri<span style="color: #38BD48;">Ya</span></a>
+            <form class="d-flex flex-grow-1 justify-content-center" role="search">
+                <div class="input-group w-100" style="max-width: 500px;">
+                    <input class="form-control" type="search" placeholder="Buscá comidas, restaurantes..."
+                           aria-label="Buscar">
+                    <button class="btn buscar" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </form>
+
+            <div class="botones-nav">
+                <a class="btn btn-outline-secondary mx-1" th:href="@{/nutriya-login.html}">
+                    <i class="bi bi-person"></i>
+                </a>
+
+                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#menuLateral" aria-controls="menuLateral">
+                    <i class="bi bi-list"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- OFFCANVAS MENU -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="menuLateral" aria-labelledby="menuLateralLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="menuLateralLabel">Opciones</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="navbar-nav gap-2">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/nutriya.html}">Inicio</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/pedido.html}">Comidas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" th:href="@{/restaurantes.html}">Restaurantes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/medios-pago}">Medios de Pago</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/nutriya-login.html}">Mi Perfil</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- CONTENIDO PRINCIPAL -->
+<div class="restaurant-header" th:style="${'background-image: url(' + restaurante.imagen + ')'}">
+    <div class="container restaurant-header-content">
+        <h1 th:text="${restaurante.nombre}"></h1>
+        <p class="lead" th:text="${restaurante.descripcion}"></p>
+        <p><i class="bi bi-geo-alt-fill"></i> <span th:text="${restaurante.calle + ' ' + restaurante.numero + ', ' + restaurante.localidad + ' - Zona ' + restaurante.zona}"></span></p>
+        <div>
+            <span class="badge mx-1" th:each="tipo : ${restaurante.tiposComida}" th:text="${tipo}"></span>
+        </div>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Platos disponibles</h2>
+        <a th:href="@{/restaurantes}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Volver a Restaurantes
+        </a>
+    </div>
+
+    <p th:if="${#lists.isEmpty(platos)}">Este restaurante aún no tiene platos disponibles.</p>
+
+    <div class="row g-4">
+        <div class="col-md-4" th:each="plato : ${platos}">
+            <div class="card plato-card">
+                <img th:src="@{${plato.imagen}}" class="plato-img" th:alt="${plato.nombre}"/>
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${plato.nombre}"></h5>
+                    <p class="card-text" th:text="${plato.descripcion}"></p>
+                    <p class="fw-bold">$<span th:text="${#numbers.formatDecimal(plato.precio, 0, 'POINT', 2, 'COMMA')}"></span></p>
+                    <div>
+                        <span class="badge mx-1" th:each="etiqueta : ${plato.etiquetas}" th:text="${etiqueta.nombre}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap 5.2.0 JS -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"
+        crossorigin="anonymous"></script>
+</body>
+</html>

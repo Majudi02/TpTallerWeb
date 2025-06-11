@@ -112,15 +112,17 @@
     <div class="row g-4">
         <!-- Restaurante 1 -->
         <div class="col-md-4" th:each="restaurante : ${restaurantes}">
-            <div class="card restaurant-card">
-                <img th:src="@{${restaurante.getImagen()}}" class="restaurant-img" th:alt="${restaurante.nombre}"/>
-                <div class="card-body">
-                    <h5 class="restaurant-name" th:text="${restaurante.nombre}"></h5>
-                    <p class="restaurant-info"
-                       th:text="${restaurante.descripcion} + ' · Zona ' + ${restaurante.zona}"></p>
-                    <span class="badge mx-1" th:each="tipo : ${restaurante.tiposComida}" th:text="${tipo}"></span>
+            <a th:href="@{'/restaurantes/' + ${restaurante.nombre}}" class="text-decoration-none">
+                <div class="card restaurant-card">
+                    <img th:src="@{${restaurante.getImagen()}}" class="restaurant-img" th:alt="${restaurante.nombre}"/>
+                    <div class="card-body">
+                        <h5 class="restaurant-name" th:text="${restaurante.nombre}"></h5>
+                        <p class="restaurant-info"
+                           th:text="${restaurante.descripcion} + ' · Zona ' + ${restaurante.zona}"></p>
+                        <span class="badge mx-1" th:each="tipo : ${restaurante.tiposComida}" th:text="${tipo}"></span>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 </div>
