@@ -32,6 +32,8 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
             cliente.setEmail(usuarioDTO.getEmail());
             cliente.setPassword(usuarioDTO.getPassword());
             cliente.setNombre(usuarioDTO.getNombre());
+            cliente.setTokenConfirmacion(usuarioDTO.getTokenConfirmacion());
+            cliente.setConfirmado(usuarioDTO.getConfirmado());
 
             cliente.setEdad(usuarioDTO.getEdad());
             cliente.setPesoActual(usuarioDTO.getPesoActual());
@@ -56,6 +58,9 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
             restaurante.setImagen(usuarioDTO.getImagen());
             usuarioRestaurante.setRestaurante(restaurante);
 
+            usuarioRestaurante.setTokenConfirmacion(usuarioDTO.getTokenConfirmacion());
+            usuarioRestaurante.setConfirmado(usuarioDTO.getConfirmado());
+
             usuario = usuarioRestaurante;
 
         } else if ("repartidor".equalsIgnoreCase(usuarioDTO.getTipoUsuario())) {
@@ -67,6 +72,8 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
             repartidor.setDni(usuarioDTO.getDni());
             repartidor.setTelefono(usuarioDTO.getTelefono());
             repartidor.setVehiculo(usuarioDTO.getVehiculo());
+            repartidor.setTokenConfirmacion(usuarioDTO.getTokenConfirmacion());
+            repartidor.setConfirmado(usuarioDTO.getConfirmado());
             usuario = repartidor;
         } else {
             throw new IllegalArgumentException("Tipo de usuario inválido");
@@ -74,6 +81,8 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
 
         repositorioUsuario.guardar(usuario);
     }
+
+
 
     @Override
     public UsuarioDTO getUsuario(String email) {
@@ -89,9 +98,29 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
         return mapToDTO(usuario);
     }
 
+    @Override
+    public UsuarioDTO buscarPorTokenConfirmacion(String token) {
+        UsuarioNutriya usuario = repositorioUsuario.buscarPorTokenConfirmacion(token);
+        return mapToDTO(usuario);
+    }
+
+    @Override
+    public Boolean confirmarUsuarioPorToken(String token) {
+        UsuarioNutriya usuario = repositorioUsuario.buscarPorTokenConfirmacion(token);
+        if (usuario != null && !usuario.getConfirmado()) {
+            usuario.setConfirmado(true);
+            usuario.setTokenConfirmacion(null);
+            repositorioUsuario.guardar(usuario);
+            return true;
+        }
+        return false;
+    }
+
     private UsuarioDTO mapToDTO(UsuarioNutriya usuario) {
         UsuarioDTO dto = new UsuarioDTO();
         dto.setEmail(usuario.getEmail());
+        dto.setConfirmado(usuario.getConfirmado());
+
 
         if (usuario instanceof Cliente) {
             Cliente c = (Cliente) usuario;

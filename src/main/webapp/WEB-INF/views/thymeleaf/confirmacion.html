@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Confirmación Pendiente</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2rem;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h2 {
+            color: #007bff;
+        }
+        p {
+            font-size: 1.1rem;
+            margin-top: 1rem;
+        }
+        .email {
+            font-weight: bold;
+            color: #555;
+        }
+        .resend-btn {
+            margin-top: 2rem;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .resend-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Tu cuenta aún no está confirmada</h2>
+    <p>Para activar tu cuenta, por favor revisa tu correo electrónico <span class="email" th:text="${email}">[correo]</span> y haz clic en el enlace de confirmación.</p>
+    <p>Si no ves el correo, revisa tu carpeta de spam o correo no deseado.</p>
+
+    <!-- Opcional: botón para reenviar el email de confirmación -->
+    <form th:action="@{/reenviar-confirmacion}" method="post">
+        <input type="hidden" name="email" th:value="${email}" />
+        <button type="submit" class="resend-btn">Reenviar correo de confirmación</button>
+    </form>
+</div>
+</body>
+</html>

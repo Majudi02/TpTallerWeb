@@ -1,14 +1,16 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.ServicioEmail;
 import com.tallerwebi.dominio.ServicioRestaurante;
 import com.tallerwebi.dominio.ServicioUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,57 +25,64 @@ public class ControladorUsuario {
     @Autowired
     private ServicioRestaurante servicioRestaurante;
 
-    public ControladorUsuario(ServicioUsuario servicioUsuario, ServicioRestaurante servicioRestaurante) {
+    @Autowired
+    private ServicioEmail servicioEmail;
+
+    public ControladorUsuario(ServicioUsuario servicioUsuario, ServicioRestaurante servicioRestaurante, ServicioEmail servicioEmail) {
         this.servicioUsuario = servicioUsuario;
         this.servicioRestaurante = servicioRestaurante;
+        this.servicioEmail = servicioEmail;
     }
 
     @GetMapping("/nutriya-register")
-    public String mostrarFormularioRegistro(Model model) {
+    public ModelAndView mostrarFormularioRegistro() {
+        ModelMap model = new ModelMap();
         model.addAttribute("registroUsuarioDTO", new UsuarioDTO());
-        return "nutriya-register";
+        return new ModelAndView("nutriya-register", model);
     }
 
     @PostMapping("/nutriya-register")
-    public String registrarUsuario(@ModelAttribute("registroUsuarioDTO") UsuarioDTO usuarioDTO, @RequestParam(value = "imagenRestaurante", required = false) MultipartFile imagen, RedirectAttributes redirectAttributes) {
+    public ModelAndView registrarUsuario(@ModelAttribute("registroUsuarioDTO") UsuarioDTO usuarioDTO,
+                                         @RequestPart(value = "imagenRestaurante", required = false) MultipartFile imagen,
+                                         RedirectAttributes redirectAttributes) {
+
         if (usuarioDTO.getTipoUsuario() == null || usuarioDTO.getTipoUsuario().isEmpty()) {
-            return "nutriya-register";
+            return mostrarFormularioRegistro();
         }
 
-        // Validar campos obligatorios según tipo de usuario
-        if ("cliente".equals(usuarioDTO.getTipoUsuario())) {
-            if (usuarioDTO.getNombre() == null || usuarioDTO.getEmail() == null || usuarioDTO.getPassword() == null ||
-                    usuarioDTO.getEdad() == null || usuarioDTO.getPesoActual() == null ||
-                    usuarioDTO.getPesoDeseado() == null || usuarioDTO.getAltura() == null ||
-                    usuarioDTO.getObjetivo() == null) {
-                return "nutriya-register";
-            }
-        } else if ("restaurante".equals(usuarioDTO.getTipoUsuario())) {
-            if (usuarioDTO.getNombre() == null || usuarioDTO.getEmail() == null || usuarioDTO.getPassword() == null ||
-                    usuarioDTO.getDescripcion() == null || usuarioDTO.getCalle() == null ||
-                    usuarioDTO.getNumero() == null || usuarioDTO.getLocalidad() == null ||
-                    usuarioDTO.getZona() == null) {
-                return "nutriya-register";
-            }
-        } else if ("repartidor".equals(usuarioDTO.getTipoUsuario())) {
-            if (usuarioDTO.getNombre() == null || usuarioDTO.getApellido() == null ||
-                    usuarioDTO.getDni() == null || usuarioDTO.getTelefono() == null ||
-                    usuarioDTO.getEmail() == null || usuarioDTO.getPassword() == null ||
-                    usuarioDTO.getVehiculo() == null) {
-                return "nutriya-register";
-            }
-        } else {
-            return "nutriya-register";
+
+        boolean datosInvalidos = false;
+        switch (usuarioDTO.getTipoUsuario()) {
+            case "cliente":
+                datosInvalidos = usuarioDTO.getNombre() == null || usuarioDTO.getEmail() == null || usuarioDTO.getPassword() == null ||
+                        usuarioDTO.getEdad() == null || usuarioDTO.getPesoActual() == null ||
+                        usuarioDTO.getPesoDeseado() == null || usuarioDTO.getAltura() == null ||
+                        usuarioDTO.getObjetivo() == null;
+                break;
+            case "restaurante":
+                datosInvalidos = usuarioDTO.getNombre() == null || usuarioDTO.getEmail() == null || usuarioDTO.getPassword() == null ||
+                        usuarioDTO.getDescripcion() == null || usuarioDTO.getCalle() == null ||
+                        usuarioDTO.getNumero() == null || usuarioDTO.getLocalidad() == null ||
+                        usuarioDTO.getZona() == null;
+                break;
+            case "repartidor":
+                datosInvalidos = usuarioDTO.getNombre() == null || usuarioDTO.getApellido() == null ||
+                        usuarioDTO.getDni() == null || usuarioDTO.getTelefono() == null ||
+                        usuarioDTO.getEmail() == null || usuarioDTO.getPassword() == null ||
+                        usuarioDTO.getVehiculo() == null;
+                break;
+            default:
+                datosInvalidos = true;
         }
 
-        // Verificar si ya hay un usuario con ese email
-        System.out.println("DTO: " + usuarioDTO.getImagenRestaurante());
-        System.out.println("RESTAURANTE?: " + usuarioDTO.getTipoUsuario());
+        if (datosInvalidos) {
+            return mostrarFormularioRegistro();
+        }
+
         UsuarioDTO usuarioEncontrado = servicioUsuario.getUsuario(usuarioDTO.getEmail());
-
         if (usuarioEncontrado != null) {
             redirectAttributes.addFlashAttribute("errorEmail", "Ya existe un usuario registrado con ese email.");
-            return "redirect:/resultado-registro";
+            return new ModelAndView("redirect:/resultado-registro");
         }
 
         if ("restaurante".equals(usuarioDTO.getTipoUsuario())) {
@@ -92,52 +101,117 @@ public class ControladorUsuario {
 
                     usuarioDTO.setImagen("/assets/imagenesRestaurantes/" + nombreArchivo);
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }
 
-        // SOLO UNA LLAMADA AL SERVICIO
+        String token = UUID.randomUUID().toString();
+        usuarioDTO.setTokenConfirmacion(token);
+        usuarioDTO.setConfirmado(false);
+
         servicioUsuario.registrarUsuario(usuarioDTO);
 
-        return "redirect:/resultado-registro";
+            String destinatario = usuarioDTO.getEmail();
+            String asunto = "Confirma tu cuenta en NutriYa";
+            String urlConfirmacion = "http://localhost:8080/nutriya-confirmar-registro?token=" + token;
+            String cuerpoMensaje = "Hola " + usuarioDTO.getNombre() + ",\n\n" +
+                    "Gracias por registrarte en NutriYa. Por favor, haz clic en el siguiente enlace para confirmar tu cuenta:\n" +
+                    urlConfirmacion + "\n\n" +
+                    "Saludos,\nEl equipo de NutriYa";
+            servicioEmail.enviarEmail(destinatario, asunto, cuerpoMensaje);
+
+            ModelMap modelo = new ModelMap();
+            modelo.put("emailEnviadoA", usuarioDTO.getEmail());
+            return new ModelAndView("confirmacion", modelo);
+
+
+    }
+
+    @GetMapping("/nutriya-confirmar-registro")
+    public ModelAndView confirmarRegistro(@RequestParam("token") String token) {
+        ModelMap model = new ModelMap();
+        Boolean exitoConfirmacion = servicioUsuario.confirmarUsuarioPorToken(token);
+
+        if (exitoConfirmacion) {
+            model.addAttribute("mensaje", "¡Tu cuenta ha sido confirmada exitosamente! Ya puedes iniciar sesión.");
+            return new ModelAndView("cuenta-confirmada", model);
+        } else {
+            model.addAttribute("error", "El enlace de confirmación no es válido o ha expirado.");
+            return new ModelAndView("confirmacion", model);
+        }
     }
 
 
     @GetMapping("/resultado-registro")
-    public String mostrarRegistroExitoso() {
-        return "resultado-registro";
+    public ModelAndView mostrarRegistroExitoso() {
+        return new ModelAndView("resultado-registro");
     }
 
-
     @GetMapping("/nutriya-login")
-    public String mostrarFormularioLogin(Model model) {
-        model.addAttribute("loginDTO", new UsuarioDTO());  // Para ligar el formulario
-        return "nutriya-login";  // nombre de la vista login.html
+    public ModelAndView mostrarFormularioLogin() {
+        ModelMap model = new ModelMap();
+        model.addAttribute("loginDTO", new UsuarioDTO());
+        return new ModelAndView("nutriya-login", model);
+    }
+
+    @GetMapping("/Restaurante/perfil")
+    public ModelAndView perfilRestaurante(UsuarioDTO usuario){
+        ModelMap model = new ModelMap();
+        model.put("usuario", usuario);
+        return new ModelAndView("perfil-restaurante", model);
+    }
+
+    @GetMapping("/Repartidor/perfil")
+    public ModelAndView perfilRepartidor(UsuarioDTO usuario){
+        ModelMap model = new ModelMap();
+        model.put("usuario", usuario);
+        return new ModelAndView("perfil-repartidor", model);
+    }
+
+    @GetMapping("/Cliente/perfil")
+    public ModelAndView perfilCliente(UsuarioDTO usuario){
+        ModelMap model = new ModelMap();
+        model.put("usuario", usuario);
+        return new ModelAndView("perfil-cliente", model);
     }
 
     @PostMapping("/nutriya-login")
-    public String procesarLogin(@ModelAttribute("loginDTO") UsuarioDTO loginDTO, Model model) {
+    public ModelAndView procesarLogin(@ModelAttribute("loginDTO") UsuarioDTO loginDTO, RedirectAttributes redirectAttributes, ModelMap model) {
         UsuarioDTO usuarioEncontrado = servicioUsuario.validarUsuario(loginDTO.getEmail(), loginDTO.getPassword());
 
         if (usuarioEncontrado == null) {
             model.addAttribute("errorLogin", "Email o contraseña incorrectos");
-            return "nutriya-login";
+            model.addAttribute("loginDTO", new UsuarioDTO());
+            return new ModelAndView("nutriya-login", model);
+        }
+
+        if (!usuarioEncontrado.getConfirmado()) {
+
+            ModelMap modelMap =new ModelMap();
+            modelMap.put("emailParaConfirmar", usuarioEncontrado.getEmail());
+            modelMap.put("nombre", usuarioEncontrado.getNombre());
+            return new ModelAndView("pendiente-confirmacion",modelMap);
         }
 
         model.addAttribute("usuario", usuarioEncontrado);
 
-        // Redirigir según tipoUsuario
         String tipo = usuarioEncontrado.getTipoUsuario();
 
         if ("cliente".equalsIgnoreCase(tipo)) {
-            return "perfil-cliente";
+            return perfilCliente(usuarioEncontrado);
         } else if ("repartidor".equalsIgnoreCase(tipo)) {
-            return "perfil-repartidor";
+            return perfilRepartidor(usuarioEncontrado);
         } else if ("restaurante".equalsIgnoreCase(tipo)) {
-            return "perfil-restaurante";
+            return perfilRestaurante(usuarioEncontrado);
         }
-        return "nutriya-login";
+
+        return new ModelAndView("nutriya-login", model);
     }
+
+
+
+}
 
     @GetMapping(value = "/validar-email", produces = "application/json")
     @ResponseBody
@@ -147,3 +221,4 @@ public class ControladorUsuario {
     }
 
 }
+

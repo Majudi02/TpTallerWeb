@@ -3,12 +3,16 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.entidades.Cliente;
 import com.tallerwebi.dominio.entidades.Repartidor;
+import com.tallerwebi.dominio.entidades.UsuarioNutriya;
 import com.tallerwebi.dominio.entidades.UsuarioRestaurante;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestTemplate;
 
 import java.util.List;
+import java.util.UUID;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -165,4 +169,43 @@ public class ServicioUsuarioImplTest {
 
         assertNull(dto);
     }
+
+
+    @Test
+    public void queSePuedaTraerUnUsuarioConUnToken(){
+
+        String token = UUID.randomUUID().toString();
+        UsuarioNutriya usuarioMock = new Cliente();
+        usuarioMock.setEmail("test@mail.com");
+        usuarioMock.setConfirmado(false);
+        usuarioMock.setTokenConfirmacion(token);
+
+        when(repositorioMock.buscarPorTokenConfirmacion(token)).thenReturn(usuarioMock);
+
+        UsuarioDTO resultado = servicioUsuario.buscarPorTokenConfirmacion(token);
+
+        assertEquals("test@mail.com", resultado.getEmail());
+        assertFalse(resultado.getConfirmado());
+    }
+
+    @Test
+    public void queSePuedaConfirmarUnUsuarioConUnToken(){
+        String token = UUID.randomUUID().toString();
+        UsuarioNutriya usuarioMock = new Cliente();
+        usuarioMock.setEmail("test@mail.com");
+        usuarioMock.setConfirmado(false);
+        usuarioMock.setTokenConfirmacion(token);
+
+        when(repositorioMock.buscarPorTokenConfirmacion(token)).thenReturn(usuarioMock);
+
+        Boolean resultado = servicioUsuario.confirmarUsuarioPorToken(token);
+
+        assertTrue(resultado);
+        assertTrue(usuarioMock.getConfirmado());
+        assertNull(usuarioMock.getTokenConfirmacion());
+
+        verify(repositorioMock).guardar(usuarioMock);
+    }
+
+
 }

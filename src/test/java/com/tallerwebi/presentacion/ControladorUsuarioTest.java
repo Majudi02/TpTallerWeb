@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.ui.ConcurrentModel;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import java.util.List;
@@ -15,23 +17,26 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import static org.mockito.Mockito.*;
 
+
 public class ControladorUsuarioTest {
 
     private ControladorUsuario controlador;
     private ServicioUsuario servicioUsuario;
     private ServicioRestaurante servicioRestaurante;
+    private ServicioEmail servicioEmail;
     private RepositorioUsuarioNutriya repositorioUsuario;
 
     @BeforeEach
     public void init() {
-        repositorioUsuario = mock(RepositorioUsuarioNutriya.class); // <-- simulamos el repo
+        repositorioUsuario = mock(RepositorioUsuarioNutriya.class);
         servicioUsuario = new ServicioUsuarioImpl(repositorioUsuario);
         servicioRestaurante = mock(ServicioRestaurante.class);
-        controlador = new ControladorUsuario(servicioUsuario, servicioRestaurante);
+        servicioEmail=mock(ServicioEmail.class);
+        controlador = new ControladorUsuario(servicioUsuario, servicioRestaurante, servicioEmail);
     }
 
     @Test
-    public void DadoQueTengoUnControladorUsuaruioPuedoRegistrarUnUsuarioTipoCliente() {
+    public void DadoQueTengoUnControladorUsuarioPuedoRegistrarUnUsuarioTipoCliente() {
         UsuarioDTO cliente = new UsuarioDTO();
         cliente.setTipoUsuario("cliente");
         cliente.setNombre("Ana");
@@ -43,51 +48,47 @@ public class ControladorUsuarioTest {
         cliente.setAltura(1.65);
         cliente.setObjetivo("bajar de peso");
 
-        // Simulamos que no existe previamente
         when(repositorioUsuario.buscarPorEmail("ana@mail.com")).thenReturn(null);
 
         RedirectAttributesModelMap redirect = new RedirectAttributesModelMap();
-        String resultado = controlador.registrarUsuario(cliente, null, redirect);
+        ModelAndView resultado = controlador.registrarUsuario(cliente, null, redirect);
 
-        // Verificamos que se haya guardado
         verify(repositorioUsuario).guardar(any(Cliente.class));
 
-        assertEquals("redirect:/resultado-registro", resultado);
+        assertEquals("confirmacion", resultado.getViewName());
+        assertEquals("ana@mail.com", resultado.getModel().get("emailEnviadoA"));
     }
 
 
     @Test
-    public void DadoQueTengoUnControladorUsuaruioMeMuestraElFormularioDeRegistroConUnUsuarioDTOVacio() {
-        Model model = new ConcurrentModel();
+    public void DadoQueTengoUnControladorUsuarioMeMuestraElFormularioDeRegistroConUnUsuarioDTOVacio() {
+        ModelAndView vista = controlador.mostrarFormularioRegistro();
 
-        String vista = controlador.mostrarFormularioRegistro(model);
-
-        assertEquals("nutriya-register", vista);
-        assertTrue(model.containsAttribute("registroUsuarioDTO"));
+        assertEquals("nutriya-register", vista.getViewName());
+        assertTrue(vista.getModel().containsKey("registroUsuarioDTO"));
     }
 
     @Test
-    public void DadoQueTengoUnControladorUsuaruioNoPuedoRegistrarUnUsuarioSiFaltanCampos() {
+    public void DadoQueTengoUnControladorUsuarioNoPuedoRegistrarUnUsuarioSiFaltanCampos() {
         UsuarioDTO cliente = new UsuarioDTO();
         cliente.setTipoUsuario("cliente");
         cliente.setEmail("faltanombre@mail.com");
 
         RedirectAttributesModelMap redirect = new RedirectAttributesModelMap();
 
-        String resultado = controlador.registrarUsuario(cliente, null, redirect);
+        ModelAndView resultado = controlador.registrarUsuario(cliente, null, redirect);
 
-        assertEquals("nutriya-register", resultado);
+        assertEquals("nutriya-register", resultado.getViewName());
     }
 
     @Test
     public void DadoQueTengoUnControladorUsuarioMuestraLaVistaLogin() {
-        Model model = new ConcurrentModel();
+        ModelAndView vista = controlador.mostrarFormularioLogin();
 
-        String vista = controlador.mostrarFormularioLogin(model);
-
-        assertEquals("nutriya-login", vista);
-        assertTrue(model.containsAttribute("loginDTO"));
+        assertEquals("nutriya-login", vista.getViewName());
+        assertTrue(vista.getModel().containsKey("loginDTO"));
     }
+
 
     @Test
     public void DadoQueTengoUnControladorUsuarioPuedoLogearmeConUnClienteRegistrado() {
@@ -102,7 +103,6 @@ public class ControladorUsuarioTest {
         cliente.setAltura(1.70);
         cliente.setObjetivo("mantener peso");
 
-        // Simulamos que el usuario ya existe cuando se busca por email y password
         Cliente usuarioMock = new Cliente();
         usuarioMock.setEmail("login@mail.com");
         usuarioMock.setPassword("clave");
@@ -112,41 +112,36 @@ public class ControladorUsuarioTest {
         usuarioMock.setPesoDeseado(65);
         usuarioMock.setAltura(1.70);
         usuarioMock.setObjetivo("mantener peso");
+        usuarioMock.setConfirmado(true); // Asegurar que está confirmado
 
         when(repositorioUsuario.buscarPorEmailYPassword("login@mail.com", "clave"))
                 .thenReturn(usuarioMock);
-
-        Model model = new ConcurrentModel();
 
         UsuarioDTO intentoLogin = new UsuarioDTO();
         intentoLogin.setEmail("login@mail.com");
         intentoLogin.setPassword("clave");
 
-        String vista = controlador.procesarLogin(intentoLogin, model);
-        assertEquals("perfil-cliente", vista);
-        assertTrue(model.containsAttribute("usuario"));
+        ModelMap model = new ModelMap();
+        ModelAndView modelAndView = controlador.procesarLogin(intentoLogin, new RedirectAttributesModelMap(), model);
+
+        assertEquals("perfil-cliente", modelAndView.getViewName());
+        assertTrue(modelAndView.getModel().containsKey("usuario"));
     }
 
 
     @Test
     public void DadoQueTengoUnControladorUsuarioAlIntentarLogearmeConDatosInvalidosDevuelveError() {
-        UsuarioDTO cliente = new UsuarioDTO();
-        cliente.setTipoUsuario("cliente");
-        cliente.setEmail("login@mail.com");
-        cliente.setPassword("clave");
-
-        servicioUsuario.registrarUsuario(cliente);
+        when(repositorioUsuario.buscarPorEmailYPassword("login@mail.com", "claveIncorrecta")).thenReturn(null);
 
         UsuarioDTO intentoLogin = new UsuarioDTO();
         intentoLogin.setEmail("login@mail.com");
         intentoLogin.setPassword("claveIncorrecta");
 
-        Model model = new ConcurrentModel();
+        ModelMap model = new ModelMap();
+        ModelAndView vista = controlador.procesarLogin(intentoLogin, new RedirectAttributesModelMap(), model);
 
-        String vista = controlador.procesarLogin(intentoLogin, model);
-
-        assertEquals("nutriya-login", vista);
-        assertTrue(model.containsAttribute("errorLogin"));
+        assertEquals("nutriya-login", vista.getViewName());
+        assertTrue(vista.getModel().containsKey("errorLogin"));
     }
 
     @Test
@@ -179,3 +174,5 @@ public class ControladorUsuarioTest {
     }
 
 }
+
+

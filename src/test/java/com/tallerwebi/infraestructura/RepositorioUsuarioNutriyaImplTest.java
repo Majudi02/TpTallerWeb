@@ -1,5 +1,6 @@
 package com.tallerwebi.infraestructura;
 
+import com.tallerwebi.dominio.RepositorioUsuarioNutriya;
 import com.tallerwebi.dominio.entidades.Cliente;
 import com.tallerwebi.dominio.entidades.Repartidor;
 import com.tallerwebi.dominio.entidades.UsuarioNutriya;
@@ -10,6 +11,11 @@ import org.hibernate.query.Query;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.UUID;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -128,6 +134,22 @@ public class RepositorioUsuarioNutriyaImplTest {
 
         repositorio.modificar(cliente);
         verify(sessionMock).update(cliente);
+    }
+
+    @Test
+    public void queSePuedaObtenerUnUsuasroConUnToken(){
+        String token = UUID.randomUUID().toString();
+        UsuarioNutriya usuarioMock = mock(UsuarioNutriya.class);
+
+        RepositorioUsuarioNutriya repositorioMock = mock(RepositorioUsuarioNutriya.class);
+        when(repositorioMock.buscarPorTokenConfirmacion(token)).thenReturn(usuarioMock);
+
+
+        UsuarioNutriya resultado = repositorioMock.buscarPorTokenConfirmacion(token);
+
+        assertNotNull(resultado);
+        assertEquals(usuarioMock, resultado);
+
     }
 
 

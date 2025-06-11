@@ -14,6 +14,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 public class HibernateConfig {
 
+
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
