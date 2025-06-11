@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.servlet.http.HttpServletRequest;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -112,18 +114,18 @@ public class ControladorUsuario {
 
         servicioUsuario.registrarUsuario(usuarioDTO);
 
-            String destinatario = usuarioDTO.getEmail();
-            String asunto = "Confirma tu cuenta en NutriYa";
-            String urlConfirmacion = "http://localhost:8080/nutriya-confirmar-registro?token=" + token;
-            String cuerpoMensaje = "Hola " + usuarioDTO.getNombre() + ",\n\n" +
-                    "Gracias por registrarte en NutriYa. Por favor, haz clic en el siguiente enlace para confirmar tu cuenta:\n" +
-                    urlConfirmacion + "\n\n" +
-                    "Saludos,\nEl equipo de NutriYa";
-            servicioEmail.enviarEmail(destinatario, asunto, cuerpoMensaje);
+        String destinatario = usuarioDTO.getEmail();
+        String asunto = "Confirma tu cuenta en NutriYa";
+        String urlConfirmacion = "http://localhost:8080/nutriya-confirmar-registro?token=" + token;
+        String cuerpoMensaje = "Hola " + usuarioDTO.getNombre() + ",\n\n" +
+                "Gracias por registrarte en NutriYa. Por favor, haz clic en el siguiente enlace para confirmar tu cuenta:\n" +
+                urlConfirmacion + "\n\n" +
+                "Saludos,\nEl equipo de NutriYa";
+        servicioEmail.enviarEmail(destinatario, asunto, cuerpoMensaje);
 
-            ModelMap modelo = new ModelMap();
-            modelo.put("emailEnviadoA", usuarioDTO.getEmail());
-            return new ModelAndView("confirmacion", modelo);
+        ModelMap modelo = new ModelMap();
+        modelo.put("emailEnviadoA", usuarioDTO.getEmail());
+        return new ModelAndView("confirmacion", modelo);
 
 
     }
@@ -149,35 +151,50 @@ public class ControladorUsuario {
     }
 
     @GetMapping("/nutriya-login")
-    public ModelAndView mostrarFormularioLogin() {
+    public ModelAndView mostrarFormularioLogin(HttpServletRequest request) {
+        UsuarioDTO usuarioSesion = (UsuarioDTO) request.getSession().getAttribute("usuario");
+
+        if (usuarioSesion != null) {
+            // Si hay usuario en sesión, redirigir a su perfil según tipo
+            String tipo = usuarioSesion.getTipoUsuario();
+            if ("cliente".equalsIgnoreCase(tipo)) {
+                return perfilCliente(usuarioSesion);
+            } else if ("repartidor".equalsIgnoreCase(tipo)) {
+                return perfilRepartidor(usuarioSesion);
+            } else if ("restaurante".equalsIgnoreCase(tipo)) {
+                return perfilRestaurante(usuarioSesion);
+            }
+        }
+
+        // Si no hay usuario en sesión, mostrar formulario de login
         ModelMap model = new ModelMap();
         model.addAttribute("loginDTO", new UsuarioDTO());
         return new ModelAndView("nutriya-login", model);
     }
 
     @GetMapping("/Restaurante/perfil")
-    public ModelAndView perfilRestaurante(UsuarioDTO usuario){
+    public ModelAndView perfilRestaurante(UsuarioDTO usuario) {
         ModelMap model = new ModelMap();
         model.put("usuario", usuario);
         return new ModelAndView("perfil-restaurante", model);
     }
 
     @GetMapping("/Repartidor/perfil")
-    public ModelAndView perfilRepartidor(UsuarioDTO usuario){
+    public ModelAndView perfilRepartidor(UsuarioDTO usuario) {
         ModelMap model = new ModelMap();
         model.put("usuario", usuario);
         return new ModelAndView("perfil-repartidor", model);
     }
 
     @GetMapping("/Cliente/perfil")
-    public ModelAndView perfilCliente(UsuarioDTO usuario){
+    public ModelAndView perfilCliente(UsuarioDTO usuario) {
         ModelMap model = new ModelMap();
         model.put("usuario", usuario);
         return new ModelAndView("perfil-cliente", model);
     }
 
     @PostMapping("/nutriya-login")
-    public ModelAndView procesarLogin(@ModelAttribute("loginDTO") UsuarioDTO loginDTO, RedirectAttributes redirectAttributes, ModelMap model) {
+    public ModelAndView procesarLogin(@ModelAttribute("loginDTO") UsuarioDTO loginDTO, RedirectAttributes redirectAttributes, ModelMap model, HttpServletRequest request) {
         UsuarioDTO usuarioEncontrado = servicioUsuario.validarUsuario(loginDTO.getEmail(), loginDTO.getPassword());
 
         if (usuarioEncontrado == null) {
@@ -187,12 +204,13 @@ public class ControladorUsuario {
         }
 
         if (!usuarioEncontrado.getConfirmado()) {
-
-            ModelMap modelMap =new ModelMap();
+            ModelMap modelMap = new ModelMap();
             modelMap.put("emailParaConfirmar", usuarioEncontrado.getEmail());
             modelMap.put("nombre", usuarioEncontrado.getNombre());
-            return new ModelAndView("pendiente-confirmacion",modelMap);
+            return new ModelAndView("pendiente-confirmacion", modelMap);
         }
+
+        request.getSession().setAttribute("usuario", usuarioEncontrado);
 
         model.addAttribute("usuario", usuarioEncontrado);
 
@@ -215,6 +233,12 @@ public class ControladorUsuario {
     public String validarEmail(@RequestParam String email) {
         boolean disponible = servicioUsuario.getUsuario(email) == null;
         return "{\"disponible\": " + disponible + "}";
+    }
+
+    @GetMapping("/cerrar-sesion")
+    public String cerrarSesion(HttpServletRequest request) {
+        request.getSession().invalidate();  // Cierra la sesión
+        return "redirect:/nutriya-login";   // Redirige al login
     }
 
 }

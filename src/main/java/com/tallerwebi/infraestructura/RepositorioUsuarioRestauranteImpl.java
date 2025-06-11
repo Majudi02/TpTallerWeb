@@ -21,8 +21,12 @@ public class RepositorioUsuarioRestauranteImpl implements RepositorioUsuarioRest
     }
 
     @Override
-    public UsuarioRestaurante buscarPorId(Long id) {
-        return sessionFactory.getCurrentSession().get(UsuarioRestaurante.class, id);
+    public UsuarioRestaurante buscarPorUsuarioId(Long usuarioId) {
+        String hql = "FROM UsuarioRestaurante ur WHERE ur.id = :usuarioId";
+        return (UsuarioRestaurante) sessionFactory.getCurrentSession()
+                .createQuery(hql, UsuarioRestaurante.class)
+                .setParameter("usuarioId", usuarioId)
+                .uniqueResult();
     }
 
     @Override
