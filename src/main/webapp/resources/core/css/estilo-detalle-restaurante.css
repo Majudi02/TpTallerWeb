@@ -1,0 +1,48 @@
+.plato-card {
+    transition: transform 0.3s ease;
+    height: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.plato-card:hover {
+    transform: translateY(-5px);
+}
+
+.plato-img {
+    height: 200px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.restaurant-header {
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 100px 0 30px;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.restaurant-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.restaurant-header-content {
+    position: relative;
+    z-index: 2;
+}
+
+.badge {
+    background-color: #38BD48;
+    color: white;
+    margin-right: 5px;
+}
