@@ -45,6 +45,7 @@ public class ControladorUsuario {
     public ModelAndView registrarUsuario(@ModelAttribute("registroUsuarioDTO") UsuarioDTO usuarioDTO,
                                          @RequestPart(value = "imagenRestaurante", required = false) MultipartFile imagen,
                                          RedirectAttributes redirectAttributes) {
+
         if (usuarioDTO.getTipoUsuario() == null || usuarioDTO.getTipoUsuario().isEmpty()) {
             return mostrarFormularioRegistro();
         }
@@ -210,6 +211,14 @@ public class ControladorUsuario {
 
 
 
+}
 
+    @GetMapping(value = "/validar-email", produces = "application/json")
+    @ResponseBody
+    public String validarEmail(@RequestParam String email) {
+        boolean disponible = servicioUsuario.getUsuario(email) == null;
+        return "{\"disponible\": " + disponible + "}";
+    }
 
 }
+

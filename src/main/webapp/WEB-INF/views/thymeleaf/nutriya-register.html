@@ -100,7 +100,9 @@
     <div class="form-container contenedor-verde">
         <form id="formRegistro" th:action="@{/nutriya-register}" th:object="${registroUsuarioDTO}" method="post"
               enctype="multipart/form-data" accept-charset="UTF-8">
+
         <!-- Paso 1: Tipo de usuario -->
+
             <div id="paso1" class="paso activo">
                 <div class="d-flex flex-column gap-5 align-center">
                     <h3 style="text-align: center;">Seleccione tipo de usuario</h3>
@@ -146,7 +148,7 @@
                     <div class="d-flex justify-content-between btn-group">
                         <button type="button" class="btn btn-secondary" onclick="volverAlPaso1()">Volver</button>
                         <button type="button" class="btn btn-green"
-                                onclick="cambiarPaso('paso2-cliente', 'paso3-cliente')">Siguiente
+                                onclick="verificarEmailAntesDeContinuar('cliente')">Siguiente
                         </button>
                     </div>
                 </div>
@@ -238,7 +240,7 @@
                 <div class="d-flex justify-content-between btn-group">
                     <button type="button" class="btn btn-secondary" onclick="volverAlPaso1()">Volver</button>
                     <button type="button" class="btn btn-green"
-                            onclick="cambiarPaso('paso2-restaurante', 'paso3-restaurante')">Siguiente
+                            onclick="verificarEmailAntesDeContinuar('restaurante')">Siguiente
                     </button>
                 </div>
             </div>
@@ -251,7 +253,8 @@
                 </div>
                 <div class="mb-3">
                     <label for="imagenRestaurante" class="form-label">Subir imagen</label>
-                    <input class="form-control restaurante-input" type="file" th:field="*{imagenRestaurante}" id="imagenRestaurante" name="imagenRestaurante"
+                    <input class="form-control restaurante-input" type="file" th:field="*{imagenRestaurante}"
+                           id="imagenRestaurante" name="imagenRestaurante"
                            accept="image/*"/>
                 </div>
                 <div class="mb-3">
@@ -352,7 +355,7 @@
                 <div class="d-flex justify-content-between btn-group">
                     <button type="button" class="btn btn-secondary" onclick="volverAlPaso1()">Volver</button>
                     <button type="button" class="btn btn-green"
-                            onclick="cambiarPaso('paso2-repartidor', 'paso3-repartidor')">Siguiente
+                            onclick="verificarEmailAntesDeContinuar('repartidor')">Siguiente
                     </button>
                 </div>
             </div>
@@ -397,92 +400,118 @@
     </div>
 </footer>
 <script>
-    function gestionarInputs() {
-        const tipoUsuario = document.querySelector('input[name="tipoUsuario"]:checked')?.value;
-
-        // Deshabilitar todos los inputs por defecto
-        document.querySelectorAll('#formRegistro input, #formRegistro select, #formRegistro textarea')
-            .forEach(el => el.disabled = true);
-
-        // Habilitar inputs del paso 1 (tipoUsuario)
-        document.querySelectorAll('#paso1 input').forEach(el => el.disabled = false);
-
-        // Habilitar inputs del tipo de usuario seleccionado
-        if (tipoUsuario) {
-            document.querySelectorAll(`.${tipoUsuario}-input`).forEach(el => el.disabled = false);
-        }
-    }
-
-    function cambiarPaso(pasoActual, pasoNuevo) {
-        document.getElementById(pasoActual).classList.remove('activo');
-        document.getElementById(pasoNuevo).classList.add('activo');
-    }
-
-    function siguientePaso() {
-        const tipoUsuario = document.querySelector('input[name="tipoUsuario"]:checked');
-        if (!tipoUsuario) {
-            alert("Por favor, selecciona un tipo de usuario.");
-            return;
-        }
-
-        document.getElementById('paso1').classList.remove('activo');
-        let paso2Id = '';
-        switch (tipoUsuario.value) {
-            case 'cliente':
-                paso2Id = 'paso2-cliente';
-                break;
-            case 'restaurante':
-                paso2Id = 'paso2-restaurante';
-                break;
-            case 'repartidor':
-                paso2Id = 'paso2-repartidor';
-                break;
-        }
-        document.getElementById(paso2Id).classList.add('activo');
-        gestionarInputs();
-    }
-
-    function volverAlPaso1() {
+    document.addEventListener('DOMContentLoaded', function() {
         const pasos = document.querySelectorAll('.paso');
-        pasos.forEach(p => p.classList.remove('activo'));
-        document.getElementById('paso1').classList.add('activo');
+        const tipoUsuarioRadios = document.querySelectorAll('input[name="tipoUsuario"]');
+        const allInputs = document.querySelectorAll('.cliente-input, .restaurante-input, .repartidor-input');
+
+        const inputGroups = {
+            'cliente': document.querySelectorAll('.cliente-input'),
+            'restaurante': document.querySelectorAll('.restaurante-input'),
+            'repartidor': document.querySelectorAll('.repartidor-input')
+        };
+
+        function limpiarInput(input) {
+            if (['text', 'email', 'password', 'number', 'file'].includes(input.type)) {
+                input.value = '';
+            } else if (['checkbox', 'radio'].includes(input.type)) {
+                input.checked = false;
+            } else if (input.tagName === 'SELECT') {
+                input.selectedIndex = 0;
+            }
+        }
+
+        function deshabilitarYLimpiar(inputs) {
+            inputs.forEach(input => {
+                input.disabled = true;
+                limpiarInput(input);
+            });
+        }
+
+        function gestionarInputs() {
+            const seleccionado = document.querySelector('input[name="tipoUsuario"]:checked');
+            if (!seleccionado) {
+                deshabilitarYLimpiar(allInputs);
+                return;
+            }
+
+            // Deshabilitar y limpiar todos
+            Object.values(inputGroups).forEach(deshabilitarYLimpiar);
+
+            // Habilitar los del tipo seleccionado
+            inputGroups[seleccionado.value].forEach(input => input.disabled = false);
+
+            // Mostrar paso 1
+            mostrarSoloPaso('paso1');
+        }
+
+        function mostrarSoloPaso(idPaso) {
+            pasos.forEach(p => p.classList.toggle('activo', p.id === idPaso));
+        }
+
+        function siguientePaso() {
+            const seleccionado = document.querySelector('input[name="tipoUsuario"]:checked');
+            if (!seleccionado) {
+                alert('Por favor, seleccione un tipo de usuario');
+                return;
+            }
+            mostrarSoloPaso(`paso2-${seleccionado.value}`);
+        }
+
+        function cambiarPaso(pasoActualId, pasoSiguienteId) {
+            const actual = document.getElementById(pasoActualId);
+            const siguiente = document.getElementById(pasoSiguienteId);
+            if (actual && siguiente) {
+                actual.classList.remove('activo');
+                siguiente.classList.add('activo');
+            } else {
+                console.error('Error: paso no encontrado', { pasoActualId, pasoSiguienteId });
+            }
+        }
+
+        function volverAlPaso1() {
+            deshabilitarYLimpiar(allInputs);
+            tipoUsuarioRadios.forEach(r => r.checked = false);
+            mostrarSoloPaso('paso1');
+            gestionarInputs();
+        }
+
+        function verificarEmailAntesDeContinuar(tipo) {
+            const emailInput = document.querySelector(`#paso2-${tipo} input[type="email"]`);
+            if (!emailInput) return alert('No se encontró el campo de email');
+
+            const email = emailInput.value.trim();
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                return alert('Por favor, ingrese un email válido');
+            }
+
+            fetch(`/validar-email?email=${encodeURIComponent(email)}`)
+                .then(res => res.ok ? res.json() : Promise.reject('Error del servidor'))
+                .then(data => {
+                    if (data.disponible) {
+                        cambiarPaso(`paso2-${tipo}`, `paso3-${tipo}`);
+                    } else {
+                        alert("El email ya está registrado. Usá otro.");
+                    }
+                })
+                .catch(err => {
+                    console.error('Error al verificar email:', err);
+                    alert("Hubo un problema al verificar el email.");
+                });
+        }
+
+        // Exponer funciones
+        window.gestionarInputs = gestionarInputs;
+        window.siguientePaso = siguientePaso;
+        window.cambiarPaso = cambiarPaso;
+        window.volverAlPaso1 = volverAlPaso1;
+        window.verificarEmailAntesDeContinuar = verificarEmailAntesDeContinuar;
+
+        // Inicializar
         gestionarInputs();
-    }
-
-    // Validar formulario al enviar
-    document.getElementById('formRegistro').addEventListener('submit', function (event) {
-        const tipoUsuario = document.querySelector('input[name="tipoUsuario"]:checked');
-        if (!tipoUsuario) {
-            event.preventDefault();
-            alert("Por favor, selecciona un tipo de usuario.");
-            return;
-        }
-
-        // Verificar que el paso activo sea el final para el tipo de usuario
-        let pasoFinal = '';
-        switch (tipoUsuario.value) {
-            case 'cliente':
-                pasoFinal = 'paso4-cliente';
-                break;
-            case 'restaurante':
-                pasoFinal = 'paso4-restaurante';
-                break;
-            case 'repartidor':
-                pasoFinal = 'paso3-repartidor';
-                break;
-        }
-
-        if (!document.getElementById(pasoFinal).classList.contains('activo')) {
-            event.preventDefault();
-            alert("Por favor, completa todos los pasos antes de registrarte.");
-        }
     });
-
-    // Inicializar al cargar la página
-    window.onload = () => {
-        gestionarInputs();
-    };
 </script>
+
 <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 </body>
 
