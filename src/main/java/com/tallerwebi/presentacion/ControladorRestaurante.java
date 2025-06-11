@@ -30,6 +30,7 @@ public class ControladorRestaurante {
         public String listarRestaurantes(@RequestParam(required = false) String zona,
                                          @RequestParam(required = false) String tipo,
                                          Model model) {
+            servicioRestaurante.inicializarDatos();
             List<Restaurante> restaurantes = servicioRestaurante.buscarPorTipoComidaYZona(zona, tipo);
             model.addAttribute("restaurantes", restaurantes);
             model.addAttribute("zona", zona);  // para mantener filtro en la vista

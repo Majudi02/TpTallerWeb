@@ -9,6 +9,8 @@ public class UsuarioDTO {
 
     private String email;
     private String password;
+    private String tokenConfirmacion;
+    private boolean confirmado;
 
     // Campos Repartidor
     private String nombre;
@@ -49,6 +51,22 @@ public class UsuarioDTO {
                 ", password='" + password + '\'' +
                 ", tipoUsuario='" + tipoUsuario + '\'' +
                 '}';
+    }
+
+    public boolean getConfirmado() {
+        return confirmado;
+    }
+
+    public void setConfirmado(boolean confirmado) {
+        this.confirmado = confirmado;
+    }
+
+    public String getTokenConfirmacion() {
+        return tokenConfirmacion;
+    }
+
+    public void setTokenConfirmacion(String tokenConfirmacion) {
+        this.tokenConfirmacion = tokenConfirmacion;
     }
 
     public Double getAltura() {

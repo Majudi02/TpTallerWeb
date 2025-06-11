@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.entidades.UsuarioNutriya;
 import com.tallerwebi.presentacion.UsuarioDTO;
 import org.springframework.stereotype.Service;
 
@@ -14,5 +15,10 @@ public interface ServicioUsuario {
     UsuarioDTO getUsuario(String email);
 
     UsuarioDTO validarUsuario(String email, String password);
+
+    UsuarioDTO buscarPorTokenConfirmacion(String token);
+
+    Boolean confirmarUsuarioPorToken(String token);
+
 }
 

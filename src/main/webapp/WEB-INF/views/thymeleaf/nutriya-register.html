@@ -98,8 +98,9 @@
 </div>
 <main class="flex-grow-1 p-5" style="margin-top: 170px;">
     <div class="form-container contenedor-verde">
-        <form id="formRegistro" th:action="@{/nutriya-register}" th:object="${registroUsuarioDTO}" method="post"  enctype="multipart/form-data" accept-charset="UTF-8">
-            <!-- Paso 1: Tipo de usuario -->
+        <form id="formRegistro" th:action="@{/nutriya-register}" th:object="${registroUsuarioDTO}" method="post"
+              enctype="multipart/form-data" accept-charset="UTF-8">
+        <!-- Paso 1: Tipo de usuario -->
             <div id="paso1" class="paso activo">
                 <div class="d-flex flex-column gap-5 align-center">
                     <h3 style="text-align: center;">Seleccione tipo de usuario</h3>
@@ -259,7 +260,7 @@
                 </div>
                 <div class="mb-3">
                     <label>Número</label>
-                    <input th:field="*{numero}" type="text" class="form-control restaurante-input" required/>
+                    <input th:field="*{numero}" type="number" class="form-control restaurante-input" required/>
                 </div>
                 <div class="mb-3">
                     <label>Localidad</label>

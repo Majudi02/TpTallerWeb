@@ -45,4 +45,14 @@ public class RepositorioUsuarioNutriyaImpl implements RepositorioUsuarioNutriya 
     public void modificar(UsuarioNutriya usuario) {
         sessionFactory.getCurrentSession().update(usuario);
     }
+
+    @Override
+    public UsuarioNutriya buscarPorTokenConfirmacion(String token) {
+        String hql = "FROM UsuarioNutriya u WHERE u.tokenConfirmacion = :token ";
+        return sessionFactory.getCurrentSession().
+                createQuery(hql,UsuarioNutriya.class)
+                .setParameter("token",token)
+                .uniqueResult();
+
+    }
 }

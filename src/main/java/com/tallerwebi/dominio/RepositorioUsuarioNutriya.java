@@ -7,4 +7,5 @@ public interface RepositorioUsuarioNutriya {
     void guardar(UsuarioNutriya usuario);
     UsuarioNutriya buscarPorEmail(String email);
     void modificar(UsuarioNutriya usuario);
+    UsuarioNutriya buscarPorTokenConfirmacion(String token);
 }

@@ -12,6 +12,24 @@ public abstract class UsuarioNutriya {
 
     private String email;
     private String password;
+    private String tokenConfirmacion;
+    private boolean confirmado;
+
+    public String getTokenConfirmacion() {
+        return tokenConfirmacion;
+    }
+
+    public void setTokenConfirmacion(String tokenConfirmacion) {
+        this.tokenConfirmacion = tokenConfirmacion;
+    }
+
+    public boolean getConfirmado() {
+        return confirmado;
+    }
+
+    public void setConfirmado(boolean confirmado) {
+        this.confirmado = confirmado;
+    }
 
     // Getters y Setters
     public Long getId() {
