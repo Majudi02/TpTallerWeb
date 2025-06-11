@@ -210,9 +210,6 @@ public class ControladorUsuario {
     }
 
 
-
-}
-
     @GetMapping(value = "/validar-email", produces = "application/json")
     @ResponseBody
     public String validarEmail(@RequestParam String email) {
