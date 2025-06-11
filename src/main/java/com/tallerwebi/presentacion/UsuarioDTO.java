@@ -6,6 +6,7 @@ import java.util.List;
 
 public class UsuarioDTO {
     private String tipoUsuario;
+    private Long id;
 
     private String email;
     private String password;
@@ -42,16 +43,22 @@ public class UsuarioDTO {
     @Override
     public String toString() {
         return "UsuarioDTO{" +
-                "nombre='" + nombre + '\'' +
-                ", apellido='" + apellido + '\'' +
-                ", dni='" + dni + '\'' +
-                ", telefono='" + telefono + '\'' +
-                ", vehiculo='" + vehiculo + '\'' +
+                "id=" + id +
+                ", tipoUsuario='" + tipoUsuario + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", tipoUsuario='" + tipoUsuario + '\'' +
+                ", tokenConfirmacion='" + tokenConfirmacion + '\'' +
+                ", confirmado=" + confirmado +
+                ", descripcion='" + descripcion + '\'' +
+                ", imagen='" + imagen + '\'' +
+                ", calle='" + calle + '\'' +
+                ", numero=" + numero +
+                ", localidad='" + localidad + '\'' +
+                ", zona='" + zona + '\'' +
+                ", tipoComidas=" + tipoComidas +
                 '}';
     }
+
 
     public boolean getConfirmado() {
         return confirmado;
@@ -243,6 +250,14 @@ public class UsuarioDTO {
 
     public void setImagenRestaurante(MultipartFile imagenRestaurante) {
         this.imagenRestaurante = imagenRestaurante;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
 

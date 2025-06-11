@@ -1,8 +1,6 @@
 package com.tallerwebi.dominio.entidades;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Entity
 public class UsuarioRestaurante extends UsuarioNutriya {

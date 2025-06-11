@@ -15,7 +15,7 @@ public class Plato {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurante_id")
     private Restaurante restaurante;
 
@@ -35,6 +35,14 @@ public class Plato {
     public PlatoDto obtenerDto() {
         PlatoDto platoDto = new PlatoDto();
         platoDto.setId(this.id);
+
+        if (this.restaurante != null) {
+            platoDto.setIdRestaurante(restaurante.getId());
+        } else {
+            // Si restaurante es null, puedes setear un valor por defecto o dejarlo null
+            platoDto.setIdRestaurante(null);
+        }
+
         platoDto.setNombre(this.nombre);
         platoDto.setDescripcion(this.descripcion);
         platoDto.setImagen(this.imagen);
