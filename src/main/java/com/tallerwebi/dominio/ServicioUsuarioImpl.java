@@ -82,8 +82,6 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
         repositorioUsuario.guardar(usuario);
     }
 
-
-
     @Override
     public UsuarioDTO getUsuario(String email) {
         UsuarioNutriya usuario = repositorioUsuario.buscarPorEmail(email);
@@ -116,6 +114,60 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
         return false;
     }
 
+    @Override
+    public void editarUsuario(UsuarioDTO usuarioDTO) {
+        UsuarioNutriya usuarioExistente = repositorioUsuario.buscarPorEmail(usuarioDTO.getEmail());
+        if (usuarioExistente == null) {
+            throw new IllegalArgumentException("Usuario no encontrado");
+        }
+
+        if (usuarioDTO.getPassword() != null && !usuarioDTO.getPassword().isBlank()) {
+            usuarioExistente.setPassword(usuarioDTO.getPassword());
+        }
+
+        if (usuarioExistente instanceof Cliente && "cliente".equalsIgnoreCase(usuarioDTO.getTipoUsuario())) {
+            Cliente cliente = (Cliente) usuarioExistente;
+            cliente.setNombre(usuarioDTO.getNombre());
+            cliente.setEdad(usuarioDTO.getEdad());
+            cliente.setPesoActual(usuarioDTO.getPesoActual());
+            cliente.setPesoDeseado(usuarioDTO.getPesoDeseado());
+            cliente.setAltura(usuarioDTO.getAltura());
+            cliente.setObjetivo(usuarioDTO.getObjetivo());
+
+        } else if (usuarioExistente instanceof UsuarioRestaurante && "restaurante".equalsIgnoreCase(usuarioDTO.getTipoUsuario())) {
+            UsuarioRestaurante usuarioRestaurante = (UsuarioRestaurante) usuarioExistente;
+            Restaurante restaurante = usuarioRestaurante.getRestaurante();
+
+            restaurante.setNombre(usuarioDTO.getNombre());
+            restaurante.setDescripcion(usuarioDTO.getDescripcion());
+            restaurante.setCalle(usuarioDTO.getCalle());
+            restaurante.setNumero(usuarioDTO.getNumero());
+            restaurante.setLocalidad(usuarioDTO.getLocalidad());
+            restaurante.setZona(usuarioDTO.getZona());
+            restaurante.setTiposComida(usuarioDTO.getTipoComidas());
+
+            // Si el campo imagen no es null, lo actualizamos
+            if (usuarioDTO.getImagen() != null) {
+                restaurante.setImagen(usuarioDTO.getImagen());
+            }
+
+        } else if (usuarioExistente instanceof Repartidor && "repartidor".equalsIgnoreCase(usuarioDTO.getTipoUsuario())) {
+            Repartidor repartidor = (Repartidor) usuarioExistente;
+            repartidor.setNombre(usuarioDTO.getNombre());
+            repartidor.setApellido(usuarioDTO.getApellido());
+            repartidor.setDni(usuarioDTO.getDni());
+            repartidor.setTelefono(usuarioDTO.getTelefono());
+            repartidor.setVehiculo(usuarioDTO.getVehiculo());
+
+        } else {
+            throw new IllegalArgumentException("Tipo de usuario inválido o no coincide con el tipo guardado");
+        }
+
+        // Guardamos los cambios
+        repositorioUsuario.guardar(usuarioExistente);
+    }
+
+
     private UsuarioDTO mapToDTO(UsuarioNutriya usuario) {
         UsuarioDTO dto = new UsuarioDTO();
         dto.setEmail(usuario.getEmail());
@@ -142,6 +194,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
             dto.setZona(r.getZona());
             dto.setTipoComidas(r.getTiposComida());
             dto.setTipoUsuario("restaurante");
+            dto.setImagen(r.getImagen());
         } else if (usuario instanceof Repartidor) {
             Repartidor rep = (Repartidor) usuario;
             dto.setNombre(rep.getNombre());

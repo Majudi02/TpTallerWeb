@@ -59,33 +59,49 @@
         </ul>
     </div>
 </div>
-<main class="d-flex flex-column justify-content-center align-items-center">
-    <div class="card contenedor-verde w-50 p-5 shadow">
+<main class="d-flex flex-column justify-content-center align-items-center mx-2">
+    <div class="card contenedor-verde w-100 p-5 shadow" style="max-width: 900px;">
         <h1 class="titulo-verde">Perfil del Restaurante</h1>
-        <div>
-            <p><strong>Nombre del Restaurante:</strong> <span th:text="${usuario.nombre}">Restaurante Ejemplo</span>
-            </p>
-            <p><strong>Email:</strong> <span th:text="${usuario.email}">restaurante@ejemplo.com</span></p>
-            <p><strong>Descripción:</strong> <span th:text="${usuario.descripcion}">Descripción del
-                        restaurante</span>
-            </p>
-            <p><strong>Dirección:</strong>
-                <span th:text="${usuario.calle}">Calle Falsa</span>
-                <span th:text="${usuario.numero}">123</span>,
-                <span th:text="${usuario.localidad}">Ciudad</span>
-            </p>
-            <p><strong>Zona:</strong> <span th:text="${usuario.zona}">Centro</span></p>
-            <img th:if="${usuario.imagen != null}" th:src="@{${usuario.imagen}}" alt="Imagen Restaurante"
-                 style="max-width: 300px;"/>
+        <div class="d-flex justify-content-between align-items-center justify-content-center my-3">
             <div>
-                <a class="btn btn-lg btn-green" href="#">Editar</a>
-                <a class="btn btn-lg btn-green" th:href="@{/editarPlatos}">Gestionar Platos</a>
-                <a href="/crear-plato" class="btn btn-lg btn-green">Agregar Plato</a>
-                <a class="btn btn-lg btn-danger" href="/cerrar-sesion">Cerrar Sesión</a>
+                <div class="mb-2">
+                    <p class="mb-1 fw-bold">Nombre del Restaurante</p>
+                    <p class="form-control" th:text="${usuario.nombre}">Restaurante Ejemplo</p>
+                </div>
+                <div class="mb-2">
+                    <p class="mb-1 fw-bold">Email</p>
+                    <p class="form-control" th:text="${usuario.email}">restaurante@ejemplo.com</p>
+                </div>
+                <div class="mb-1">
+                    <p class="mb-1 fw-bold">Descripción del restaurante</p>
+                    <p class="form-control" th:text="${usuario.descripcion}">Descripción del restaurante</p>
+                </div>
+                <div class="mb-2">
+                    <p class="mb-1 fw-bold">Dirección</p>
+                    <div class="form-control">
+                        <span th:text="${usuario.calle}">Calle Falsa</span>
+                        <span th:text="${usuario.numero}">123</span>,
+                        <span th:text="${usuario.localidad}">Ciudad</span>
+                    </div>
+                </div>
+                <div class="mb-0">
+                    <p class="mb-1 fw-bold">Zona</p>
+                    <p class="form-control" th:text="${usuario.zona}">Oeste</p>
+                </div>
+            </div>
+            <div>
+                <img class="rounded-4" th:if="${usuario.imagen != null}" th:src="@{${usuario.imagen}}"
+                     alt="Imagen Restaurante"
+                     style="max-width: 400px; width: 100%;"/>
             </div>
         </div>
+        <div class="d-flex flex-wrap justify-content-center gap-4">
+            <a class="btn btn-lg btn-green" th:href="@{/editar-usuario}">Editar</a>
+            <a class="btn btn-lg btn-green" th:href="@{/editarPlatos}">Gestionar Platos</a>
+            <a class="btn btn-lg btn-green" th:href="@{/crear-plato}">Agregar Plato</a>
+            <a class="btn btn-lg btn-danger" th:href="@{/cerrar-sesion}">Cerrar Sesión</a>
+        </div>
     </div>
-
 </main>
 <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 </body>
