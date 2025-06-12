@@ -17,7 +17,7 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top px-3 ">
     <div class="container-fluid">
         <div class="d-flex w-100 justify-content-between align-items-center">
-            <a class="navbar-brand" th:href="@{nutriya.html}">Nutri<span style="color: #38BD48;">Ya</span></a>
+            <a class="navbar-brand" th:href="@{nutriya}">Nutri<span style="color: #38BD48;">Ya</span></a>
             <form class="d-none d-lg-flex mx-auto" role="search" style="width: 40%;">
                 <div class="input-group">
                     <input class="form-control" type="search" placeholder="Buscá comidas, restaurantes..."
@@ -28,7 +28,7 @@
                 </div>
             </form>
             <div class="botones-nav">
-                <a class="btn btn-outline-secondary mx-1" th:href="@{nutriya-login.html}">
+                <a class="btn btn-outline-secondary mx-1" th:href="@{nutriya-login}">
                     <i class="bi bi-person"></i>
                 </a>
                 <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
@@ -48,19 +48,19 @@
     <div class="offcanvas-body">
         <ul class="navbar-nav gap-2">
             <li class="nav-item">
-                <a class="nav-link" th:href="@{nutriya.html}">Inicio</a>
+                <a class="nav-link" th:href="@{nutriya}">Inicio</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{pedido.html}">Comidas</a>
+                <a class="nav-link" th:href="@{pedido}">Comidas</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" th:href="@{restaurantes.html}">Restaurantes</a>
+                <a class="nav-link" th:href="@{restaurantes}">Restaurantes</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/medios-pago}">Medios de Pago</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" th:href="@{nutriya-login.html}">Mi Perfil</a>
+                <a class="nav-link active" th:href="@{nutriya-login}">Mi Perfil</a>
             </li>
         </ul>
     </div>
@@ -86,7 +86,7 @@
             </div>
             <div class="d-flex flex-column gap-3 mb-3">
                 <span>¿No tenés cuenta?<a class="link-verde mx-1"
-                                          th:href="@{nutriya-register.html}">Registrate</a></span>
+                                          th:href="@{nutriya-register}">Registrate</a></span>
                 <button type="submit" class="btn btn-green">Iniciar Sesión</button>
             </div>
             <div th:if="${errorLogin}" class="alert alert-danger" role="alert" th:text="${errorLogin}"></div>
