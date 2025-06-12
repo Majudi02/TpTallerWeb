@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio.entidades;
 
+import com.tallerwebi.presentacion.UsuarioDTO;
+
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import java.util.List;
@@ -16,6 +18,25 @@ public class Cliente extends UsuarioNutriya {
 
     @ElementCollection
     private List<String> etiquetas;
+
+
+    public Cliente obtenerEntidad(UsuarioDTO dto) {
+        Cliente cliente = new Cliente();
+
+        cliente.setNombre(dto.getNombre());
+        cliente.setEmail(dto.getEmail());
+        cliente.setPassword(dto.getPassword());
+        cliente.setEdad(dto.getEdad());
+        cliente.setPesoActual(dto.getPesoActual());
+        cliente.setPesoDeseado(dto.getPesoDeseado());
+        cliente.setAltura(dto.getAltura());
+        cliente.setObjetivo(dto.getObjetivo());
+        cliente.setEtiquetas(dto.getEtiquetas());
+        cliente.setConfirmado(dto.getConfirmado());
+        cliente.setTokenConfirmacion(dto.getTokenConfirmacion());
+
+        return cliente;
+    }
 
     public String getNombre() {
         return nombre;

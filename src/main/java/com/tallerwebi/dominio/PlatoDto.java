@@ -84,6 +84,28 @@ public class PlatoDto {
     }
 
 
+    public Plato obtenerEntidad() {
+        Plato plato = new Plato();
+        plato.setId(this.id);
+        plato.setNombre(this.nombre);
+        plato.setDescripcion(this.descripcion);
+        plato.setImagen(this.imagen);
+        plato.setPrecio(this.precio);
+
+        List<Etiqueta> etiquetasEntidad = new ArrayList<>();
+        if (this.etiquetas != null) {
+            for (EtiquetaDto dto : this.etiquetas) {
+                Etiqueta etiqueta = new Etiqueta();
+                etiqueta.setId(dto.getId());
+                etiqueta.setNombre(dto.getNombre());
+                etiquetasEntidad.add(etiqueta);
+            }
+        }
+
+        plato.setEtiquetas(etiquetasEntidad);
+        return plato;
+    }
+
     public List<Integer> getEtiquetasIds() {
         return etiquetasIds;
     }
