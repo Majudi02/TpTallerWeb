@@ -115,7 +115,6 @@
                         <div class="d-flex flex-column w-75">
                             <h5 class="card-title" th:text="${plato.getNombre()}"></h5>
                             <p th:text="${plato.getDescripcion()}"></p>
-                            <p th:text="${plato.getId()}"></p>
                             <strong class="card-text mt-3" th:text="'$' + ${plato.getPrecio()}"></strong>
 
                             <form th:action="@{/pedido/agregar}" method="post" class="mt-3">

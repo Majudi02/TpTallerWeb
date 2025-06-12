@@ -31,13 +31,15 @@ public class RepositorioUsuarioRestauranteImpl implements RepositorioUsuarioRest
 
     @Override
     public List<Restaurante> traerRestaurantesDestacados() {
-        String hql = "SELECT ur.restaurante FROM UsuarioRestaurante ur ORDER BY rand()";
-        return sessionFactory.getCurrentSession()
-                .createQuery(hql, Restaurante.class)
-                .setMaxResults(4)
+        String hql = "FROM UsuarioRestaurante ur ORDER BY rand()";
+        List<UsuarioRestaurante> usuarios = sessionFactory.getCurrentSession()
+                .createQuery(hql, UsuarioRestaurante.class)
+                .setMaxResults(5)
                 .list();
+        return usuarios.stream()
+                .map(UsuarioRestaurante::getRestaurante)
+                .collect(Collectors.toList());
     }
-
 
     @Override
     public List<UsuarioRestaurante> buscarTodos() {
