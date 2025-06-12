@@ -1,8 +1,11 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.entidades.Etiqueta;
+import com.tallerwebi.dominio.entidades.Pedido;
 import com.tallerwebi.dominio.entidades.Plato;
 import com.tallerwebi.dominio.entidades.Restaurante;
 import com.tallerwebi.infraestructura.RepositorioPlatoImpl;
+import com.tallerwebi.presentacion.PedidoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,12 +17,15 @@ import java.util.stream.Collectors;
 
 
 @Service
+@Transactional
 public class PedidoServiceImpl implements PedidoService {
     private final RepositorioPlatoImpl repositorioPlatoImpl;
+    private RepositorioPedido repositorioPedido;
 
     @Autowired
-    public PedidoServiceImpl(RepositorioPlatoImpl repositorioPlatoImpl) {
+    public PedidoServiceImpl(RepositorioPlatoImpl repositorioPlatoImpl,RepositorioPedido repositorioPedido) {
         this.repositorioPlatoImpl = repositorioPlatoImpl;
+        this.repositorioPedido=repositorioPedido;
     }
 /*
         List<PlatoDto> platosDestacados = List.of(
@@ -85,7 +91,7 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    @Transactional
+
     public List<PlatoDto> buscarPlatosPorTipoComida(String tipoComida) {
         List<Plato> platos = this.repositorioPlatoImpl.buscarPlatosPorTipoComida(tipoComida);
         return platos.stream().map(Plato::obtenerDto).collect(Collectors.toList());
@@ -99,6 +105,38 @@ public class PedidoServiceImpl implements PedidoService {
             platosOrdenados.sort(Comparator.comparing(PlatoDto::getPrecio));
         }
         return platosOrdenados;
+    }
+
+
+    @Override
+    public PedidoDto buscarPedidoActivoPorUsuario() {
+        Pedido pedido= this.repositorioPedido.buscarPedidoActivoPorUsuario();
+        return  pedido.obtenerDto();
+    }
+
+    @Override
+    public void crearPedido(PedidoDto pedido) {
+
+        Pedido pedidoEntidad = pedido.obtenerEntidad(pedido.obtenerPlatosEntidad());
+        this.repositorioPedido.crearPedido(pedidoEntidad);
+    }
+
+    @Override
+    public void agregarPlatoAlPedido(PlatoDto platoDto) {
+
+        List<Etiqueta> etiquetasEntidad = new ArrayList<>();
+        if (platoDto.getEtiquetas() != null) {
+            for (EtiquetaDto etiquetaDto : platoDto.getEtiquetas()) {
+                Etiqueta etiqueta = new Etiqueta();
+                etiqueta.setId(etiquetaDto.getId());
+                etiqueta.setNombre(etiquetaDto.getNombre());
+                etiquetasEntidad.add(etiqueta);
+            }
+        }
+
+        Plato platoEntidad = platoDto.obtenerEntidad(etiquetasEntidad);
+
+        this.repositorioPedido.agregarPlatoAlPedido(platoEntidad);
     }
 
 /*        @Override
