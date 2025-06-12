@@ -23,50 +23,54 @@ public class ControladorRestaurante {
 
 
     @Autowired
-    public ControladorRestaurante(ServicioRestaurante servicioRestaurante){
-        this.servicioRestaurante=servicioRestaurante;
+    public ControladorRestaurante(ServicioRestaurante servicioRestaurante) {
+        this.servicioRestaurante = servicioRestaurante;
     }
 
-        @GetMapping("/restaurantes")
-        public String listarRestaurantes(@RequestParam(required = false) String zona,
-                                         @RequestParam(required = false) String tipo,
-                                         Model model) {
-            servicioRestaurante.inicializarDatos();
-            List<Restaurante> restaurantes = servicioRestaurante.buscarPorTipoComidaYZona(zona, tipo);
-            model.addAttribute("restaurantes", restaurantes);
-            model.addAttribute("zona", zona);  // para mantener filtro en la vista
-            model.addAttribute("tipo", tipo);  // para mantener filtro en la vista
-            return "restaurantes";
-        }
-
-        @GetMapping("/restaurantes/{nombre}")
-        public String verDetalleRestaurante(@PathVariable String nombre, Model model) {
-            Restaurante restaurante = servicioRestaurante.obtenerRestaurante(nombre);
-            if (restaurante == null) {
-                return "redirect:/restaurantes";
-            }
-
-            // Obtener todos los platos y filtrar los que corresponden a este restaurante
-            // Como no hay una relación directa entre platos y restaurantes,
-            // asumimos que los platos tienen alguna relación con el restaurante por nombre o descripción
-            List<PlatoDto> todosLosPlatos = servicioRestaurante.traerTodosLosPlatos();
-            List<PlatoDto> platosDelRestaurante = new java.util.ArrayList<>();
-
-            // Filtrar platos que podrían pertenecer a este restaurante
-            // Esta es una implementación temporal hasta que se establezca una relación formal
-            for (PlatoDto plato : todosLosPlatos) {
-                // Verificar si el plato podría pertenecer a este restaurante
-                // basado en alguna coincidencia en el nombre o descripción
-                if (plato.getNombre().toLowerCase().contains(restaurante.getNombre().toLowerCase()) ||
-                    (plato.getDescripcion() != null && plato.getDescripcion().toLowerCase().contains(restaurante.getNombre().toLowerCase()))) {
-                    platosDelRestaurante.add(plato);
-                }
-            }
-
-            model.addAttribute("restaurante", restaurante);
-            model.addAttribute("platos", platosDelRestaurante);
-
-            return "restaurante-detalle";
-        }
-
+    @GetMapping("/restaurantes")
+    public String listarRestaurantes(@RequestParam(required = false) String zona,
+                                     @RequestParam(required = false) String tipo,
+                                     Model model) {
+        servicioRestaurante.inicializarDatos();
+        List<Restaurante> restaurantes = servicioRestaurante.buscarPorTipoComidaYZona(zona, tipo);
+        model.addAttribute("restaurantes", restaurantes);
+        model.addAttribute("zona", zona);  // para mantener filtro en la vista
+        model.addAttribute("tipo", tipo);  // para mantener filtro en la vista
+        return "restaurantes";
     }
+
+    @GetMapping("/restaurantes/{id}")
+    public String verDetalleRestaurante(@PathVariable Long id, Model model) {
+        Restaurante restaurante = servicioRestaurante.obtenerRestaurantePorId(id);
+        if (restaurante == null) {
+            return "redirect:/restaurantes";
+        }
+
+        List<PlatoDto> todosLosPlatos = servicioRestaurante.traerTodosLosPlatos();
+        List<PlatoDto> platosDelRestaurante = new java.util.ArrayList<>();
+
+        for (PlatoDto plato : todosLosPlatos) {
+            if (plato.getIdRestaurante() != null && plato.getIdRestaurante().equals(id)) {
+                platosDelRestaurante.add(plato);
+            }
+        }
+
+        model.addAttribute("restaurante", restaurante);
+        model.addAttribute("platos", platosDelRestaurante);
+
+        return "restaurante-detalle";
+    }
+
+
+    @GetMapping("/hacer-pedido-platos")
+    public ModelAndView mostrarPedidoPlatos() {
+        ModelMap modelo = new ModelMap();
+
+        // Aquí puedes cargar la info que quieras pasar a la vista,
+        // por ejemplo una lista de platos disponibles para hacer pedido.
+        List<PlatoDto> platos = servicioRestaurante.traerTodosLosPlatos();
+        modelo.put("platos", platos);
+
+        return new ModelAndView("hacer-pedido-platos", modelo);
+    }
+}

@@ -15,6 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -37,11 +38,12 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
     private EtiquetaService etiquetaService;
 
 
+
     @Autowired
-    public ServicioRestauranteImpl(RepositorioUsuarioRestaurante repositorioUsuarioRestaurante, RepositorioPlato repositorioPlato,EtiquetaService etiquetaService) {
+    public ServicioRestauranteImpl(RepositorioUsuarioRestaurante repositorioUsuarioRestaurante, RepositorioPlato repositorioPlato, EtiquetaService etiquetaService) {
         this.repositorioUsuarioRestaurante = repositorioUsuarioRestaurante;
         this.repositorioPlato = repositorioPlato;
-        this.etiquetaService=etiquetaService;
+        this.etiquetaService = etiquetaService;
     }
 
     @Override
@@ -82,6 +84,17 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
     @Override
     public List<Restaurante> traerRestaurantesDestacados() {
         return repositorioUsuarioRestaurante.traerRestaurantesDestacados();
+    }
+
+    @Override
+    public Restaurante obtenerRestaurantePorId(Long idRestaurante) {
+        List<Restaurante> restaurantes = repositorioUsuarioRestaurante.buscarTodosLosRestaurantes();
+        for (Restaurante rest : restaurantes) {
+            if (Objects.equals(rest.getId(), idRestaurante)) {
+                return rest;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -142,7 +155,20 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
     @Override
     @Transactional
     public Boolean guardarPlato(PlatoDto platoDto) {
-        Plato plato = platoDto.obtenerDto(platoDto.getEtiquetas());
+        List<Etiqueta> etiquetas = new ArrayList<>();
+        if (platoDto.getEtiquetas() != null) {
+            for (EtiquetaDto etiquetaDto : platoDto.getEtiquetas()) {
+                Etiqueta etiqueta = new Etiqueta();
+                etiqueta.setId(etiquetaDto.getId());
+                etiqueta.setNombre(etiquetaDto.getNombre());
+                etiquetas.add(etiqueta);
+            }
+        }
+
+        Plato plato = platoDto.obtenerEntidad(etiquetas);
+        Restaurante restaurante = this.obtenerRestaurantePorUsuarioId(platoDto.getIdRestaurante());
+        plato.setRestaurante(restaurante);
+
         return this.repositorioPlato.crearPlato(plato);
     }
 
@@ -157,7 +183,7 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
             platoExistente.setNombre(platoDto.getNombre());
         }
 
-        if(platoDto.getDescripcion()!=null && !platoDto.getDescripcion().trim().isEmpty()){
+        if (platoDto.getDescripcion() != null && !platoDto.getDescripcion().trim().isEmpty()) {
             platoExistente.setDescripcion(platoDto.getDescripcion());
         }
 
@@ -176,7 +202,7 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
 
         }
 
-        if (platoDto.getImagen()!=null && !platoDto.getImagen().trim().isEmpty()){
+        if (platoDto.getImagen() != null && !platoDto.getImagen().trim().isEmpty()) {
             platoExistente.setImagen(platoDto.getImagen());
         }
 
@@ -186,7 +212,7 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
     @Override
     public PlatoDto obtenerPlatoPorId(Integer id) {
         Plato plato = this.repositorioPlato.buscarPlatoPorId(id);
-        return  plato.obtenerDto();
+        return plato.obtenerDto();
     }
 
     @Override
@@ -216,6 +242,30 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
             }
         }
     }
+
+    @Override
+    public List<PlatoDto> obtenerPlatosDelRestaurante(Long idRestaurante) {
+        Restaurante restaurante = obtenerRestaurantePorId(idRestaurante);
+
+        List<PlatoDto> platosObtenidos = new ArrayList<>();
+        List<Plato> platos = repositorioPlato.traerTodosLosPlatos();
+
+        for (Plato plato : platos) {
+            if (plato.getRestaurante() != null && plato.getRestaurante().equals(restaurante)) {
+                PlatoDto platoDto = plato.obtenerDto();
+                platosObtenidos.add(platoDto);
+            }
+        }
+
+        return platosObtenidos;
+    }
+
+    @Override
+    public Restaurante obtenerRestaurantePorUsuarioId(Long usuarioId) {
+        UsuarioRestaurante usuarioRestaurante = repositorioUsuarioRestaurante.buscarPorUsuarioId(usuarioId);
+        return usuarioRestaurante.getRestaurante();
+    }
+
 }
 
 

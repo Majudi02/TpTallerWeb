@@ -2,6 +2,7 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.entidades.Etiqueta;
 import com.tallerwebi.dominio.entidades.Plato;
+import com.tallerwebi.dominio.entidades.Restaurante;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 public class PlatoDto {
 
     private Integer id;
+    private Long idRestaurante;
     private String nombre;
     private String descripcion;
     private String imagen;
@@ -17,8 +19,9 @@ public class PlatoDto {
     private List<Integer> etiquetasIds;
     private List<EtiquetaDto> etiquetas;
 
-    public PlatoDto(Integer id, String nombre, String descripcion, String imagen, Double precio, List<EtiquetaDto> etiquetas) {
+    public PlatoDto(Integer id, Long idRestaurante, String nombre, String descripcion, String imagen, Double precio, List<EtiquetaDto> etiquetas) {
         this.id = id;
+        this.idRestaurante = idRestaurante;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.imagen = imagen;
@@ -28,6 +31,7 @@ public class PlatoDto {
 
     public PlatoDto(Plato plato) {
         this.id = plato.getId();
+        this.idRestaurante = plato.getRestaurante().getId();
         this.nombre = plato.getNombre();
         this.descripcion = plato.getDescripcion();
         this.imagen = plato.getImagen();
@@ -48,7 +52,12 @@ public class PlatoDto {
         plato.setDescripcion(this.descripcion);
         plato.setImagen(this.imagen);
         plato.setPrecio(this.precio);
-        plato.setEtiquetas(listaEtiquetas); // relaciona etiquetas reales
+        plato.setEtiquetas(listaEtiquetas);
+
+        Restaurante restaurante = new Restaurante();
+        restaurante.setId(this.idRestaurante);
+        plato.setRestaurante(restaurante);
+
         return plato;
     }
 
@@ -154,4 +163,11 @@ public class PlatoDto {
         this.nombre = nombre;
     }
 
+    public void setIdRestaurante(Long idRestaurante) {
+        this.idRestaurante = idRestaurante;
+    }
+
+    public Long getIdRestaurante() {
+        return idRestaurante;
+    }
 }

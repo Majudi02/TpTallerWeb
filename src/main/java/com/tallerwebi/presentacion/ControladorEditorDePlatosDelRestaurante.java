@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.entidades.Restaurante;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -39,6 +40,14 @@ public class ControladorEditorDePlatosDelRestaurante {
                                      @RequestParam("imagen") MultipartFile imagen,
                                      HttpServletRequest request) {
 
+        // Obtener el usuario restaurante logueado desde la sesión
+        UsuarioDTO usuarioLogueado = (UsuarioDTO) request.getSession().getAttribute("usuario");
+        if (usuarioLogueado == null || !usuarioLogueado.getTipoUsuario().equals("restaurante")) {
+            return new ModelAndView("redirect:/nutriya-login");
+        }
+
+        platoDto.setIdRestaurante(usuarioLogueado.getId());
+
         if (platoDto.getEtiquetasIds() != null) {
             List<EtiquetaDto> etiquetas = new ArrayList<>();
             for (Integer idEtiqueta : platoDto.getEtiquetasIds()) {
@@ -52,22 +61,37 @@ public class ControladorEditorDePlatosDelRestaurante {
             platoDto.setEtiquetas(etiquetas);
         }
 
-        servicioRestaurante.guardarImagen(platoDto,imagen);
+        servicioRestaurante.guardarImagen(platoDto, imagen);
 
         Boolean guardado = servicioRestaurante.guardarPlato(platoDto);
 
-        return new ModelAndView(guardado ? "redirect:/hacer-pedido-platos" : "redirect:/perfil-home");
+        System.out.println("Restaurante ID en el DTO: " + platoDto.getIdRestaurante());
+        System.out.println(usuarioLogueado);
+        return new ModelAndView(guardado ? "redirect:/editarPlatos" : "redirect:/perfil-home");
     }
 
     @GetMapping("/editarPlatos")
-    public ModelAndView editarPlatosPantalla(){
-        ModelMap modelo= new ModelMap();
-        List<PlatoDto> platos= servicioRestaurante.traerTodosLosPlatos();
+    public ModelAndView editarPlatosPantalla(HttpServletRequest request){
+        UsuarioDTO usuarioLogueado = (UsuarioDTO) request.getSession().getAttribute("usuario");
+        if (usuarioLogueado == null || !usuarioLogueado.getTipoUsuario().equals("restaurante")) {
+            return new ModelAndView("redirect:/nutriya-login");
+        }
+
+        ModelMap modelo = new ModelMap();
+
+        // Obtener restaurante del usuario logueado
+        Restaurante restaurante = servicioRestaurante.obtenerRestaurantePorUsuarioId(usuarioLogueado.getId());
+
+        List<PlatoDto> platos = new ArrayList<>();
+        if(restaurante != null) {
+            platos = servicioRestaurante.obtenerPlatosDelRestaurante(restaurante.getId());
+        }
 
         modelo.put("platos", platos);
 
         return new ModelAndView("platos-del-restautrante", modelo);
     }
+
 
     @GetMapping("/plato/{id}")
     public ModelAndView administrarPlatos(@PathVariable Integer id) {
@@ -109,5 +133,4 @@ public class ControladorEditorDePlatosDelRestaurante {
             return new ModelAndView("redirect:/perfil-home");
         }
     }
-
 }

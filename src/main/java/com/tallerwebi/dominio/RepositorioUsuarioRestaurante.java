@@ -6,7 +6,7 @@ import com.tallerwebi.dominio.entidades.UsuarioRestaurante;
 import java.util.List;
 
 public interface RepositorioUsuarioRestaurante {
-    UsuarioRestaurante buscarPorId(Long id);
+    UsuarioRestaurante buscarPorUsuarioId(Long id);
     List<UsuarioRestaurante> buscarTodos();
     List<Restaurante> buscarTodosLosRestaurantes();
     void guardar(UsuarioRestaurante usuarioRestaurante);

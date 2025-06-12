@@ -11,6 +11,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,6 +27,7 @@ public class ControladorUsuarioTest {
     private ServicioRestaurante servicioRestaurante;
     private ServicioEmail servicioEmail;
     private RepositorioUsuarioNutriya repositorioUsuario;
+    private HttpServletRequest httpServletRequest;
 
     @BeforeEach
     public void init() {
@@ -33,6 +36,10 @@ public class ControladorUsuarioTest {
         servicioRestaurante = mock(ServicioRestaurante.class);
         servicioEmail=mock(ServicioEmail.class);
         controlador = new ControladorUsuario(servicioUsuario, servicioRestaurante, servicioEmail);
+
+        httpServletRequest = mock(HttpServletRequest.class);
+        HttpSession httpSession = mock(HttpSession.class);
+        when(httpServletRequest.getSession()).thenReturn(httpSession);
     }
 
     @Test
@@ -83,7 +90,7 @@ public class ControladorUsuarioTest {
 
     @Test
     public void DadoQueTengoUnControladorUsuarioMuestraLaVistaLogin() {
-        ModelAndView vista = controlador.mostrarFormularioLogin();
+        ModelAndView vista = controlador.mostrarFormularioLogin(httpServletRequest);
 
         assertEquals("nutriya-login", vista.getViewName());
         assertTrue(vista.getModel().containsKey("loginDTO"));
@@ -93,15 +100,8 @@ public class ControladorUsuarioTest {
     @Test
     public void DadoQueTengoUnControladorUsuarioPuedoLogearmeConUnClienteRegistrado() {
         UsuarioDTO cliente = new UsuarioDTO();
-        cliente.setTipoUsuario("cliente");
         cliente.setEmail("login@mail.com");
         cliente.setPassword("clave");
-        cliente.setNombre("Ana");
-        cliente.setEdad(30);
-        cliente.setPesoActual(70);
-        cliente.setPesoDeseado(65);
-        cliente.setAltura(1.70);
-        cliente.setObjetivo("mantener peso");
 
         Cliente usuarioMock = new Cliente();
         usuarioMock.setEmail("login@mail.com");
@@ -112,17 +112,13 @@ public class ControladorUsuarioTest {
         usuarioMock.setPesoDeseado(65);
         usuarioMock.setAltura(1.70);
         usuarioMock.setObjetivo("mantener peso");
-        usuarioMock.setConfirmado(true); // Asegurar que está confirmado
+        usuarioMock.setConfirmado(true);
 
         when(repositorioUsuario.buscarPorEmailYPassword("login@mail.com", "clave"))
                 .thenReturn(usuarioMock);
 
-        UsuarioDTO intentoLogin = new UsuarioDTO();
-        intentoLogin.setEmail("login@mail.com");
-        intentoLogin.setPassword("clave");
-
         ModelMap model = new ModelMap();
-        ModelAndView modelAndView = controlador.procesarLogin(intentoLogin, new RedirectAttributesModelMap(), model);
+        ModelAndView modelAndView = controlador.procesarLogin(cliente, new RedirectAttributesModelMap(), model, httpServletRequest);
 
         assertEquals("perfil-cliente", modelAndView.getViewName());
         assertTrue(modelAndView.getModel().containsKey("usuario"));
@@ -138,7 +134,7 @@ public class ControladorUsuarioTest {
         intentoLogin.setPassword("claveIncorrecta");
 
         ModelMap model = new ModelMap();
-        ModelAndView vista = controlador.procesarLogin(intentoLogin, new RedirectAttributesModelMap(), model);
+        ModelAndView vista = controlador.procesarLogin(intentoLogin, new RedirectAttributesModelMap(), model, httpServletRequest);
 
         assertEquals("nutriya-login", vista.getViewName());
         assertTrue(vista.getModel().containsKey("errorLogin"));

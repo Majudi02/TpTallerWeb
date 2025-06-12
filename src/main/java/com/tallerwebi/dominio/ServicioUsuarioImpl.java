@@ -120,7 +120,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
         UsuarioDTO dto = new UsuarioDTO();
         dto.setEmail(usuario.getEmail());
         dto.setConfirmado(usuario.getConfirmado());
-
+        dto.setId(usuario.getId());
 
         if (usuario instanceof Cliente) {
             Cliente c = (Cliente) usuario;
