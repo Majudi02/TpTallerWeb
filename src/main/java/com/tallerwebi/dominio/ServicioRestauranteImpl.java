@@ -82,6 +82,11 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
     }
 
     @Override
+    public List<Restaurante> traerRestaurantesDestacados() {
+        return repositorioUsuarioRestaurante.traerRestaurantesDestacados();
+    }
+
+    @Override
     public Restaurante obtenerRestaurantePorId(Long idRestaurante) {
         List<Restaurante> restaurantes = repositorioUsuarioRestaurante.buscarTodosLosRestaurantes();
         for (Restaurante rest : restaurantes) {

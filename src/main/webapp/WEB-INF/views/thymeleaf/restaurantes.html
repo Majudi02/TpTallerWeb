@@ -5,20 +5,16 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>NutriYa</title>
-
-    <!-- Bootstrap 5.2.0 CSS & Icons -->
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
     <link rel="stylesheet" th:href="@{/css/estilo-principal.css}">
     <link rel="stylesheet" th:href="@{/css/estilo-restaurante.css}">
-    <!-- Fuente Outfit -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap" rel="stylesheet">
 
 </head>
 
 <body>
-<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top px-3">
     <div class="container-fluid">
         <div class="d-flex w-100 justify-content-between align-items-center">
@@ -47,7 +43,7 @@
     </div>
 </nav>
 
-<!-- OFFCANVAS MENU -->
+
 <div class="offcanvas offcanvas-end" tabindex="-1" id="menuLateral" aria-labelledby="menuLateralLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="menuLateralLabel">Opciones</h5>
@@ -74,10 +70,10 @@
     </div>
 </div>
 
-<!-- CONTENIDO PRINCIPAL -->
+
 <h2>Restaurantes Disponibles</h2>
 
-<!-- Filtros -->
+
 <form method="get" class="filters container mb-4" th:action="@{/restaurantes}">
     <div class="row g-3">
         <div class="col-md-6">
@@ -105,12 +101,12 @@
 </form>
 
 
-<!-- Lista de restaurantes -->
+
 <div class="container">
     <p th:if="${#lists.isEmpty(restaurantes)}">No hay restaurantes para mostrar.</p>
 
     <div class="row g-4">
-        <!-- Restaurante 1 -->
+
         <div class="col-md-4" th:each="restaurante : ${restaurantes}">
             <a th:href="@{'/restaurantes/' + ${restaurante.id}}" class="text-decoration-none">
                 <div class="card restaurant-card">
@@ -126,7 +122,7 @@
         </div>
     </div>
 </div>
-<!-- Bootstrap 5.2.0 JS -->
+
 <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 </body>
 </html>

@@ -97,7 +97,7 @@
     <section class="container mt-5">
         <h2 class="main-color">Restaurantes destacados</h2>
         <article class="d-flex flex-row p-4 gap-5 justify-content-center restaurante-container flex-wrap">
-            <a class="text-decoration-none" th:each="restaurante : ${restaurantes}" th:href="@{/pedido/restaurante/1}">
+            <a class="text-decoration-none" th:each="restaurante : ${restaurantes}" th:href="@{'/restaurantes/' + ${restaurante.id}}">
                 <div class="card d-flex flex-column align-items-center p-2">
                     <img th:src="@{${restaurante.getImagen()}}" class="logo-restaurante" alt="Logo restaurante"/>
                     <p class="card-text text-center mt-2" th:text="${restaurante.getNombre()}"></p>

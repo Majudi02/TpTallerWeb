@@ -29,7 +29,7 @@ public class PedidoControlador {
     @GetMapping("/pedido")
     public ModelAndView irAPedido() {
         ModelMap modeloMap = new ModelMap();
-        modeloMap.put("restaurantes", pedidoService.traerRestaurantesDestacados());
+        modeloMap.put("restaurantes", servicioRestaurante.traerRestaurantesDestacados());
         modeloMap.put("platos", pedidoService.traerPlatosDestacados());
 
         return new ModelAndView("pedido",modeloMap);

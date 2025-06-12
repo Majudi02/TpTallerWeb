@@ -9,6 +9,8 @@ public interface ServicioRestaurante {
 
     Restaurante obtenerRestaurante(String nombre);
 
+    List<Restaurante> traerRestaurantesDestacados();
+
     Restaurante obtenerRestaurantePorId(Long idRestaurante);
 
     List<Restaurante> obtenerRestaurantes();
