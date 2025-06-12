@@ -60,18 +60,38 @@
     </div>
 </div>
 <main class="d-flex flex-column justify-content-center align-items-center">
-    <div class="card contenedor-verde w-50 p-5 shadow">
+    <div class="card contenedor-verde w-100 p-5 shadow my-3"
+         style="max-width: 900px;">
         <h1 class="titulo-verde">Perfil del Repartidor</h1>
-        <div>
-            <p><strong>Nombre:</strong> <span th:text="${usuario.nombre}">Nombre</span> <span
-                    th:text="${usuario.apellido}">Apellido</span></p>
-            <p><strong>Email:</strong> <span th:text="${usuario.email}">email@ejemplo.com</span></p>
-            <p><strong>Teléfono:</strong> <span th:text="${usuario.telefono}">123456789</span></p>
-            <p><strong>Vehículo:</strong> <span th:text="${usuario.vehiculo}">Moto</span></p>
-            <div>
-                <a class="btn btn-lg btn-green" href="#">Editar</a>
-                <a class="btn btn-lg btn-danger" href="/cerrar-sesion">Cerrar Sesión</a>
+        <div class="d-flex flex-column my-3">
+            <div class="mb-2">
+                <p class="mb-1 fw-bold">Nombre</p>
+                <p class="form-control" th:text="${usuario.nombre}">Nombre ejemplo</p>
             </div>
+            <div class="mb-2">
+                <p class="mb-1 fw-bold">Apellido</p>
+                <p class="form-control" th:text="${usuario.apellido}">Nombre ejemplo</p>
+            </div>
+            <div class="mb-2">
+                <p class="mb-1 fw-bold">Email</p>
+                <p class="form-control" th:text="${usuario.email}">email@ejemplo.com</p>
+            </div>
+            <div class="mb-1">
+                <p class="mb-1 fw-bold">Teléfono</p>
+                <p class="form-control" th:text="${usuario.telefono}">12345</p>
+            </div>
+            <div class="mb-1">
+                <p class="mb-1 fw-bold">Vehículo</p>
+                <p class="form-control" th:text="${usuario.vehiculo}">Moto</p>
+            </div>
+            <div class="mb-1">
+                <p class="mb-1 fw-bold">DNI</p>
+                <p class="form-control" th:text="${usuario.dni}">45128438</p>
+            </div>
+        </div>
+        <div class="d-flex flex-wrap justify-content-center gap-4">
+            <a class="btn btn-lg btn-green" th:href="@{/editar-usuario}">Editar</a>
+            <a class="btn btn-lg btn-danger" th:href="@{/cerrar-sesion}">Cerrar Sesión</a>
         </div>
     </div>
 </main>
