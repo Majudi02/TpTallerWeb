@@ -14,7 +14,7 @@ public class RestauranteServiceTest {
     private RepositorioUsuarioRestaurante repositorioUsuarioRestauranteMock;
     private RepositorioPlato repositorioPlatoMock;
     private ServicioRestauranteImpl servicio;
-    private EtiquetaService etiquetaServiceMock;
+    private EtiquetaService etiquetaServiceMock;;
 
     @BeforeEach
     public void setup() {

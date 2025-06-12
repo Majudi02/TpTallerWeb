@@ -43,7 +43,6 @@ public class ControladorEditorDePlatosDelRestaurante {
         // Obtener el usuario restaurante logueado desde la sesión
         UsuarioDTO usuarioLogueado = (UsuarioDTO) request.getSession().getAttribute("usuario");
         if (usuarioLogueado == null || !usuarioLogueado.getTipoUsuario().equals("restaurante")) {
-            // Si no está logueado o no es restaurante redirigir
             return new ModelAndView("redirect:/nutriya-login");
         }
 
@@ -68,7 +67,7 @@ public class ControladorEditorDePlatosDelRestaurante {
 
         System.out.println("Restaurante ID en el DTO: " + platoDto.getIdRestaurante());
         System.out.println(usuarioLogueado);
-        return new ModelAndView(guardado ? "redirect:/hacer-pedido-platos" : "redirect:/perfil-home");
+        return new ModelAndView(guardado ? "redirect:/editarPlatos" : "redirect:/perfil-home");
     }
 
     @GetMapping("/editarPlatos")

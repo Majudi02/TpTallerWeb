@@ -38,6 +38,7 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
     private EtiquetaService etiquetaService;
 
 
+
     @Autowired
     public ServicioRestauranteImpl(RepositorioUsuarioRestaurante repositorioUsuarioRestaurante, RepositorioPlato repositorioPlato, EtiquetaService etiquetaService) {
         this.repositorioUsuarioRestaurante = repositorioUsuarioRestaurante;
@@ -149,7 +150,6 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
     @Override
     @Transactional
     public Boolean guardarPlato(PlatoDto platoDto) {
-        // Convertir EtiquetaDto a Etiqueta entidad
         List<Etiqueta> etiquetas = new ArrayList<>();
         if (platoDto.getEtiquetas() != null) {
             for (EtiquetaDto etiquetaDto : platoDto.getEtiquetas()) {
@@ -160,10 +160,10 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
             }
         }
 
-        // Obtener la entidad Plato usando la lista de etiquetas convertidas
         Plato plato = platoDto.obtenerEntidad(etiquetas);
+        Restaurante restaurante = this.obtenerRestaurantePorUsuarioId(platoDto.getIdRestaurante());
+        plato.setRestaurante(restaurante);
 
-        // Guardar plato (asumo que crearPlato devuelve boolean y guarda el plato)
         return this.repositorioPlato.crearPlato(plato);
     }
 
