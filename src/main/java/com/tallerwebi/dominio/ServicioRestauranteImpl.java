@@ -80,6 +80,11 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
     }
 
     @Override
+    public List<Restaurante> traerRestaurantesDestacados() {
+        return repositorioUsuarioRestaurante.traerRestaurantesDestacados();
+    }
+
+    @Override
     public List<Restaurante> obtenerRestaurantes() {
         return repositorioUsuarioRestaurante.buscarTodosLosRestaurantes();
     }

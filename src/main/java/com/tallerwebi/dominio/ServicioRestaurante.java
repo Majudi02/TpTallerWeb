@@ -9,6 +9,10 @@ public interface ServicioRestaurante {
 
     Restaurante obtenerRestaurante(String nombre);
 
+    List<Restaurante> traerRestaurantesDestacados();
+
+    Restaurante obtenerRestaurantePorId(Long idRestaurante);
+
     List<Restaurante> obtenerRestaurantes();
 
     List<Restaurante> obtenerRestaurantesPorZona(String zona);
@@ -29,6 +33,7 @@ public interface ServicioRestaurante {
 
     void guardarImagen(PlatoDto platoDto, MultipartFile imagen);
 
+    List<PlatoDto> obtenerPlatosDelRestaurante(Long idRestaurante);
 
-
+    Restaurante obtenerRestaurantePorUsuarioId(Long usuarioId);
 }

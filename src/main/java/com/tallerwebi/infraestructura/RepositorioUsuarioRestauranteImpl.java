@@ -26,6 +26,16 @@ public class RepositorioUsuarioRestauranteImpl implements RepositorioUsuarioRest
     }
 
     @Override
+    public List<Restaurante> traerRestaurantesDestacados() {
+        String hql = "SELECT ur.restaurante FROM UsuarioRestaurante ur ORDER BY rand()";
+        return sessionFactory.getCurrentSession()
+                .createQuery(hql, Restaurante.class)
+                .setMaxResults(4)
+                .list();
+    }
+
+
+    @Override
     public List<UsuarioRestaurante> buscarTodos() {
         String hql = "FROM UsuarioRestaurante";
         return sessionFactory.getCurrentSession()

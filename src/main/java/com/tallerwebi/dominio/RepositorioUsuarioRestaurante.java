@@ -11,4 +11,5 @@ public interface RepositorioUsuarioRestaurante {
     List<Restaurante> buscarTodosLosRestaurantes();
     void guardar(UsuarioRestaurante usuarioRestaurante);
     void modificar(UsuarioRestaurante usuarioRestaurante);
+    List<Restaurante> traerRestaurantesDestacados();
 }
