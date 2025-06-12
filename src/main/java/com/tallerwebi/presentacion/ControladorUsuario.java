@@ -241,5 +241,37 @@ public class ControladorUsuario {
         return "redirect:/nutriya-login";   // Redirige al login
     }
 
+    @GetMapping("/perfil-restaurante")
+    public ModelAndView perfilRestaurante(HttpServletRequest request) {
+        UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
+        if (usuario == null || !"restaurante".equalsIgnoreCase(usuario.getTipoUsuario())) {
+            return new ModelAndView("redirect:/nutriya-login");
+        }
+        ModelMap model = new ModelMap();
+        model.put("usuario", usuario);
+        return new ModelAndView("perfil-restaurante", model);
+    }
+
+    @GetMapping("/perfil-repartidor")
+    public ModelAndView perfilRepartidor(HttpServletRequest request) {
+        UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
+        if (usuario == null || !"repartidor".equalsIgnoreCase(usuario.getTipoUsuario())) {
+            return new ModelAndView("redirect:/nutriya-login");
+        }
+        ModelMap model = new ModelMap();
+        model.put("usuario", usuario);
+        return new ModelAndView("perfil-repartidor", model);
+    }
+
+    @GetMapping("/perfil-cliente")
+    public ModelAndView perfilCliente(HttpServletRequest request) {
+        UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
+        if (usuario == null || !"cliente".equalsIgnoreCase(usuario.getTipoUsuario())) {
+            return new ModelAndView("redirect:/nutriya-login");
+        }
+        ModelMap model = new ModelMap();
+        model.put("usuario", usuario);
+        return new ModelAndView("perfil-cliente", model);
+    }
 }
 
