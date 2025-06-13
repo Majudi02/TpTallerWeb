@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: tallerwebi
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - taller-network
+
+  app:
+    build:
+      context: .
+      dockerfile: DockerfileJetty
+    container_name: app
+    depends_on:
+      - mysql
+    ports:
+      - "8080:8080"
+    networks:
+      - taller-network
+
+volumes:
+  mysql_data:
+
+networks:
+  taller-network:
