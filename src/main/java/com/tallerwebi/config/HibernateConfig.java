@@ -14,6 +14,9 @@ import java.util.Properties;
 @EnableTransactionManagement
 public class HibernateConfig {
 
+    /*
+
+ para local descomentar y comentar el de abajo
 
     @Bean
     public DataSource dataSource() {
@@ -28,6 +31,21 @@ public class HibernateConfig {
         // dataSource.setPassword("");
         return dataSource;
     }
+
+     */
+
+
+    @Bean
+    public DataSource dataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        dataSource.setUrl("jdbc:mysql://mysql:3306/tallerwebi?connectTimeout=5000&socketTimeout=5000&autoReconnect=true&useSSL=false");
+        dataSource.setUsername("user");
+        dataSource.setPassword("user");
+        return dataSource;
+    }
+
+
 
     @Bean
     public LocalSessionFactoryBean sessionFactory(DataSource dataSource) {
@@ -49,7 +67,7 @@ public class HibernateConfig {
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
         properties.setProperty("hibernate.show_sql", "true");
         properties.setProperty("hibernate.format_sql", "true");
-        properties.setProperty("hibernate.hbm2ddl.auto", "create");
+        properties.setProperty("hibernate.hbm2ddl.auto", "update");
         return properties;
     }
 }
