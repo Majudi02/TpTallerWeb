@@ -18,9 +18,9 @@ public class Pedido {
     private String fecha;
 
 
-    // @ManyToOne
-    // @JoinColumn(name = "usuario_id")
-    // private UsuarioNutriya usuario;
+     @ManyToOne
+     @JoinColumn(name = "usuario_id")
+     private UsuarioNutriya usuario;
 
     @ManyToMany
     @JoinTable(
@@ -38,7 +38,7 @@ public class Pedido {
         PedidoDto pedidoDto = new PedidoDto();
         pedidoDto.setId(this.id);
         pedidoDto.setFecha(this.fecha);
-     //   pedidoDto.setUsuarioId(this.usuario.getId());
+        pedidoDto.setUsuarioId(this.usuario.getId());
         pedidoDto.setPrecio(this.Precio);
         pedidoDto.setFinalizo(this.finalizo);
 
@@ -74,7 +74,7 @@ public class Pedido {
     public void setFecha(String fecha) {
         this.fecha = fecha;
     }
-/*
+
     public UsuarioNutriya getUsuario() {
         return usuario;
     }
@@ -83,7 +83,7 @@ public class Pedido {
         this.usuario = usuario;
     }
 
- */
+
 
     public List<Plato> getPlatos() {
         return platos;

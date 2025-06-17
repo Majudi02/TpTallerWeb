@@ -6,6 +6,7 @@ import com.tallerwebi.dominio.entidades.Plato;
 import com.tallerwebi.dominio.entidades.Restaurante;
 import com.tallerwebi.infraestructura.RepositorioPlatoImpl;
 import com.tallerwebi.presentacion.PedidoDto;
+import com.tallerwebi.presentacion.UsuarioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,39 +28,6 @@ public class PedidoServiceImpl implements PedidoService {
         this.repositorioPlatoImpl = repositorioPlatoImpl;
         this.repositorioPedido=repositorioPedido;
     }
-/*
-        List<PlatoDto> platosDestacados = List.of(
-                new PlatoDto(1,"Milanesa con papas fritas", "Clásica milanesa de carne acompañada con papas fritas crujientes.", "/assets/imagen-plato.png", 2500.0, List.of("Proteica")),
-                new PlatoDto( 2,"Ravioles de ricota", "Ravioles caseros rellenos de ricota y nuez, servidos con salsa bolognesa.", "/assets/imagen-plato.png", 2800.0, List.of("Vegetariana")),
-                new PlatoDto( 3,"Pizza napolitana", "Pizza con tomate, mozzarella, ajo, y albahaca fresca.", "/assets/imagen-plato.png", 3200.0, List.of("Vegetariana")),
-                new PlatoDto( 4,"Hamburguesa completa", "Hamburguesa con lechuga, tomate, queso, panceta y papas fritas.", "/assets/imagen-plato.png", 2900.0, List.of("Proteica")),
-                new PlatoDto( 5,"Ensalada César", "Ensalada con lechuga romana, pollo, crutones, parmesano y aderezo César.", "/assets/imagen-plato.png", 2300.0, List.of("Proteica")),
-                new PlatoDto( 6,"Tarta de espinaca", "Tarta casera de espinaca y queso con masa hojaldrada.", "/assets/imagen-plato.png", 2000.0, List.of("Vegetariana"))
-        );
-/*
-        List<PlatoDto> platosTotales = List.of(
-                new PlatoDto( "Milanesa con papas fritas", "Clásica milanesa de carne acompañada con papas fritas crujientes.", "/assets/imagen-plato.png", 2500.0, List.of("Proteica")),
-                new PlatoDto( "Ravioles de ricota", "Ravioles caseros rellenos de ricota y nuez, servidos con salsa bolognesa.", "/assets/imagen-plato.png", 2800.0, List.of("Vegetariana")),
-                new PlatoDto( "Pizza napolitana", "Pizza con tomate, mozzarella, ajo y albahaca fresca.", "/assets/imagen-plato.png", 3200.0, List.of("Vegetariana")),
-                new PlatoDto( "Hamburguesa completa", "Hamburguesa con lechuga, tomate, queso, panceta y papas fritas.", "/assets/imagen-plato.png", 2900.0, List.of("Proteica")),
-                new PlatoDto( "Ensalada César", "Ensalada con lechuga romana, pollo, crutones, parmesano y aderezo César.", "/assets/imagen-plato.png", 2300.0, List.of("Proteica")),
-                new PlatoDto( "Tarta de espinaca", "Tarta casera de espinaca y queso con masa hojaldrada.", "/assets/imagen-plato.png", 2000.0, List.of("Vegetariana")),
-                new PlatoDto( "Lasaña de carne", "Capas de pasta con carne, salsa bechamel y queso gratinado.", "/assets/imagen-plato.png", 3100.0, List.of("Proteica")),
-                new PlatoDto( "Empanadas salteñas", "Empanadas rellenas de carne cortada a cuchillo, típicas del norte argentino.", "/assets/imagen-plato.png", 1800.0, List.of("Proteica")),
-                new PlatoDto( "Pollo al horno con papas", "Muslo de pollo al horno con papas doradas y especias.", "/assets/imagen-plato.png", 2600.0, List.of("Proteica")),
-                new PlatoDto( "Ñoquis con salsa rosa", "Ñoquis de papa acompañados con salsa de tomate y crema.", "/assets/imagen-plato.png", 2700.0, List.of("Vegetariana")),
-                new PlatoDto( "Sopa crema de calabaza", "Sopa suave y cremosa de calabaza natural.", "/assets/imagen-plato.png", 1900.0, List.of("Vegetariana", "Vegana", "Sin Gluten")),
-                new PlatoDto( "Tacos de carne", "Tortillas mexicanas rellenas de carne, cebolla y cilantro.", "/assets/imagen-plato.png", 3000.0, List.of("Proteica")),
-                new PlatoDto( "Milanesa napolitana", "Milanesa con jamón, queso y salsa de tomate, servida con papas.", "/assets/imagen-plato.png", 3200.0, List.of("Proteica")),
-                new PlatoDto( "Pizza cuatro quesos", "Pizza con una mezcla de mozzarella, azul, provolone y parmesano.", "/assets/imagen-plato.png", 3400.0, List.of("Vegetariana")),
-                new PlatoDto( "Panqueques con dulce de leche", "Postre de panqueques caseros rellenos con dulce de leche argentino.", "/assets/imagen-plato.png", 1600.0, List.of()),
-                new PlatoDto( "Churrasco con ensalada", "Carne asada a la plancha con guarnición de ensalada fresca.", "/assets/imagen-plato.png", 3500.0, List.of("Proteica", "Sin Gluten")),
-                new PlatoDto( "Fideos al pesto", "Fideos largos acompañados con salsa pesto casera.", "/assets/imagen-plato.png", 2500.0, List.of("Vegetariana")),
-                new PlatoDto( "Sándwich de lomito", "Lomito con huevo, jamón, queso, lechuga y tomate en pan tostado.", "/assets/imagen-plato.png", 2800.0, List.of("Proteica")),
-                new PlatoDto( "Canelones de verdura", "Pasta rellena de verdura con salsa blanca y gratinada al horno.", "/assets/imagen-plato.png", 3000.0, List.of("Vegetariana")),
-                new PlatoDto( "Helado artesanal", "Helado de elaboración artesanal, sabores surtidos.", "/assets/imagen-plato.png", 1500.0, List.of("Sin Gluten"))
-        );
-*/
 
     List<Restaurante> restaurantes = List.of(
             new Restaurante("Green Bowl", "Comida Vegana", "/assets/restaurante.png", "calle", 123, "Don Torcuato", "Norte", List.of("Vegana")),
@@ -114,6 +82,7 @@ public class PedidoServiceImpl implements PedidoService {
         return  pedido.obtenerDto();
     }
 
+    /*
     @Override
     public void crearPedido(PedidoDto pedido) {
 
@@ -121,8 +90,10 @@ public class PedidoServiceImpl implements PedidoService {
         this.repositorioPedido.crearPedido(pedidoEntidad);
     }
 
+     */
+
     @Override
-    public void agregarPlatoAlPedido(PlatoDto platoDto) {
+    public void agregarPlatoAlPedido(PlatoDto platoDto, UsuarioDTO usuarioDTO) {
 
         List<Etiqueta> etiquetasEntidad = new ArrayList<>();
         if (platoDto.getEtiquetas() != null) {
@@ -134,10 +105,32 @@ public class PedidoServiceImpl implements PedidoService {
             }
         }
 
+
         Plato platoEntidad = platoDto.obtenerEntidad(etiquetasEntidad);
 
-        this.repositorioPedido.agregarPlatoAlPedido(platoEntidad);
+        this.repositorioPedido.agregarPlatoAlPedido(platoEntidad,usuarioDTO.getId());
     }
+
+    @Override
+    public List<PlatoDto> mostrarPlatosDelPedidoActual(Long idUsuario) {
+
+        return this.repositorioPedido.mostrarPlatosDelPedidoActual(idUsuario).stream().map(Plato::obtenerDto).collect(Collectors.toList());
+    }
+
+
+    @Override
+    public Double mostrarPrecioTotalDelPedidoActual(Long idUsuario) {
+        return this.repositorioPedido.mostrarPrecioTotalDelPedidoActual(idUsuario);
+    }
+
+    @Override
+    public void finalizarPedido(Long id) {
+        this.repositorioPedido.finalizarPedido(id);
+    }
+
+
+
+
 
 /*        @Override
         public void guardarPlatoDb(Plato plato) {

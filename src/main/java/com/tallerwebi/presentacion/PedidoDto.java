@@ -34,7 +34,7 @@ public class PedidoDto {
     public PedidoDto(Pedido pedido) {
         this.id = pedido.getId();
         this.fecha = pedido.getFecha();
-      //  this.usuarioId = pedido.getUsuario().getId();
+        this.usuarioId = pedido.getUsuario().getId();
         this.precio = pedido.getPrecio();
         this.finalizo=pedido.isFinalizo();
         this.platos = pedido.getPlatos()
@@ -44,11 +44,11 @@ public class PedidoDto {
     }
 
     
-    public Pedido obtenerEntidad(/*UsuarioNutriya usuario, */List<Plato> platosEntidad) {
+    public Pedido obtenerEntidad(UsuarioNutriya usuario, List<Plato> platosEntidad) {
         Pedido pedido = new Pedido();
         pedido.setId(this.id);
         pedido.setFecha(this.fecha);
-   //     pedido.setUsuario(usuario);
+        pedido.setUsuario(usuario);
         pedido.setPlatos(platosEntidad);
         pedido.setPrecio(this.precio);
         pedido.setFinalizo(this.finalizo);
