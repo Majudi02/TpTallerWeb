@@ -55,35 +55,66 @@ public class RepositorioPedidoImplTest {
     }
 
     @Test
-    public void queSePuedaGuardarUnPlatoEnUnPedidoExistente(){
+    public void queSePuedaGuardarUnPlatoEnUnPedidoExistente() {
         Cliente usuario = new Cliente();
         usuario.setId(1L);
-
 
         Plato plato = new Plato();
         plato.setId(1);
         plato.setNombre("Milanesa");
+        plato.setPrecio(100.0);
 
         Pedido pedido = new Pedido();
-     //   pedido.setUsuario(usuario);
+        pedido.setUsuario(usuario);
         pedido.setPlatos(new ArrayList<>());
         pedido.setFinalizo(false);
+        pedido.setPrecio(0.0);
 
         Query<Pedido> queryMock = mock(Query.class);
+
         when(sessionMock.createQuery(anyString(), eq(Pedido.class))).thenReturn(queryMock);
-        when(queryMock.setParameter(eq("usuario"),eq(usuario))).thenReturn(queryMock);
-
-
-        when(queryMock.setParameter("finalizo",false)).thenReturn(queryMock);
-        when(queryMock.uniqueResult()).thenReturn(pedido);
+        when(queryMock.setParameter(eq("usuario"), any())).thenReturn(queryMock);
+        when(queryMock.setParameter(eq("finalizo"), eq(false))).thenReturn(queryMock);
         when(queryMock.uniqueResult()).thenReturn(pedido);
 
-        repositorio.agregarPlatoAlPedido(plato);
+
+        when(sessionMock.get(eq(UsuarioNutriya.class), eq(1L))).thenReturn(usuario);
+
+
+        repositorio.agregarPlatoAlPedido(plato, usuario.getId());
+
 
         assertTrue(pedido.getPlatos().contains(plato));
         verify(sessionMock).saveOrUpdate(pedido);
-
     }
+
+
+    @Test
+    public void queSePuedaFinalizarUnPedido() {
+        Long idUsuario = 1L;
+
+        Cliente cliente = new Cliente();
+        cliente.setId(idUsuario);
+
+        Pedido pedido = new Pedido();
+        pedido.setUsuario(cliente);
+        pedido.setPlatos(new ArrayList<>());
+        pedido.setFinalizo(false);
+        pedido.setPrecio(0.0);
+
+        when(sessionMock.get(UsuarioNutriya.class, idUsuario)).thenReturn(cliente);
+
+        Query<Pedido> queryMock = mock(Query.class);
+        when(sessionMock.createQuery(anyString(), eq(Pedido.class))).thenReturn(queryMock);
+        when(queryMock.setParameter("usuario", cliente)).thenReturn(queryMock);
+        when(queryMock.uniqueResult()).thenReturn(pedido);
+
+        repositorio.finalizarPedido(idUsuario);
+
+        assertTrue(pedido.isFinalizo());
+        verify(sessionMock).saveOrUpdate(pedido);
+    }
+
 
 
 

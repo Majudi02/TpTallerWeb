@@ -16,13 +16,12 @@ public class HibernateConfig {
 
     /*
 
- para local descomentar y comentar el de abajo
-
+ para local usar este y comentar el de abajo
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        // dataSource.setDriverClassName("org.hsqldb.jdbcDriver");
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+         dataSource.setDriverClassName("org.hsqldb.jdbcDriver");
+      //  dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource.setUrl("jdbc:hsqldb:mem:db_");
         dataSource.setUrl("jdbc:mysql://localhost:3306/tallerwebi");
         dataSource.setUsername("user");

@@ -5,15 +5,19 @@ import com.tallerwebi.dominio.entidades.Pedido;
 import com.tallerwebi.dominio.entidades.Plato;
 import com.tallerwebi.dominio.entidades.UsuarioNutriya;
 
+import java.util.List;
+
 public interface RepositorioPedido {
 
     Pedido buscarPedidoActivoPorUsuario();
     void crearPedido(Pedido pedido);
-    void agregarPlatoAlPedido(Plato plato);
-/*
-    Pedido buscarPedidoActivoPorUsuario(Cliente usuario);
-    void crearPedido(Pedido pedido);
-    void agregarPlatoAlPedido(Cliente cliente,Plato plato);
+    void agregarPlatoAlPedido(Plato plato, Long idUsuario);
+    List<Plato> mostrarPlatosDelPedidoActual(Long idUsuario);
 
- */
+    Double mostrarPrecioTotalDelPedidoActual(Long idUsuario);
+
+    Pedido buscarPedidoActivoPorUsuario(Long idUsuario);
+    void crearPedido(Pedido pedido, Long idUsuario);
+    void agregarPlatoAlPedido(Long idUsuario,Plato plato);
+    void finalizarPedido(Long id);
 }
