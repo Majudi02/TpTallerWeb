@@ -1,4 +1,3 @@
-
 INSERT IGNORE INTO Etiqueta (id, nombre) VALUES
 (1, 'Vegana'),
 (2, 'Vegetariana'),
