@@ -5,11 +5,14 @@ import com.tallerwebi.dominio.PlatoDto;
 import com.tallerwebi.dominio.ServicioRestaurante;
 import com.tallerwebi.dominio.entidades.Pedido;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -57,13 +60,15 @@ public class PedidoControlador {
 
 
         UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
+        modeloMap.addAttribute("usuario", usuario);
+        if (usuario != null) {
+            List<PlatoDto> pedidoActual = pedidoService.mostrarPlatosDelPedidoActual(usuario.getId());
+            modeloMap.addAttribute("pedidoActual", pedidoActual);
 
-        List<PlatoDto> pedidoActual = pedidoService.mostrarPlatosDelPedidoActual(usuario.getId());
-        modeloMap.addAttribute("pedidoActual", pedidoActual);
+            Double precioTotalDelPedido = pedidoService.mostrarPrecioTotalDelPedidoActual(usuario.getId());
+            modeloMap.addAttribute("precioTotal", precioTotalDelPedido);
+        }
 
-
-        Double precioTotalDelPedido = pedidoService.mostrarPrecioTotalDelPedidoActual(usuario.getId());
-        modeloMap.addAttribute("precioTotal", precioTotalDelPedido);
 
         modeloMap.addAttribute("platos", platosMostrados);
         return new ModelAndView("hacer-pedido-platos", modeloMap);
@@ -78,18 +83,23 @@ public class PedidoControlador {
         return "redirect:/pedido/platos";
     }
 
-    @PostMapping("/pedido/agregar")
-    public String agregarPlatoAlPedido(@RequestParam("platoId")Integer platoId,
-                                       HttpServletRequest request){
-
+    @GetMapping("/pedido/carrito")
+    @ResponseBody
+    public List<PlatoDto> mostrarCarrito(HttpServletRequest request) {
         UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
+        if (usuario == null) {
+            return new java.util.ArrayList<>();
+        }
+        return pedidoService.mostrarPlatosDelPedidoActual(usuario.getId());
+    }
+    @PostMapping("/pedido/agregar")
+    @ResponseBody
+    public void agregarPlatoAlPedido(@RequestParam("platoId") Integer platoId, HttpServletRequest request) {
+            UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
 
-        PlatoDto platoBuscado= servicioRestaurante.obtenerPlatoPorId(platoId);
-        System.out.println(platoBuscado.getNombre());
-        System.out.println(platoBuscado.getDescripcion());
-        pedidoService.agregarPlatoAlPedido(platoBuscado,usuario);
+            PlatoDto platoBuscado = servicioRestaurante.obtenerPlatoPorId(platoId);
+            pedidoService.agregarPlatoAlPedido(platoBuscado, usuario);
 
-        return "redirect:/pedido/platos";
     }
 
 
