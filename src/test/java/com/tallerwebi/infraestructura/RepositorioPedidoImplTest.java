@@ -1,122 +1,102 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.entidades.Cliente;
 import com.tallerwebi.dominio.entidades.Pedido;
 import com.tallerwebi.dominio.entidades.Plato;
-import com.tallerwebi.dominio.entidades.UsuarioNutriya;
-import org.hibernate.Session;
+import com.tallerwebi.infraestructura.config.HibernateInfraestructuraTestConfig;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
+
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {HibernateInfraestructuraTestConfig.class})
+@Transactional
 public class RepositorioPedidoImplTest {
 
-    private SessionFactory sessionFactoryMock;
-    private Session sessionMock;
-    private RepositorioPedidoImpl repositorio;
+    @Autowired
+    private SessionFactory sessionFactory;
+    private RepositorioPedidoImpl repositorioPedido;
+
 
     @BeforeEach
-    public void setUp(){
-        sessionFactoryMock = mock(SessionFactory.class);
-        sessionMock= mock(Session.class);
-        when(sessionFactoryMock.getCurrentSession()).thenReturn(sessionMock);
-
-        repositorio = new RepositorioPedidoImpl(sessionFactoryMock);
+    public void setUp() {
+        repositorioPedido = new RepositorioPedidoImpl(sessionFactory);
     }
 
 
     @Test
-    public void quePuedaDevolverUnPedidoCuandoElUsuarioLoTieneActivo(){
+    @Rollback
+    public void quePuedaDevolverUnPedidoCuandoElUsuarioLoTieneActivo() {
         Cliente usuario = new Cliente();
-        usuario.setId(1L);
+        sessionFactory.getCurrentSession().save(usuario);
 
         Pedido pedido = new Pedido();
         pedido.setFinalizo(false);
-     //   pedido.setUsuario(usuario);
+        pedido.setUsuario(usuario);
+        sessionFactory.getCurrentSession().save(pedido);
 
-        Query<Pedido> queryMock = mock(Query.class);
-        when(sessionMock.createQuery(anyString(), eq(Pedido.class))).thenReturn(queryMock);
-        when(queryMock.setParameter("usuario",usuario)).thenReturn(queryMock);
-        when(queryMock.setParameter("finalizo",false)).thenReturn(queryMock);
-        when(queryMock.uniqueResult()).thenReturn(pedido);
-
-        Pedido pedidoActivoEncontrado = repositorio.buscarPedidoActivoPorUsuario();
+        Pedido pedidoActivoEncontrado = repositorioPedido.buscarPedidoActivoPorUsuario(usuario.getId());
 
         assertNotNull(pedidoActivoEncontrado);
-        assertFalse(pedido.isFinalizo());
-
+        assertEquals(usuario.getId(), pedidoActivoEncontrado.getUsuario().getId());
     }
 
     @Test
+    @Rollback
     public void queSePuedaGuardarUnPlatoEnUnPedidoExistente() {
+
         Cliente usuario = new Cliente();
-        usuario.setId(1L);
+        sessionFactory.getCurrentSession().save(usuario);
 
         Plato plato = new Plato();
         plato.setId(1);
         plato.setNombre("Milanesa");
         plato.setPrecio(100.0);
+        sessionFactory.getCurrentSession().save(plato);
+
 
         Pedido pedido = new Pedido();
         pedido.setUsuario(usuario);
         pedido.setPlatos(new ArrayList<>());
         pedido.setFinalizo(false);
         pedido.setPrecio(0.0);
+        sessionFactory.getCurrentSession().save(pedido);
 
-        Query<Pedido> queryMock = mock(Query.class);
+        repositorioPedido.agregarPlatoAlPedido(plato, usuario.getId());
 
-        when(sessionMock.createQuery(anyString(), eq(Pedido.class))).thenReturn(queryMock);
-        when(queryMock.setParameter(eq("usuario"), any())).thenReturn(queryMock);
-        when(queryMock.setParameter(eq("finalizo"), eq(false))).thenReturn(queryMock);
-        when(queryMock.uniqueResult()).thenReturn(pedido);
+        Pedido pedidoActualizado = sessionFactory.getCurrentSession().get(Pedido.class, pedido.getId());
 
+        assertTrue(pedidoActualizado.getPlatos().contains(plato));
 
-        when(sessionMock.get(eq(UsuarioNutriya.class), eq(1L))).thenReturn(usuario);
-
-
-        repositorio.agregarPlatoAlPedido(plato, usuario.getId());
-
-
-        assertTrue(pedido.getPlatos().contains(plato));
-        verify(sessionMock).saveOrUpdate(pedido);
     }
 
-
     @Test
+    @Rollback
     public void queSePuedaFinalizarUnPedido() {
-        Long idUsuario = 1L;
-
-        Cliente cliente = new Cliente();
-        cliente.setId(idUsuario);
+        Cliente usuario = new Cliente();
+        sessionFactory.getCurrentSession().save(usuario);
 
         Pedido pedido = new Pedido();
-        pedido.setUsuario(cliente);
+        pedido.setUsuario(usuario);
         pedido.setPlatos(new ArrayList<>());
         pedido.setFinalizo(false);
         pedido.setPrecio(0.0);
+        sessionFactory.getCurrentSession().save(pedido);
 
-        when(sessionMock.get(UsuarioNutriya.class, idUsuario)).thenReturn(cliente);
-
-        Query<Pedido> queryMock = mock(Query.class);
-        when(sessionMock.createQuery(anyString(), eq(Pedido.class))).thenReturn(queryMock);
-        when(queryMock.setParameter("usuario", cliente)).thenReturn(queryMock);
-        when(queryMock.uniqueResult()).thenReturn(pedido);
-
-        repositorio.finalizarPedido(idUsuario);
+        repositorioPedido.finalizarPedido(usuario.getId());
 
         assertTrue(pedido.isFinalizo());
-        verify(sessionMock).saveOrUpdate(pedido);
+
     }
-
-
-
-
-
 }
