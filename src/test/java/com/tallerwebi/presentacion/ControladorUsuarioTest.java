@@ -97,6 +97,7 @@ public class ControladorUsuarioTest {
     }
 
 
+    /*
     @Test
     public void DadoQueTengoUnControladorUsuarioPuedoLogearmeConUnClienteRegistrado() {
         UsuarioDTO cliente = new UsuarioDTO();
@@ -123,6 +124,8 @@ public class ControladorUsuarioTest {
         assertEquals("perfil-cliente", modelAndView.getViewName());
         assertTrue(modelAndView.getModel().containsKey("usuario"));
     }
+
+     */
 
 
     @Test

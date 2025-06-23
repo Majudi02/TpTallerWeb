@@ -27,11 +27,14 @@ public class Pedido {
             name = "Pedido_Plato",
             joinColumns = @JoinColumn(name = "pedido_id"),
             inverseJoinColumns = @JoinColumn(name = "plato_id")
+
     )
     private List<Plato> platos;
 
-    private Double Precio;
+    private Double precio;
     private boolean finalizo;
+    @Enumerated(EnumType.STRING)
+    private EstadoPedido estadoPedido;
 
 
     public PedidoDto obtenerDto() {
@@ -39,9 +42,9 @@ public class Pedido {
         pedidoDto.setId(this.id);
         pedidoDto.setFecha(this.fecha);
         pedidoDto.setUsuarioId(this.usuario.getId());
-        pedidoDto.setPrecio(this.Precio);
+        pedidoDto.setPrecio(this.precio);
         pedidoDto.setFinalizo(this.finalizo);
-
+        pedidoDto.setEstadoPedido(this.estadoPedido);
         List<PlatoDto> platosDto = this.platos.stream()
                 .map(Plato::obtenerDto)
                 .collect(Collectors.toList());
@@ -49,6 +52,14 @@ public class Pedido {
         pedidoDto.setPlatos(platosDto);
 
         return pedidoDto;
+    }
+
+    public EstadoPedido getEstadoPedido() {
+        return estadoPedido;
+    }
+
+    public void setEstadoPedido(EstadoPedido estadoPedido) {
+        this.estadoPedido = estadoPedido;
     }
 
     public boolean isFinalizo() {
@@ -94,10 +105,10 @@ public class Pedido {
     }
 
     public Double getPrecio() {
-        return Precio;
+        return precio;
     }
 
     public void setPrecio(Double precio) {
-        Precio = precio;
+        this.precio = precio;
     }
 }

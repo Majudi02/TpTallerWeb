@@ -3,10 +3,7 @@
     import com.tallerwebi.dominio.PlatoDto;
     import com.tallerwebi.dominio.RepositorioPedido;
     import com.tallerwebi.dominio.Usuario;
-    import com.tallerwebi.dominio.entidades.Cliente;
-    import com.tallerwebi.dominio.entidades.Pedido;
-    import com.tallerwebi.dominio.entidades.Plato;
-    import com.tallerwebi.dominio.entidades.UsuarioNutriya;
+    import com.tallerwebi.dominio.entidades.*;
     import com.tallerwebi.presentacion.UsuarioDTO;
     import org.hibernate.SessionFactory;
     import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +49,8 @@
                 pedidoBuscado.setPlatos(new ArrayList<>());
                 pedidoBuscado.setFinalizo(false);
                 pedidoBuscado.setFecha(String.valueOf(LocalDateTime.now()));
-                pedidoBuscado.setPrecio(0.0); // empezamos de 0
+                pedidoBuscado.setPrecio(0.0);
+                pedidoBuscado.setEstadoPedido(EstadoPedido.PENDIENTE);
             }
 
             pedidoBuscado.getPlatos().add(plato);
@@ -94,11 +92,6 @@
         }
 
         @Override
-        public void crearPedido(Pedido pedido,Long idUsuario) {
-            sessionFactory.getCurrentSession().save(pedido);
-        }
-
-        @Override
         public void agregarPlatoAlPedido(Long idUsuario,Plato plato){
             Pedido pedidoBuscado= this.buscarPedidoActivoPorUsuario(idUsuario);
             if (pedidoBuscado!=null){
@@ -115,6 +108,8 @@
 
             sessionFactory.getCurrentSession().saveOrUpdate(pedidoBuscado);
         }
+
+
 
 
     }

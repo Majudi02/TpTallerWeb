@@ -17,7 +17,6 @@ public interface RepositorioPedido {
     Double mostrarPrecioTotalDelPedidoActual(Long idUsuario);
 
     Pedido buscarPedidoActivoPorUsuario(Long idUsuario);
-    void crearPedido(Pedido pedido, Long idUsuario);
     void agregarPlatoAlPedido(Long idUsuario,Plato plato);
     void finalizarPedido(Long id);
 }

@@ -39,8 +39,6 @@ public class ControladorEditorDePlatosDelRestaurante {
     public ModelAndView guardarPlato(@ModelAttribute PlatoDto platoDto,
                                      @RequestParam("imagen") MultipartFile imagen,
                                      HttpServletRequest request) {
-
-        // Obtener el usuario restaurante logueado desde la sesión
         UsuarioDTO usuarioLogueado = (UsuarioDTO) request.getSession().getAttribute("usuario");
         if (usuarioLogueado == null || !usuarioLogueado.getTipoUsuario().equals("restaurante")) {
             return new ModelAndView("redirect:/nutriya-login");
@@ -79,7 +77,6 @@ public class ControladorEditorDePlatosDelRestaurante {
 
         ModelMap modelo = new ModelMap();
 
-        // Obtener restaurante del usuario logueado
         Restaurante restaurante = servicioRestaurante.obtenerRestaurantePorUsuarioId(usuarioLogueado.getId());
 
         List<PlatoDto> platos = new ArrayList<>();

@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface PedidoService {
 
-    List<Restaurante> traerRestaurantesDestacados();
     List<PlatoDto> traerPlatosDestacados();
     List<PlatoDto> traerTodosLosPlatos();
     List<PlatoDto> buscarPlatosPorTipoComida(String tipoComida);
@@ -19,5 +18,4 @@ public interface PedidoService {
     List<PlatoDto>mostrarPlatosDelPedidoActual(Long idUsuario);
     Double mostrarPrecioTotalDelPedidoActual(Long idUsuario);
     void finalizarPedido(Long id);
-  //  void guardarPlatoDb(Plato plato);
 }

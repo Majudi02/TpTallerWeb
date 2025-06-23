@@ -155,14 +155,13 @@ public class ControladorUsuario {
         UsuarioDTO usuarioSesion = (UsuarioDTO) request.getSession().getAttribute("usuario");
 
         if (usuarioSesion != null) {
-            // Si hay usuario en sesión, redirigir a su perfil según tipo
             String tipo = usuarioSesion.getTipoUsuario();
             if ("cliente".equalsIgnoreCase(tipo)) {
-                return perfilCliente(usuarioSesion);
+                return new ModelAndView("redirect:/cliente/perfil");
             } else if ("repartidor".equalsIgnoreCase(tipo)) {
-                return perfilRepartidor(usuarioSesion);
+                return new ModelAndView("redirect:/repartidor/perfil");
             } else if ("restaurante".equalsIgnoreCase(tipo)) {
-                return perfilRestaurante(usuarioSesion);
+                return new ModelAndView("redirect:/restaurante/perfil");
             }
         }
 
@@ -172,26 +171,6 @@ public class ControladorUsuario {
         return new ModelAndView("nutriya-login", model);
     }
 
-    @GetMapping("/Restaurante/perfil")
-    public ModelAndView perfilRestaurante(UsuarioDTO usuario) {
-        ModelMap model = new ModelMap();
-        model.put("usuario", usuario);
-        return new ModelAndView("perfil-restaurante", model);
-    }
-
-    @GetMapping("/Repartidor/perfil")
-    public ModelAndView perfilRepartidor(UsuarioDTO usuario) {
-        ModelMap model = new ModelMap();
-        model.put("usuario", usuario);
-        return new ModelAndView("perfil-repartidor", model);
-    }
-
-    @GetMapping("/Cliente/perfil")
-    public ModelAndView perfilCliente(UsuarioDTO usuario) {
-        ModelMap model = new ModelMap();
-        model.put("usuario", usuario);
-        return new ModelAndView("perfil-cliente", model);
-    }
 
     @PostMapping("/nutriya-login")
     public ModelAndView procesarLogin(@ModelAttribute("loginDTO") UsuarioDTO loginDTO, RedirectAttributes redirectAttributes, ModelMap model, HttpServletRequest request) {
@@ -217,11 +196,11 @@ public class ControladorUsuario {
         String tipo = usuarioEncontrado.getTipoUsuario();
 
         if ("cliente".equalsIgnoreCase(tipo)) {
-            return perfilCliente(usuarioEncontrado);
+            return new ModelAndView("redirect:/cliente/perfil");
         } else if ("repartidor".equalsIgnoreCase(tipo)) {
-            return perfilRepartidor(usuarioEncontrado);
+            return new ModelAndView("redirect:/repartidor/perfil");
         } else if ("restaurante".equalsIgnoreCase(tipo)) {
-            return perfilRestaurante(usuarioEncontrado);
+            return new ModelAndView("redirect:/restaurante/perfil");
         }
 
         return new ModelAndView("nutriya-login", model);
@@ -237,22 +216,22 @@ public class ControladorUsuario {
 
     @GetMapping("/cerrar-sesion")
     public String cerrarSesion(HttpServletRequest request) {
-        request.getSession().invalidate();  // Cierra la sesión
-        return "redirect:/nutriya-login";   // Redirige al login
+        request.getSession().invalidate();
+        return "redirect:/nutriya-login";
     }
 
-    @GetMapping("/perfil-restaurante")
-    public ModelAndView perfilRestaurante(HttpServletRequest request) {
+    @GetMapping("/cliente/perfil")
+    public ModelAndView perfilCliente(HttpServletRequest request) {
         UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
-        if (usuario == null || !"restaurante".equalsIgnoreCase(usuario.getTipoUsuario())) {
+        if (usuario == null || !"cliente".equalsIgnoreCase(usuario.getTipoUsuario())) {
             return new ModelAndView("redirect:/nutriya-login");
         }
         ModelMap model = new ModelMap();
         model.put("usuario", usuario);
-        return new ModelAndView("perfil-restaurante", model);
+        return new ModelAndView("perfil-cliente", model);
     }
 
-    @GetMapping("/perfil-repartidor")
+    @GetMapping("/repartidor/perfil")
     public ModelAndView perfilRepartidor(HttpServletRequest request) {
         UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
         if (usuario == null || !"repartidor".equalsIgnoreCase(usuario.getTipoUsuario())) {
@@ -263,15 +242,15 @@ public class ControladorUsuario {
         return new ModelAndView("perfil-repartidor", model);
     }
 
-    @GetMapping("/perfil-cliente")
-    public ModelAndView perfilCliente(HttpServletRequest request) {
+    @GetMapping("/restaurante/perfil")
+    public ModelAndView perfilRestaurante(HttpServletRequest request) {
         UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
-        if (usuario == null || !"cliente".equalsIgnoreCase(usuario.getTipoUsuario())) {
+        if (usuario == null || !"restaurante".equalsIgnoreCase(usuario.getTipoUsuario())) {
             return new ModelAndView("redirect:/nutriya-login");
         }
         ModelMap model = new ModelMap();
         model.put("usuario", usuario);
-        return new ModelAndView("perfil-cliente", model);
+        return new ModelAndView("perfil-restaurante", model);
     }
 }
 
