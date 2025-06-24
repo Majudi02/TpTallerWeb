@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.PedidoService;
 import com.tallerwebi.dominio.PlatoDto;
 import com.tallerwebi.dominio.ServicioRestaurante;
 import com.tallerwebi.dominio.entidades.Pedido;
+import com.tallerwebi.dominio.entidades.PedidoPlato;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,7 +63,7 @@ public class PedidoControlador {
         UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
         modeloMap.addAttribute("usuario", usuario);
         if (usuario != null) {
-            List<PlatoDto> pedidoActual = pedidoService.mostrarPlatosDelPedidoActual(usuario.getId());
+            List<PedidoPlatoDto> pedidoActual = pedidoService.mostrarPlatosDelPedidoActual(usuario.getId());
             modeloMap.addAttribute("pedidoActual", pedidoActual);
 
             Double precioTotalDelPedido = pedidoService.mostrarPrecioTotalDelPedidoActual(usuario.getId());
@@ -85,7 +86,7 @@ public class PedidoControlador {
 
     @GetMapping("/pedido/carrito")
     @ResponseBody
-    public List<PlatoDto> mostrarCarrito(HttpServletRequest request) {
+    public List<PedidoPlatoDto> mostrarCarrito(HttpServletRequest request) {
         UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
         if (usuario == null) {
             return new java.util.ArrayList<>();

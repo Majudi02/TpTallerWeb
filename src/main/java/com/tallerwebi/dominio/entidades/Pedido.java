@@ -2,6 +2,7 @@ package com.tallerwebi.dominio.entidades;
 
 import com.tallerwebi.dominio.PlatoDto;
 import com.tallerwebi.presentacion.PedidoDto;
+import com.tallerwebi.presentacion.PedidoPlatoDto;
 
 import javax.persistence.*;
 import java.util.List;
@@ -22,14 +23,8 @@ public class Pedido {
      @JoinColumn(name = "usuario_id")
      private UsuarioNutriya usuario;
 
-    @ManyToMany
-    @JoinTable(
-            name = "Pedido_Plato",
-            joinColumns = @JoinColumn(name = "pedido_id"),
-            inverseJoinColumns = @JoinColumn(name = "plato_id")
-
-    )
-    private List<Plato> platos;
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PedidoPlato> pedidoPlatos;
 
     private Double precio;
     private boolean finalizo;
@@ -45,13 +40,30 @@ public class Pedido {
         pedidoDto.setPrecio(this.precio);
         pedidoDto.setFinalizo(this.finalizo);
         pedidoDto.setEstadoPedido(this.estadoPedido);
-        List<PlatoDto> platosDto = this.platos.stream()
-                .map(Plato::obtenerDto)
-                .collect(Collectors.toList());
 
-        pedidoDto.setPlatos(platosDto);
+        List<PedidoPlatoDto> pedidoPlatoDtos = this.pedidoPlatos.stream().map(pp -> {
+            PedidoPlatoDto dto = new PedidoPlatoDto();
+            dto.setId(pp.getId());
+            dto.setEstadoPlato(pp.getEstadoPlato());
+            dto.setPlato(pp.getPlato().obtenerDto());
+            return dto;
+        }).collect(Collectors.toList());
+
+        pedidoDto.setPedidoPlatos(pedidoPlatoDtos);
 
         return pedidoDto;
+    }
+
+    public Boolean todosLosPlatosFinalizados() {
+        if (pedidoPlatos == null || pedidoPlatos.isEmpty()) {
+            return false;
+        }
+        for (PedidoPlato pp : pedidoPlatos) {
+            if (pp.getEstadoPlato() != EstadoPlato.FINALIZADO) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public EstadoPedido getEstadoPedido() {
@@ -95,13 +107,12 @@ public class Pedido {
     }
 
 
-
-    public List<Plato> getPlatos() {
-        return platos;
+    public List<PedidoPlato> getPedidoPlatos() {
+        return pedidoPlatos;
     }
 
-    public void setPlatos(List<Plato> platos) {
-        this.platos = platos;
+    public void setPedidoPlatos(List<PedidoPlato> pedidoPlatos) {
+        this.pedidoPlatos = pedidoPlatos;
     }
 
     public Double getPrecio() {

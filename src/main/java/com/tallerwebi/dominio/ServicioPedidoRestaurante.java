@@ -13,4 +13,5 @@ public interface ServicioPedidoRestaurante {
 
     Long obtenerIdDelRestaurate(Long id);
 
+    void finalizarPedido(Long id);
 }
