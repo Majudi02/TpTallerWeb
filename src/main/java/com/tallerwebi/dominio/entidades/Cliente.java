@@ -2,8 +2,12 @@ package com.tallerwebi.dominio.entidades;
 
 import com.tallerwebi.presentacion.UsuarioDTO;
 
+import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Entity
@@ -16,13 +20,15 @@ public class Cliente extends UsuarioNutriya {
     private Double altura;
     private String objetivo;
 
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Direccion> direcciones = new ArrayList<>();
+
     @ElementCollection
     private List<String> etiquetas;
 
 
     public Cliente obtenerEntidad(UsuarioDTO dto) {
         Cliente cliente = new Cliente();
-
         cliente.setNombre(dto.getNombre());
         cliente.setEmail(dto.getEmail());
         cliente.setPassword(dto.getPassword());
@@ -97,5 +103,13 @@ public class Cliente extends UsuarioNutriya {
     @Override
     public String tipoUsuario() {
         return "CLIENTE";
+    }
+
+    public List<Direccion> getDirecciones() {
+        return direcciones;
+    }
+
+    public void setDirecciones(List<Direccion> direcciones) {
+        this.direcciones = direcciones;
     }
 }

@@ -1,21 +1,26 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.entidades.*;
+import com.tallerwebi.presentacion.DireccionDto;
 import com.tallerwebi.presentacion.UsuarioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
 public class ServicioUsuarioImpl implements ServicioUsuario {
 
     private final RepositorioUsuarioNutriya repositorioUsuario;
+    private RepositorioDireccion repositorioDireccion;
 
     @Autowired
-    public ServicioUsuarioImpl(RepositorioUsuarioNutriya repositorioUsuario) {
+    public ServicioUsuarioImpl(RepositorioUsuarioNutriya repositorioUsuario, RepositorioDireccion repositorioDireccion) {
         this.repositorioUsuario = repositorioUsuario;
+        this.repositorioDireccion = repositorioDireccion;
     }
 
     @Override
@@ -28,20 +33,38 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
 
         UsuarioNutriya usuario;
         if ("cliente".equalsIgnoreCase(usuarioDTO.getTipoUsuario())) {
+            // Validar que los campos de dirección estén completos
+            if (usuarioDTO.getCalle() == null || usuarioDTO.getCalle().isEmpty()
+                    || usuarioDTO.getNumero() == null
+                    || usuarioDTO.getLocalidad() == null || usuarioDTO.getLocalidad().isEmpty()) {
+                throw new IllegalArgumentException("Debe registrar una dirección completa");
+            }
+
             Cliente cliente = new Cliente();
+            // setear campos del cliente
             cliente.setEmail(usuarioDTO.getEmail());
             cliente.setPassword(usuarioDTO.getPassword());
             cliente.setNombre(usuarioDTO.getNombre());
             cliente.setTokenConfirmacion(usuarioDTO.getTokenConfirmacion());
             cliente.setConfirmado(usuarioDTO.getConfirmado());
-
             cliente.setEdad(usuarioDTO.getEdad());
             cliente.setPesoActual(usuarioDTO.getPesoActual());
             cliente.setPesoDeseado(usuarioDTO.getPesoDeseado());
             cliente.setAltura(usuarioDTO.getAltura());
             cliente.setObjetivo(usuarioDTO.getObjetivo());
-            usuario = cliente;
 
+            // Crear y asociar la única dirección
+            Direccion direccion = new Direccion();
+            direccion.setCalle(usuarioDTO.getCalle());
+            direccion.setNumero(usuarioDTO.getNumero());
+            direccion.setLocalidad(usuarioDTO.getLocalidad());
+            direccion.setCliente(cliente);
+
+            cliente.getDirecciones().add(direccion);
+
+            repositorioDireccion.guardarDireccion(direccion);
+
+            usuario = cliente;
         } else if ("restaurante".equalsIgnoreCase(usuarioDTO.getTipoUsuario())) {
             UsuarioRestaurante usuarioRestaurante = new UsuarioRestaurante();
             usuarioRestaurante.setEmail(usuarioDTO.getEmail());
@@ -133,7 +156,49 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
             cliente.setPesoDeseado(usuarioDTO.getPesoDeseado());
             cliente.setAltura(usuarioDTO.getAltura());
             cliente.setObjetivo(usuarioDTO.getObjetivo());
+            List<DireccionDto> direccionesDTO = usuarioDTO.getDirecciones();
+            if (direccionesDTO != null) {
 
+                // 1. Procesar direcciones para eliminar las marcadas como "eliminado"
+                for (DireccionDto dDto : direccionesDTO) {
+                    if (Boolean.TRUE.equals(dDto.getEliminado()) && dDto.getId() != null) {
+                        // Eliminar de la base
+                        repositorioDireccion.eliminarDireccionPorId(dDto.getId());
+                    }
+                }
+
+                // 2. Ahora actualizar/agregar las direcciones no eliminadas
+                List<Direccion> direccionesActualizadas = new ArrayList<>();
+
+                for (DireccionDto dDto : direccionesDTO) {
+                    if (Boolean.TRUE.equals(dDto.getEliminado())) {
+                        // Ya esta eliminado porloq no se agrega
+                        continue;
+                    }
+
+                    Direccion direccion;
+                    if (dDto.getId() != null) {
+                        // Buscar existente para actualizar
+                        direccion = cliente.getDirecciones().stream()
+                                .filter(d -> d.getId().equals(dDto.getId()))
+                                .findFirst()
+                                .orElse(new Direccion());
+                    } else {
+                        direccion = new Direccion();
+                        direccion.setCliente(cliente);
+                    }
+
+                    direccion.setCalle(dDto.getCalle());
+                    direccion.setNumero(dDto.getNumero());
+                    direccion.setLocalidad(dDto.getLocalidad());
+
+                    direccionesActualizadas.add(direccion);
+                }
+
+                // Reemplazar lista de direcciones en cliente
+                cliente.getDirecciones().clear();
+                cliente.getDirecciones().addAll(direccionesActualizadas);
+            }
         } else if (usuarioExistente instanceof UsuarioRestaurante && "restaurante".equalsIgnoreCase(usuarioDTO.getTipoUsuario())) {
             UsuarioRestaurante usuarioRestaurante = (UsuarioRestaurante) usuarioExistente;
             Restaurante restaurante = usuarioRestaurante.getRestaurante();
@@ -176,6 +241,9 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
 
         if (usuario instanceof Cliente) {
             Cliente c = (Cliente) usuario;
+
+            c.getDirecciones().size();
+
             dto.setNombre(c.getNombre());
             dto.setEdad(c.getEdad());
             dto.setPesoActual(c.getPesoActual());
@@ -183,6 +251,18 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
             dto.setAltura(c.getAltura());
             dto.setObjetivo(c.getObjetivo());
             dto.setTipoUsuario("cliente");
+            List<DireccionDto> direccionesDTO = new ArrayList<>();
+            if (c.getDirecciones() != null) {
+                for (Direccion d : c.getDirecciones()) {
+                    DireccionDto dDto = new DireccionDto();
+                    dDto.setId(d.getId());
+                    dDto.setCalle(d.getCalle());
+                    dDto.setNumero(d.getNumero());
+                    dDto.setLocalidad(d.getLocalidad());
+                    direccionesDTO.add(dDto);
+                }
+            }
+            dto.setDirecciones(direccionesDTO);
         } else if (usuario instanceof UsuarioRestaurante) {
             UsuarioRestaurante ur = (UsuarioRestaurante) usuario;
             Restaurante r = ur.getRestaurante();

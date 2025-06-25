@@ -101,6 +101,20 @@
             <p><strong>Etiquetas:</strong>
                 <span th:each="tag : ${usuario.etiquetas}" th:text="${tag} + ' '">Etiqueta</span>
             </p>
+            <div class="mb-1">
+                <p class="mb-1 fw-bold">Direcciones</p>
+                <div th:if="${usuario.direcciones != null}">
+                    <div th:each="dir : ${usuario.direcciones}" class="form-control mb-2">
+                        <span th:text="${dir.calle}">Calle</span>
+                        <span th:text="${dir.numero}">123</span>,
+                        <span th:text="${dir.localidad}">Localidad</span>
+                    </div>
+                </div>
+                <div th:if="${usuario.direcciones == null or #lists.isEmpty(usuario.direcciones)}">
+                    <p class="form-control">Sin direcciones registradas</p>
+                </div>
+            </div>
+
         </div>
         <div class="d-flex flex-wrap justify-content-center gap-4">
             <a class="btn btn-lg btn-green" th:href="@{/editar-usuario}">Editar</a>

@@ -35,7 +35,9 @@
                 <div class="card-header d-flex justify-content-between align-items-center text-white" style="background-color: #38BD48;">
                     <div>
                         Pedido ID: <span th:text="${pedido.id}"></span>
-                        <span class="badge bg-black rounded-pill ms-2" th:text="${pedido.estadoPedido}"></span>
+                        <span class="badge rounded-pill ms-2"
+                              th:classappend="${pedido.estadoPedido.name() == 'FINALIZADO'} ? 'bg-success' : 'bg-warning text-dark'"
+                              th:text="${pedido.estadoPedido}"></span>
                     </div>
                     <button class="btn btn-light btn-sm"
                             type="button"
@@ -44,20 +46,88 @@
                         Ver Platos
                     </button>
                 </div>
+
                 <div class="collapse" th:attr="id='platos-' + ${pedido.id}">
                     <div class="card-body">
-                        <ul class="list-group list-group-flush">
-                            <li th:each="plato : ${pedido.platos}" class="list-group-item d-flex justify-content-between align-items-center">
-                                <span th:text="${plato.nombre}"></span>
-                                <span class="badge bg-primary rounded-pill" th:text="'$' + ${plato.precio}"></span>
+                        <ul class="list-group list-group-flush mb-3">
+                            <li th:each="pedidoPlato : ${pedido.pedidoPlatos}" class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span th:text="${pedidoPlato.plato.nombre}"></span>
+                                    <span class="badge ms-2"
+                                          th:classappend="${pedidoPlato.estadoPlato.name() == 'FINALIZADO'} ? 'bg-success' : 'bg-warning text-dark'"
+                                          th:text="${pedidoPlato.estadoPlato}"></span>
+                                </div>
+
+                                <div th:if="${pedidoPlato.estadoPlato.name() == 'PENDIENTE'}" >
+                                    <form method="post" class="cambiar-estado-del-plato" th:action="@{/restaurante/finalizar-pedido}">
+                                        <input type="hidden" name="pedidoPlatoId" th:value="${pedidoPlato.id}" />
+                                        <input type="hidden" name="idUsuario" th:value="${idUsuario}" />
+                                        <button type="submit" class="btn btn-danger btn-sm">Finalizar plato</button>
+                                    </form>
+                                </div>
                             </li>
                         </ul>
+
+                        <div th:if="${pedido.estadoPedido.name() != 'FINALIZADO'}" class="text-end">
+                            <form method="post" th:action="@{/restaurante/finalizar-pedido-completo}">
+                                <input type="hidden" name="pedidoId" th:value="${pedido.id}" />
+                                <input type="hidden" name="idUsuario" th:value="${idUsuario}" />
+                                <button type="submit" class="btn btn-success btn-sm">
+                                    <i class="bi bi-check-circle"></i> Finalizar pedido completo
+                                </button>
+                            </form>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </main>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const formsFinalizarPlato = document.querySelectorAll(".cambiar-estado-del-plato");
+
+        formsFinalizarPlato.forEach(form => {
+            form.addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                const pedidoPlatoId = this.querySelector("input[name='pedidoPlatoId']").value;
+
+                fetch("/restaurante/finalizar-pedido", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: `pedidoPlatoId=${pedidoPlatoId}`
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Error al finalizar el plato");
+                        }
+
+                        // Deshabilitar y ocultar botón
+                        const boton = this.querySelector("button[type='submit']");
+                        boton.style.display = 'none';
+
+                        // Actualizar el badge de estado del plato
+                        const liPedidoPlato = this.closest('li');
+                        if (liPedidoPlato) {
+                            const badgeEstado = liPedidoPlato.querySelector('span.badge.ms-2');
+                            if (badgeEstado) {
+                                badgeEstado.textContent = "FINALIZADO";
+                                badgeEstado.classList.remove('bg-warning', 'text-dark');
+                                badgeEstado.classList.add('bg-success');
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        alert(error.message);
+                    });
+            });
+        });
+    });
+</script>
 
 <script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 </body>

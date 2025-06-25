@@ -11,6 +11,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import javax.servlet.http.HttpSession;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -93,7 +94,7 @@ public class ControladorEdicionUsuarioTest {
 
         verify(servicioUsuarioMock).editarUsuario(usuarioEditado);
         verify(servicioUsuarioMock).getUsuario("cliente@mail.com");
-        assertEquals("redirect:/perfil-cliente", vista);
+        assertEquals("redirect:/cliente/perfil", vista);
     }
 
     @Test
@@ -132,7 +133,40 @@ public class ControladorEdicionUsuarioTest {
         verify(servicioUsuarioMock).editarUsuario(any());
 
         // Verifico que se redirige al perfil del restaurantre
-        assertEquals("redirect:/perfil-restaurante", vista);
+        assertEquals("redirect:/restaurante/perfil", vista);
+    }
+
+    @Test
+    public void editarUnClienteConDireccionesDeberiaLlamarAlServicioUsuario() {
+        // Simulo usuario en sesion
+        UsuarioDTO usuarioSesion = new UsuarioDTO();
+        usuarioSesion.setId(1L);
+        usuarioSesion.setEmail("damian@test.com");
+        usuarioSesion.setTipoUsuario("cliente");
+
+        // Simular edic de direcc
+        UsuarioDTO usuarioEditado = new UsuarioDTO();
+        usuarioEditado.setId(1L);
+        usuarioEditado.setEmail("damian@test.com");
+        usuarioEditado.setTipoUsuario("cliente");
+
+        // Agregamos una direccion nueva
+        DireccionDto direccion1 = new DireccionDto();
+        direccion1.setId(null);
+        direccion1.setCalle("Calle Nombre");
+        direccion1.setNumero(123);
+        direccion1.setLocalidad("Localidad Nombre");
+
+        usuarioEditado.setDirecciones(List.of(direccion1));
+
+        request.getSession().setAttribute("usuario", usuarioSesion);
+
+        when(servicioUsuarioMock.getUsuario("damian@test.com")).thenReturn(usuarioEditado);
+
+        String vista = controlador.procesarEdicion(usuarioEditado, null, request, modeloMock);
+
+        verify(servicioUsuarioMock).editarUsuario(usuarioEditado);
+        assertEquals("redirect:/cliente/perfil", vista);
     }
 
 }

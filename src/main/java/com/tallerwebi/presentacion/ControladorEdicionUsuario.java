@@ -89,11 +89,11 @@ public class ControladorEdicionUsuario {
 
             switch (actualizado.getTipoUsuario()) {
                 case "cliente":
-                    return "redirect:/perfil-cliente";
+                    return "redirect:/cliente/perfil";
                 case "restaurante":
-                    return "redirect:/perfil-restaurante";
+                    return "redirect:/restaurante/perfil";
                 case "repartidor":
-                    return "redirect:/perfil-repartidor";
+                    return "redirect:/repartidor/perfil";
                 default:
                     return "redirect:/nutriya";
             }

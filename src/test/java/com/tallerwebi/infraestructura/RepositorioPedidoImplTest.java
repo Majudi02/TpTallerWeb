@@ -1,8 +1,6 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.entidades.Cliente;
-import com.tallerwebi.dominio.entidades.Pedido;
-import com.tallerwebi.dominio.entidades.Plato;
+import com.tallerwebi.dominio.entidades.*;
 import com.tallerwebi.infraestructura.config.HibernateInfraestructuraTestConfig;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -68,7 +66,7 @@ public class RepositorioPedidoImplTest {
 
         Pedido pedido = new Pedido();
         pedido.setUsuario(usuario);
-        pedido.setPlatos(new ArrayList<>());
+        pedido.setPedidoPlatos(new ArrayList<>());
         pedido.setFinalizo(false);
         pedido.setPrecio(0.0);
         sessionFactory.getCurrentSession().save(pedido);
@@ -77,7 +75,8 @@ public class RepositorioPedidoImplTest {
 
         Pedido pedidoActualizado = sessionFactory.getCurrentSession().get(Pedido.class, pedido.getId());
 
-        assertTrue(pedidoActualizado.getPlatos().contains(plato));
+
+        assertEquals(1, pedidoActualizado.getPedidoPlatos().size());
 
     }
 
@@ -87,16 +86,34 @@ public class RepositorioPedidoImplTest {
         Cliente usuario = new Cliente();
         sessionFactory.getCurrentSession().save(usuario);
 
+        Plato plato = new Plato();
+        plato.setNombre("Milanesa");
+        plato.setPrecio(100.0);
+        sessionFactory.getCurrentSession().save(plato);
+
         Pedido pedido = new Pedido();
         pedido.setUsuario(usuario);
-        pedido.setPlatos(new ArrayList<>());
+        pedido.setPedidoPlatos(new ArrayList<>());
         pedido.setFinalizo(false);
-        pedido.setPrecio(0.0);
+        pedido.setPrecio(100.0);
         sessionFactory.getCurrentSession().save(pedido);
+
+        PedidoPlato pedidoPlato = new PedidoPlato();
+        pedidoPlato.setPedido(pedido);
+        pedidoPlato.setPlato(plato);
+        pedidoPlato.setEstadoPlato(EstadoPlato.FINALIZADO);
+        sessionFactory.getCurrentSession().save(pedidoPlato);
+
+
+        pedido.getPedidoPlatos().add(pedidoPlato);
+        sessionFactory.getCurrentSession().saveOrUpdate(pedido);
 
         repositorioPedido.finalizarPedido(usuario.getId());
 
-        assertTrue(pedido.isFinalizo());
+        Pedido pedidoActualizado = sessionFactory.getCurrentSession().get(Pedido.class, pedido.getId());
 
+        assertTrue(pedidoActualizado.isFinalizo());
     }
 }
+
+

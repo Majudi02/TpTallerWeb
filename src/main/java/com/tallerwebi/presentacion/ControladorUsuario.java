@@ -59,7 +59,7 @@ public class ControladorUsuario {
                 datosInvalidos = usuarioDTO.getNombre() == null || usuarioDTO.getEmail() == null || usuarioDTO.getPassword() == null ||
                         usuarioDTO.getEdad() == null || usuarioDTO.getPesoActual() == null ||
                         usuarioDTO.getPesoDeseado() == null || usuarioDTO.getAltura() == null ||
-                        usuarioDTO.getObjetivo() == null;
+                        usuarioDTO.getObjetivo() == null || usuarioDTO.getCalle() == null || usuarioDTO.getNumero() == null || usuarioDTO.getLocalidad() == null;
                 break;
             case "restaurante":
                 datosInvalidos = usuarioDTO.getNombre() == null || usuarioDTO.getEmail() == null || usuarioDTO.getPassword() == null ||
@@ -125,6 +125,7 @@ public class ControladorUsuario {
 
         ModelMap modelo = new ModelMap();
         modelo.put("emailEnviadoA", usuarioDTO.getEmail());
+
         return new ModelAndView("confirmacion", modelo);
 
 

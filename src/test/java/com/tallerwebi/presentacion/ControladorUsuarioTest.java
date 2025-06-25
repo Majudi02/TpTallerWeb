@@ -2,7 +2,9 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.entidades.Cliente;
+import com.tallerwebi.dominio.entidades.Direccion;
 import com.tallerwebi.dominio.entidades.Restaurante;
+import com.tallerwebi.dominio.entidades.UsuarioNutriya;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.ui.ConcurrentModel;
@@ -13,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,13 +31,15 @@ public class ControladorUsuarioTest {
     private ServicioEmail servicioEmail;
     private RepositorioUsuarioNutriya repositorioUsuario;
     private HttpServletRequest httpServletRequest;
+    private RepositorioDireccion repositorioDireccion;
 
     @BeforeEach
     public void init() {
         repositorioUsuario = mock(RepositorioUsuarioNutriya.class);
-        servicioUsuario = new ServicioUsuarioImpl(repositorioUsuario);
+        repositorioDireccion = mock(RepositorioDireccion.class);
+        servicioUsuario = new ServicioUsuarioImpl(repositorioUsuario, repositorioDireccion);
         servicioRestaurante = mock(ServicioRestaurante.class);
-        servicioEmail=mock(ServicioEmail.class);
+        servicioEmail = mock(ServicioEmail.class);
         controlador = new ControladorUsuario(servicioUsuario, servicioRestaurante, servicioEmail);
 
         httpServletRequest = mock(HttpServletRequest.class);
@@ -54,13 +59,17 @@ public class ControladorUsuarioTest {
         cliente.setPesoDeseado(55);
         cliente.setAltura(1.65);
         cliente.setObjetivo("bajar de peso");
+        cliente.setCalle("Calle Nombre");
+        cliente.setNumero(123);
+        cliente.setLocalidad("Localidad Nombre");
 
         when(repositorioUsuario.buscarPorEmail("ana@mail.com")).thenReturn(null);
 
         RedirectAttributesModelMap redirect = new RedirectAttributesModelMap();
         ModelAndView resultado = controlador.registrarUsuario(cliente, null, redirect);
 
-        verify(repositorioUsuario).guardar(any(Cliente.class));
+        verify(repositorioUsuario).guardar(any(UsuarioNutriya.class));
+        verify(repositorioDireccion).guardarDireccion(any());
 
         assertEquals("confirmacion", resultado.getViewName());
         assertEquals("ana@mail.com", resultado.getModel().get("emailEnviadoA"));
@@ -171,6 +180,35 @@ public class ControladorUsuarioTest {
         assertNotNull(restaurante, "El restaurante debería existir en el servicio");
         assertEquals("Restaurante Test", restaurante.getNombre());
     }
+
+    @Test
+    public void DadoQueRegistroClienteConUnaDireccionSeGuardaCorrectamente() {
+        UsuarioDTO cliente = new UsuarioDTO();
+        cliente.setTipoUsuario("cliente");
+        cliente.setNombre("Ana");
+        cliente.setEmail("ana@mail.com");
+        cliente.setPassword("1234");
+        cliente.setEdad(25);
+        cliente.setPesoActual(60);
+        cliente.setPesoDeseado(55);
+        cliente.setAltura(1.65);
+        cliente.setObjetivo("bajar de peso");
+
+        cliente.setCalle("Dante Alighieri");
+        cliente.setNumero(123);
+        cliente.setLocalidad("La Matanza");
+
+        when(repositorioUsuario.buscarPorEmail("ana@mail.com")).thenReturn(null);
+
+        RedirectAttributesModelMap redirect = new RedirectAttributesModelMap();
+        ModelAndView resultado = controlador.registrarUsuario(cliente, null, redirect);
+
+        assertEquals("confirmacion", resultado.getViewName());
+        assertEquals("ana@mail.com", resultado.getModel().get("emailEnviadoA"));
+
+        verify(repositorioUsuario, atLeastOnce()).guardar(any(Cliente.class));
+    }
+
 
 }
 

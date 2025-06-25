@@ -3,7 +3,8 @@ package com.tallerwebi.dominio;
 import com.tallerwebi.dominio.entidades.Etiqueta;
 import com.tallerwebi.dominio.entidades.Pedido;
 import com.tallerwebi.dominio.entidades.Plato;
-import com.tallerwebi.dominio.entidades.Restaurante;
+import com.tallerwebi.dominio.entidades.PedidoPlato;
+import com.tallerwebi.presentacion.PedidoPlatoDto;
 import com.tallerwebi.infraestructura.RepositorioPlatoImpl;
 import com.tallerwebi.presentacion.PedidoDto;
 import com.tallerwebi.presentacion.UsuarioDTO;
@@ -32,10 +33,8 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public List<PlatoDto> traerPlatosDestacados() {
-
         return null;
     }
-
 
     @Override
     @Transactional
@@ -90,9 +89,13 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public List<PlatoDto> mostrarPlatosDelPedidoActual(Long idUsuario) {
-
-        return this.repositorioPedido.mostrarPlatosDelPedidoActual(idUsuario).stream().map(Plato::obtenerDto).collect(Collectors.toList());
+    public List<PedidoPlatoDto> mostrarPlatosDelPedidoActual(Long idUsuario) {
+        System.out.println("Buscando platos del pedido actual del usuario ID: " + idUsuario);
+        return this.repositorioPedido
+                .mostrarPlatosDelPedidoActual(idUsuario)
+                .stream()
+                .map(PedidoPlato::obtenerDto)
+                .collect(Collectors.toList());
     }
 
 
@@ -100,6 +103,7 @@ public class PedidoServiceImpl implements PedidoService {
     public Double mostrarPrecioTotalDelPedidoActual(Long idUsuario) {
         return this.repositorioPedido.mostrarPrecioTotalDelPedidoActual(idUsuario);
     }
+
 
     @Override
     public void finalizarPedido(Long id) {
@@ -109,13 +113,6 @@ public class PedidoServiceImpl implements PedidoService {
 
 
 
-
-/*        @Override
-        public void guardarPlatoDb(Plato plato) {
-
-        }
-
- */
 
 
 }
