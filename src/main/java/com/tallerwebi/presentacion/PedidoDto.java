@@ -1,10 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.PlatoDto;
-import com.tallerwebi.dominio.entidades.EstadoPedido;
-import com.tallerwebi.dominio.entidades.Pedido;
-import com.tallerwebi.dominio.entidades.Plato;
-import com.tallerwebi.dominio.entidades.UsuarioNutriya;
+import com.tallerwebi.dominio.entidades.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +14,7 @@ public class PedidoDto {
     private Long usuarioId;
     private Double precio;
     private boolean finalizo;
-    private List<PlatoDto> platos;
+    private List<PedidoPlatoDto> pedidoPlatos;
     private EstadoPedido estadoPedido;
 
 
@@ -25,14 +22,14 @@ public class PedidoDto {
     public PedidoDto() {
     }
 
-    public PedidoDto(Integer id, String fecha, Long usuarioId, Double precio,boolean finalizo, List<PlatoDto> platos, EstadoPedido estadoPedido) {
+    public PedidoDto(Integer id, String fecha, Long usuarioId, Double precio, boolean finalizo, List<PedidoPlatoDto> pedidoPlatos, EstadoPedido estadoPedido) {
         this.id = id;
         this.fecha = fecha;
         this.usuarioId = usuarioId;
         this.precio = precio;
-        this.finalizo=finalizo;
-        this.platos = platos;
-        this.estadoPedido=estadoPedido;
+        this.finalizo = finalizo;
+        this.pedidoPlatos = pedidoPlatos;
+        this.estadoPedido = estadoPedido;
     }
 
     public PedidoDto(Pedido pedido) {
@@ -40,39 +37,57 @@ public class PedidoDto {
         this.fecha = pedido.getFecha();
         this.usuarioId = pedido.getUsuario().getId();
         this.precio = pedido.getPrecio();
-        this.finalizo=pedido.isFinalizo();
-        this.estadoPedido=pedido.getEstadoPedido();
-        this.platos = pedido.getPlatos()
+        this.finalizo = pedido.isFinalizo();
+        this.estadoPedido = pedido.getEstadoPedido();
+
+        this.pedidoPlatos = pedido.getPedidoPlatos()
                 .stream()
-                .map(PlatoDto::new)
+                .map(pedidoPlato -> {
+                    PedidoPlatoDto dto = new PedidoPlatoDto();
+                    dto.setId(pedidoPlato.getId());
+                    dto.setEstadoPlato(pedidoPlato.getEstadoPlato());
+                    dto.setPlato(new PlatoDto(pedidoPlato.getPlato()));
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
 
-    
-    public Pedido obtenerEntidad(UsuarioNutriya usuario, List<Plato> platosEntidad) {
+
+    public List<PedidoPlatoDto> getPedidoPlatosDelRestaurante(Long idRestaurante) {
+        return pedidoPlatos != null
+                ? pedidoPlatos.stream()
+                .filter(pp -> pp.getPlato().getIdRestaurante().equals(idRestaurante))
+                .collect(Collectors.toList())
+                : new ArrayList<>();
+    }
+
+
+    public Pedido obtenerEntidad(UsuarioNutriya usuario) {
         Pedido pedido = new Pedido();
         pedido.setId(this.id);
         pedido.setFecha(this.fecha);
         pedido.setUsuario(usuario);
-        pedido.setPlatos(platosEntidad);
         pedido.setPrecio(this.precio);
         pedido.setFinalizo(this.finalizo);
+        pedido.setEstadoPedido(this.estadoPedido);
+
+
+        List<PedidoPlato> pedidoPlatosEntidad = this.pedidoPlatos.stream().map(ppDto -> {
+            PedidoPlato pedidoPlato = new PedidoPlato();
+            pedidoPlato.setPlato(ppDto.getPlato().obtenerEntidad());
+            pedidoPlato.setEstadoPlato(ppDto.getEstadoPlato());
+            pedidoPlato.setPedido(pedido);
+            return pedidoPlato;
+        }).collect(Collectors.toList());
+
+        pedido.setPedidoPlatos(pedidoPlatosEntidad);
+
         return pedido;
     }
 
-    public List<Plato> obtenerPlatosEntidad() {
-        List<Plato> platosEntidad = new ArrayList<>();
-
-        for (PlatoDto platoDto : platos) {
-            platosEntidad.add(platoDto.obtenerEntidad());
-        }
-
-        return platosEntidad;
-    }
-
-    public List<PlatoDto> obtenerPlatosDelRestaurante(Long idRestaurante) {
-        return platos.stream()
-                .filter(plato -> plato.getIdRestaurante().equals(idRestaurante))
+    public List<PedidoPlatoDto> obtenerPlatosDelRestaurante(Long idRestaurante) {
+        return pedidoPlatos.stream()
+                .filter(pp -> pp.getPlato().getIdRestaurante().equals(idRestaurante))
                 .collect(Collectors.toList());
     }
 
@@ -125,11 +140,11 @@ public class PedidoDto {
         this.precio = precio;
     }
 
-    public List<PlatoDto> getPlatos() {
-        return platos;
+    public List<PedidoPlatoDto> getPedidoPlatos() {
+        return pedidoPlatos;
     }
 
-    public void setPlatos(List<PlatoDto> platos) {
-        this.platos = platos;
+    public void setPedidoPlatos(List<PedidoPlatoDto> pedidoPlatos) {
+        this.pedidoPlatos = pedidoPlatos;
     }
 }

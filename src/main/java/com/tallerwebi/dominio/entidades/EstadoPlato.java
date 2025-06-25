@@ -1,8 +1,7 @@
 package com.tallerwebi.dominio.entidades;
 
-public enum EstadoPedido {
+public enum EstadoPlato {
     PENDIENTE,
-    EN_PROCESO,
-    EN_CAMINO,
+  //  EN_PROCESO,
     FINALIZADO
 }
