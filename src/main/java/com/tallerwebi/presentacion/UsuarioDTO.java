@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.entidades.Direccion;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class UsuarioDTO {
     private Double altura;
     private String objetivo;
     private List<String> etiquetas;
-
+    private List<DireccionDto> direcciones;
 
     // Campos Restaurante
     private String descripcion;
@@ -258,6 +259,14 @@ public class UsuarioDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<DireccionDto> getDirecciones() {
+        return direcciones;
+    }
+
+    public void setDirecciones(List<DireccionDto> direcciones) {
+        this.direcciones = direcciones;
     }
 }
 

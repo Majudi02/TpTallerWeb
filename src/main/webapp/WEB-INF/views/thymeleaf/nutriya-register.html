@@ -101,7 +101,7 @@
         <form id="formRegistro" th:action="@{/nutriya-register}" th:object="${registroUsuarioDTO}" method="post"
               enctype="multipart/form-data" accept-charset="UTF-8">
 
-        <!-- Paso 1: Tipo de usuario -->
+            <!-- Paso 1: Tipo de usuario -->
 
             <div id="paso1" class="paso activo">
                 <div class="d-flex flex-column gap-5 align-center">
@@ -218,9 +218,40 @@
                     <button type="button" class="btn btn-secondary"
                             onclick="cambiarPaso('paso4-cliente', 'paso3-cliente')">Volver
                     </button>
+                    <button type="button" class="btn btn-green"
+                            onclick="cambiarPaso('paso4-cliente', 'paso5-cliente')">Siguiente
+                    </button>
+                </div>
+            </div>
+
+            <!-- Paso 5 Cliente (direcion) -->
+            <div id="paso5-cliente" class="paso cliente">
+                <h3 class="mb-4">¿Dónde vivís?</h3>
+
+                <div class="mb-3">
+                    <label for="calle">Calle</label>
+                    <input th:field="*{calle}" id="calle" type="text" class="form-control cliente-input" required/>
+                </div>
+
+                <div class="mb-3">
+                    <label for="numero">Número</label>
+                    <input th:field="*{numero}" id="numero" type="number" class="form-control cliente-input" required/>
+                </div>
+
+                <div class="mb-3">
+                    <label for="localidad">Localidad</label>
+                    <input th:field="*{localidad}" id="localidad" type="text" class="form-control cliente-input"
+                           required/>
+                </div>
+
+                <div class="d-flex justify-content-between btn-group">
+                    <button type="button" class="btn btn-secondary"
+                            onclick="cambiarPaso('paso5-cliente', 'paso4-cliente')">Volver
+                    </button>
                     <button type="submit" class="btn btn-green">Registrarme</button>
                 </div>
             </div>
+
 
             <!-- Paso 2 Restaurante -->
             <div id="paso2-restaurante" class="paso restaurante">
@@ -400,7 +431,7 @@
     </div>
 </footer>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const pasos = document.querySelectorAll('.paso');
         const tipoUsuarioRadios = document.querySelectorAll('input[name="tipoUsuario"]');
         const allInputs = document.querySelectorAll('.cliente-input, .restaurante-input, .repartidor-input');
@@ -465,7 +496,7 @@
                 actual.classList.remove('activo');
                 siguiente.classList.add('activo');
             } else {
-                console.error('Error: paso no encontrado', { pasoActualId, pasoSiguienteId });
+                console.error('Error: paso no encontrado', {pasoActualId, pasoSiguienteId});
             }
         }
 

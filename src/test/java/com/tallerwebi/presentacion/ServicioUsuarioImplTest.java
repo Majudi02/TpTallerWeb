@@ -20,11 +20,13 @@ public class ServicioUsuarioImplTest {
 
     private ServicioUsuarioImpl servicioUsuario;
     private RepositorioUsuarioNutriya repositorioMock;
+    private RepositorioDireccion repositorioDireccionMock;
 
     @BeforeEach
     public void init() {
         repositorioMock = mock(RepositorioUsuarioNutriya.class);
-        servicioUsuario = new ServicioUsuarioImpl(repositorioMock);
+        repositorioDireccionMock = mock(RepositorioDireccion.class);
+        servicioUsuario = new ServicioUsuarioImpl(repositorioMock, repositorioDireccionMock);
     }
 
     @Test
@@ -172,7 +174,7 @@ public class ServicioUsuarioImplTest {
 
 
     @Test
-    public void queSePuedaTraerUnUsuarioConUnToken(){
+    public void queSePuedaTraerUnUsuarioConUnToken() {
 
         String token = UUID.randomUUID().toString();
         UsuarioNutriya usuarioMock = new Cliente();
@@ -189,7 +191,7 @@ public class ServicioUsuarioImplTest {
     }
 
     @Test
-    public void queSePuedaConfirmarUnUsuarioConUnToken(){
+    public void queSePuedaConfirmarUnUsuarioConUnToken() {
         String token = UUID.randomUUID().toString();
         UsuarioNutriya usuarioMock = new Cliente();
         usuarioMock.setEmail("test@mail.com");
@@ -207,5 +209,53 @@ public class ServicioUsuarioImplTest {
         verify(repositorioMock).guardar(usuarioMock);
     }
 
+    @Test
+    public void puedoRegistrarUnClienteYGuardarSuDireccion() {
+        UsuarioDTO dto = new UsuarioDTO();
+        dto.setTipoUsuario("cliente");
+        dto.setEmail("test@mail.com");
+        dto.setPassword("1234");
+        dto.setNombre("Damian");
+        dto.setEdad(21);
+        dto.setPesoActual(90);
+        dto.setPesoDeseado(80);
+        dto.setAltura(1.72);
+        dto.setObjetivo("bajar");
+
+        dto.setCalle("Calle Falsa");
+        dto.setNumero(123);
+        dto.setLocalidad("Localidad");
+
+        when(repositorioMock.buscarPorEmail("test@mail.com")).thenReturn(null);
+
+        servicioUsuario.registrarUsuario(dto);
+
+        verify(repositorioMock).guardar(any(Cliente.class));
+        verify(repositorioDireccionMock).guardarDireccion(any());
+    }
+
+    @Test
+    public void noPuedoRegistrarUnClienteSinDireccion() {
+        UsuarioDTO dto = new UsuarioDTO();
+        dto.setTipoUsuario("cliente");
+        dto.setEmail("test@mail.com");
+        dto.setPassword("1234");
+        dto.setNombre("Damian");
+        dto.setEdad(21);
+        dto.setPesoActual(90);
+        dto.setPesoDeseado(80);
+        dto.setAltura(1.72);
+        dto.setObjetivo("bajar");
+        // NO seteo las direcciones
+
+        when(repositorioMock.buscarPorEmail("test@mail.com")).thenReturn(null);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            servicioUsuario.registrarUsuario(dto);
+        });
+
+        verify(repositorioMock, never()).guardar(any());
+        verify(repositorioDireccionMock, never()).guardarDireccion(any());
+    }
 
 }

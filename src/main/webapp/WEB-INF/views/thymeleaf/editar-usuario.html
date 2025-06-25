@@ -85,8 +85,41 @@
                             <option value="Ganar masa">Ganar masa muscular</option>
                         </select>
                     </div>
-                </div>
 
+                    <h4>Direcciones</h4>
+                    <div id="contenedorDirecciones">
+                        <!-- iterStat.index obtienw el indice del elemento en la lista, para poder asi si se agrega / borra una direccion que cambie su indice de array -->
+                        <div th:each="dir, iterStat : ${usuarioDTO.direcciones}" class="direccion-card card mb-2 p-3">
+                            <input type="hidden" th:name="'direcciones[' + ${iterStat.index} + '].id'"
+                                   th:value="${dir.id}"/>
+                            <input type="hidden" th:name="'direcciones[' + ${iterStat.index} + '].eliminado'"
+                                   value="false"/>
+
+                            <div class="mb-2">
+                                <label>Calle:</label>
+                                <input type="text" th:name="'direcciones[' + ${iterStat.index} + '].calle'"
+                                       th:value="${dir.calle}" class="form-control"/>
+                            </div>
+                            <div class="mb-2">
+                                <label>Número:</label>
+                                <input type="number" th:name="'direcciones[' + ${iterStat.index} + '].numero'"
+                                       th:value="${dir.numero}" class="form-control"/>
+                            </div>
+                            <div class="mb-2">
+                                <label>Localidad:</label>
+                                <input type="text" th:name="'direcciones[' + ${iterStat.index} + '].localidad'"
+                                       th:value="${dir.localidad}" class="form-control"/>
+                            </div>
+
+                            <button type="button" class="btn btn-sm btn-danger"
+                                    onclick="marcarDireccionEliminada(this)">Eliminar
+                            </button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-green mt-2" onclick="agregarDireccion()">Agregar
+                        dirección
+                    </button>
+                </div>
 
                 <div th:case="'restaurante'">
                     <div class="mb-3">
@@ -198,5 +231,79 @@
         </form>
     </div>
 </main>
+<script>
+    // marca la dirección como eliminada (para que el backend la procsese)
+    function marcarDireccionEliminada(btn) {
+        // buscamos el .direccion-card más cercano
+        const bloqueDireccion = btn.closest('.direccion-card');
+        if (!bloqueDireccion) return;
+
+        // buca el input oculto 'eliminado' y lo pone en true para borrarlo de la db cuando llegue al controlador
+        const inputEliminado = bloqueDireccion.querySelector('input[name$=".eliminado"]');
+        if (inputEliminado) {
+            inputEliminado.value = "true";
+        }
+
+        // ocutlo el card para el usuario
+        bloqueDireccion.style.display = 'none';
+
+        // reindexa para mantener indices correctos
+        reindexarDirecciones();
+    }
+
+    // Agrega un bloque nuevo para direcciom vaica
+    function agregarDireccion() {
+        const contenedor = document.getElementById('contenedorDirecciones');
+        const cantidad = contenedor.children.length;
+
+        const nuevoBloque = document.createElement('div');
+        nuevoBloque.classList.add('direccion-card', 'card', 'mb-2', 'p-3');
+        nuevoBloque.innerHTML = `
+    <input type="hidden" name="direcciones[${cantidad}].id" value=""/>
+    <input type="hidden" name="direcciones[${cantidad}].eliminado" value="false"/>
+
+    <div class="mb-2">
+      <label>Calle:</label>
+      <input type="text" name="direcciones[${cantidad}].calle" value="" class="form-control"/>
+    </div>
+    <div class="mb-2">
+      <label>Número:</label>
+      <input type="number" name="direcciones[${cantidad}].numero" value="" class="form-control"/>
+    </div>
+    <div class="mb-2">
+      <label>Localidad:</label>
+      <input type="text" name="direcciones[${cantidad}].localidad" value="" class="form-control"/>
+    </div>
+
+    <button type="button" class="btn btn-sm btn-danger" onclick="marcarDireccionEliminada(this)">Eliminar</button>
+  `;
+
+        contenedor.appendChild(nuevoBloque);
+    }
+
+
+    // Reindexa los inputs para que los índices sean consecutivos 0,1,2,3...
+    function reindexarDirecciones() {
+        const contenedor = document.getElementById('contenedorDirecciones');
+        const bloques = contenedor.querySelectorAll('.direccion-card');
+
+        bloques.forEach((bloque, index) => {
+            const inputId = bloque.querySelector('input[type="hidden"][name$=".id"]');
+            if (inputId) inputId.name = `direcciones[${index}].id`;
+
+            const inputEliminado = bloque.querySelector('input[name$=".eliminado"]');
+            if (inputEliminado) inputEliminado.name = `direcciones[${index}].eliminado`;
+
+            const inputCalle = bloque.querySelector('input[name$=".calle"]');
+            if (inputCalle) inputCalle.name = `direcciones[${index}].calle`;
+
+            const inputNumero = bloque.querySelector('input[name$=".numero"]');
+            if (inputNumero) inputNumero.name = `direcciones[${index}].numero`;
+
+            const inputLocalidad = bloque.querySelector('input[name$=".localidad"]');
+            if (inputLocalidad) inputLocalidad.name = `direcciones[${index}].localidad`;
+        });
+    }
+</script>
 </body>
 </html>
