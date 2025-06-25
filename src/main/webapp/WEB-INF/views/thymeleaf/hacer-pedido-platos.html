@@ -84,6 +84,8 @@
         </div>
     </div>
 </header>
+
+<div id="notificaciones"  style="margin-top: 8em"></div>
 <main class="my-5">
     <!-- Filtros -->
     <form method="get" class="filters container mb-2 mt-5" th:action="@{/pedido/platos}">
@@ -165,6 +167,24 @@
 </main>
 
 <script>
+
+    const eventSource = new EventSource('/restaurante/notificaciones-pedidos');
+
+    eventSource.addEventListener('nuevo-plato', function (event) {
+        const mensaje = event.data;
+        console.log("📬 Nuevo mensaje recibido:", mensaje);
+
+        // Ejemplo: mostrarlo en un div
+        const contenedor = document.getElementById("notificaciones");
+        if (contenedor) {
+            const p = document.createElement("p");
+            p.textContent = mensaje;
+            contenedor.appendChild(p);
+        } else {
+            alert(mensaje); // Fallback si no hay div
+        }
+    });
+
     document.addEventListener("DOMContentLoaded", function () {
         const forms = document.querySelectorAll(".agregar-plato-form");
         actualizarCarrito();

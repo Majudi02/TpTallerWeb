@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.config.NotificacionPedidoController;
 import com.tallerwebi.dominio.entidades.Etiqueta;
 import com.tallerwebi.dominio.entidades.Pedido;
 import com.tallerwebi.dominio.entidades.Plato;
@@ -23,6 +24,9 @@ import java.util.stream.Collectors;
 public class PedidoServiceImpl implements PedidoService {
     private final RepositorioPlatoImpl repositorioPlatoImpl;
     private RepositorioPedido repositorioPedido;
+
+    @Autowired
+    private NotificacionPedidoController notificacionController;
 
     @Autowired
     public PedidoServiceImpl(RepositorioPlatoImpl repositorioPlatoImpl,RepositorioPedido repositorioPedido) {
@@ -62,8 +66,8 @@ public class PedidoServiceImpl implements PedidoService {
 
 
     @Override
-    public PedidoDto buscarPedidoActivoPorUsuario() {
-        Pedido pedido= this.repositorioPedido.buscarPedidoActivoPorUsuario();
+    public PedidoDto buscarPedidoActivoPorUsuario(Long idUsuario) {
+        Pedido pedido= this.repositorioPedido.buscarPedidoActivoPorUsuario(idUsuario);
         return  pedido.obtenerDto();
     }
 
@@ -90,7 +94,6 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public List<PedidoPlatoDto> mostrarPlatosDelPedidoActual(Long idUsuario) {
-        System.out.println("Buscando platos del pedido actual del usuario ID: " + idUsuario);
         return this.repositorioPedido
                 .mostrarPlatosDelPedidoActual(idUsuario)
                 .stream()
@@ -107,12 +110,10 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public void finalizarPedido(Long id) {
-        this.repositorioPedido.finalizarPedido(id);
+        Pedido pedidoFinalizado = this.repositorioPedido.finalizarPedido(id);
+        if (pedidoFinalizado != null) {
+            notificacionController.notificarMensaje("**Nuevo pedido disponible**");
+        }
     }
-
-
-
-
-
 
 }

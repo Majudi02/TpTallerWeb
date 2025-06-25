@@ -12,6 +12,6 @@ public interface RepositorioPedido {
     List<PedidoPlato> mostrarPlatosDelPedidoActual(Long idUsuario);
     Double mostrarPrecioTotalDelPedidoActual(Long idUsuario);
     Pedido buscarPedidoActivoPorUsuario(Long idUsuario);
-    void finalizarPedido(Long id);
+    Pedido finalizarPedido(Long id);
     Pedido buscarPorId(Integer idPedido);
 }
