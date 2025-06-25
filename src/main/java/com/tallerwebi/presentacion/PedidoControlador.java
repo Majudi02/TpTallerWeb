@@ -98,8 +98,11 @@ public class PedidoControlador {
     public void agregarPlatoAlPedido(@RequestParam("platoId") Integer platoId, HttpServletRequest request) {
             UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
 
+
             PlatoDto platoBuscado = servicioRestaurante.obtenerPlatoPorId(platoId);
-            pedidoService.agregarPlatoAlPedido(platoBuscado, usuario);
+        System.out.println("Agregando plato al pedido. Usuario ID: " + usuario.getId() + ", Plato ID: " + platoBuscado.getId());
+
+        pedidoService.agregarPlatoAlPedido(platoBuscado, usuario);
 
     }
 

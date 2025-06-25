@@ -23,12 +23,10 @@
         private RepositorioPedidoPlato repositorioPedidoPlato;
 
 
-
         @Autowired
-        public RepositorioPedidoImpl(SessionFactory sessionFactory){
-            this.sessionFactory=sessionFactory;
+        public RepositorioPedidoImpl(SessionFactory sessionFactory) {
+            this.sessionFactory = sessionFactory;
         }
-
 
 
         @Override
@@ -74,13 +72,16 @@
 
         @Override
         public List<PedidoPlato> mostrarPlatosDelPedidoActual(Long idUsuario) {
-            Pedido pedido = buscarPedidoActivoPorUsuario(idUsuario);
-            if (pedido != null) {
-                return pedido.getPedidoPlatos();
-            }
-            return new ArrayList<>();
-        }
+            String hql = "SELECT pp FROM PedidoPlato pp " +
+                    "JOIN FETCH pp.plato " +
+                    "JOIN pp.pedido p " +
+                    "WHERE p.usuario.id = :usuarioId AND p.finalizo = false";
 
+            return sessionFactory.getCurrentSession()
+                    .createQuery(hql, PedidoPlato.class)
+                    .setParameter("usuarioId", idUsuario)
+                    .getResultList();
+        }
 
 
         @Override
@@ -88,8 +89,6 @@
             Pedido pedido = this.buscarPedidoActivoPorUsuario(idUsuario);
             return (pedido != null && pedido.getPrecio() != null) ? pedido.getPrecio() : 0.0;
         }
-
-
 
 
         @Override
@@ -122,22 +121,13 @@
 
 
         @Override
-        public void finalizarPedido(Long id) {
-            PedidoPlato pedidoPlato = sessionFactory.getCurrentSession().get(PedidoPlato.class, id);
-            pedidoPlato.setEstadoPlato(EstadoPlato.FINALIZADO);
+        public void finalizarPedido(Long idUsuario) {
+            Pedido pedido = this.buscarPedidoActivoPorUsuario(idUsuario);
 
-            Pedido pedido = pedidoPlato.getPedido();
-            if (pedido.todosLosPlatosFinalizados()) {
-                pedido.setEstadoPedido(EstadoPedido.FINALIZADO);
-                pedido.setFinalizo(true);
-            }
-            sessionFactory.getCurrentSession().saveOrUpdate(pedidoPlato);
+            pedido.setFinalizo(true);
+            pedido.setEstadoPedido(EstadoPedido.EN_PROCESO);
+            sessionFactory.getCurrentSession().saveOrUpdate(pedido);
+
+
         }
-
-
-
-
-
-
-
     }
