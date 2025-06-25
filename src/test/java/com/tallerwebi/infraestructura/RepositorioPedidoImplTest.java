@@ -136,6 +136,50 @@ public class RepositorioPedidoImplTest {
         assertTrue(pedidoEntregado.isFinalizo()); // se marcó como entregado
         assertEquals(EstadoPedido.FINALIZADO, pedidoEntregado.getEstadoPedido()); // sigue siendo finalizado
     }
+
+
+    @Test
+    @Rollback
+    public void queSePuedaObtenerUnPedidoPorSuId(){
+        Cliente usuario = new Cliente();
+        sessionFactory.getCurrentSession().save(usuario);
+
+        Pedido pedido = new Pedido();
+        pedido.setUsuario(usuario);
+        pedido.setPedidoPlatos(new ArrayList<>());
+        pedido.setFinalizo(false);
+        pedido.setPrecio(100.0);
+        pedido.setEstadoPedido(EstadoPedido.PENDIENTE);
+        sessionFactory.getCurrentSession().save(pedido);
+
+        Pedido pedidoBuscado=repositorioPedido.buscarPorId(pedido.getId());
+
+        assertEquals(usuario.getId(), pedidoBuscado.getUsuario().getId());
+
+    }
+
+    @Test
+    @Rollback
+    public void queSeListanPedidosDelUsuarioOrdenadosPorFecha() {
+        Cliente usuario = new Cliente();
+        sessionFactory.getCurrentSession().save(usuario);
+
+        Pedido pedido1 = new Pedido();
+        pedido1.setUsuario(usuario);
+        pedido1.setFecha("2025-06-01");
+        sessionFactory.getCurrentSession().save(pedido1);
+
+        Pedido pedido2 = new Pedido();
+        pedido2.setUsuario(usuario);
+        pedido2.setFecha("2025-06-10");
+        sessionFactory.getCurrentSession().save(pedido2);
+
+        var pedidos = repositorioPedido.listarPedidosPorUsuario(usuario.getId());
+
+        assertEquals(2, pedidos.size());
+        assertTrue(pedidos.get(0).getFecha().compareTo(pedidos.get(1).getFecha()) > 0); // orden descendente
+    }
+
 }
 
 

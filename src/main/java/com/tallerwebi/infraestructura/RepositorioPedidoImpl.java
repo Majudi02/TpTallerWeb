@@ -160,4 +160,28 @@ public class RepositorioPedidoImpl implements RepositorioPedido {
         }
     }
 
+    @Override
+    public Pedido buscarPorId(Integer idPedido) {
+        String hql = "FROM Pedido p WHERE p.id = :idPedido";
+        return sessionFactory.getCurrentSession()
+                .createQuery(hql, Pedido.class)
+                .setParameter("idPedido", idPedido)
+                .uniqueResult();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Pedido> listarPedidosPorUsuario(Long usuarioId) {
+        String hql = "FROM Pedido p " +
+                "WHERE p.usuario.id = :uid " +
+                "ORDER BY p.fecha DESC";
+        return sessionFactory.getCurrentSession()
+                .createQuery(hql)
+                .setParameter("uid", usuarioId)
+                .list();
+    }
+
+
 }
+
+

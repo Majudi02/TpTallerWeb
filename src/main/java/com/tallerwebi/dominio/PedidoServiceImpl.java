@@ -70,7 +70,6 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public void agregarPlatoAlPedido(PlatoDto platoDto, UsuarioDTO usuarioDTO) {
-
         List<Etiqueta> etiquetasEntidad = new ArrayList<>();
         if (platoDto.getEtiquetas() != null) {
             for (EtiquetaDto etiquetaDto : platoDto.getEtiquetas()) {
@@ -107,5 +106,12 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     public void finalizarPedido(Long id) {
         this.repositorioPedido.finalizarPedido(id);
+    }
+
+    @Override
+    public List<PedidoDto> listarPedidosPorUsuario(Long usuarioId) {
+        return repositorioPedido.listarPedidosPorUsuario(usuarioId).stream()
+                .map(Pedido::obtenerDto)
+                .collect(Collectors.toList());
     }
 }

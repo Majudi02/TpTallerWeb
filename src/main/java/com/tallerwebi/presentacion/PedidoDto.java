@@ -16,6 +16,8 @@ public class PedidoDto {
     private boolean finalizo;
     private List<PedidoPlatoDto> pedidoPlatos;
     private EstadoPedido estadoPedido;
+    private boolean platosFinalizados;
+
 
 
 
@@ -89,6 +91,15 @@ public class PedidoDto {
         return pedidoPlatos.stream()
                 .filter(pp -> pp.getPlato().getIdRestaurante().equals(idRestaurante))
                 .collect(Collectors.toList());
+    }
+
+
+    public boolean isPlatosFinalizados() {
+        return platosFinalizados;
+    }
+
+    public void setPlatosFinalizados(boolean platosFinalizados) {
+        this.platosFinalizados = platosFinalizados;
     }
 
     public EstadoPedido getEstadoPedido() {

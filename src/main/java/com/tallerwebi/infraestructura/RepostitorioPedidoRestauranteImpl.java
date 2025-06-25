@@ -26,9 +26,10 @@ public class RepostitorioPedidoRestauranteImpl implements RepositorioPedidoResta
 
     @Override
     public List<Pedido> traerTodosLosPedidos() {
-        String hql = "FROM Pedido";
+        String hql = "FROM Pedido WHERE estadoPedido = :estado";
         return sessionFactory.getCurrentSession()
                 .createQuery(hql, Pedido.class)
+                .setParameter("estado", EstadoPedido.EN_PROCESO)
                 .getResultList();
     }
 

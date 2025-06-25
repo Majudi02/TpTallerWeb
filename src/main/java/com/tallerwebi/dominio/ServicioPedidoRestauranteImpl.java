@@ -64,7 +64,7 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
     }
 
     @Override
-    public void finalizarPedido(Long id) {
+    public void finalizarPlatoPedido(Long id) {
         PedidoPlato pedidoPlato = repositorioPedidoPlato.buscarPorId(id);
 
         if (pedidoPlato != null) {
@@ -144,6 +144,21 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
     @Override
     public void entregarPedido(Integer idPedido) {
         repositorioPedidoRestaurante.entregarPedido(idPedido);
+    }
+
+
+    @Override
+    public void finalizarPedidoCompleto(Integer idPedido) {
+        Pedido pedidoBuscado = repositorioPedidoRestaurante.buscarPorId(idPedido);
+
+        if (pedidoBuscado != null) {
+            pedidoBuscado.setEstadoPedido(EstadoPedido.EN_CAMINO);
+
+            for (PedidoPlato plato : pedidoBuscado.getPedidoPlatos()) {
+                plato.setEstadoPlato(EstadoPlato.FINALIZADO);
+            }
+        }
+
     }
 
 }
