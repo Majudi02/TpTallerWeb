@@ -41,9 +41,9 @@ public class RepositorioPedidoRestauranteImplTest {
     public void queSePuedanTraerTodosLosPedidos(){
 
         Pedido pedido1 = new Pedido();
-        // pedido2.setEstado("Pendiente");
+        pedido1.setEstadoPedido(EstadoPedido.EN_PROCESO);
         Pedido pedido2 = new Pedido();
-        // pedido2.setEstado("ENTREGADO");
+        pedido2.setEstadoPedido(EstadoPedido.EN_PROCESO);
 
     sessionFactory.getCurrentSession().save(pedido1);
     sessionFactory.getCurrentSession().save(pedido2);
