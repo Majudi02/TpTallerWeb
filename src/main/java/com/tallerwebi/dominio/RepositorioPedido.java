@@ -16,4 +16,8 @@ public interface RepositorioPedido {
     Pedido buscarPedidoActivoPorUsuario(Long idUsuario);
     void agregarPlatoAlPedido(Long idUsuario,Plato plato);
     void finalizarPedido(Long id);
+
+    List<Pedido> traerPedidosListosParaRetirar();
+
+    void entregarPedido(Integer idPedido);
 }

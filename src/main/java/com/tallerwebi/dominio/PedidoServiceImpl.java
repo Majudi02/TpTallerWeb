@@ -25,9 +25,9 @@ public class PedidoServiceImpl implements PedidoService {
     private RepositorioPedido repositorioPedido;
 
     @Autowired
-    public PedidoServiceImpl(RepositorioPlatoImpl repositorioPlatoImpl,RepositorioPedido repositorioPedido) {
+    public PedidoServiceImpl(RepositorioPlatoImpl repositorioPlatoImpl, RepositorioPedido repositorioPedido) {
         this.repositorioPlatoImpl = repositorioPlatoImpl;
-        this.repositorioPedido=repositorioPedido;
+        this.repositorioPedido = repositorioPedido;
     }
 
 
@@ -63,10 +63,9 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public PedidoDto buscarPedidoActivoPorUsuario() {
-        Pedido pedido= this.repositorioPedido.buscarPedidoActivoPorUsuario();
-        return  pedido.obtenerDto();
+        Pedido pedido = this.repositorioPedido.buscarPedidoActivoPorUsuario();
+        return pedido.obtenerDto();
     }
-
 
 
     @Override
@@ -85,7 +84,7 @@ public class PedidoServiceImpl implements PedidoService {
 
         Plato platoEntidad = platoDto.obtenerEntidad(etiquetasEntidad);
 
-        this.repositorioPedido.agregarPlatoAlPedido(platoEntidad,usuarioDTO.getId());
+        this.repositorioPedido.agregarPlatoAlPedido(platoEntidad, usuarioDTO.getId());
     }
 
     @Override
@@ -109,10 +108,4 @@ public class PedidoServiceImpl implements PedidoService {
     public void finalizarPedido(Long id) {
         this.repositorioPedido.finalizarPedido(id);
     }
-
-
-
-
-
-
 }
