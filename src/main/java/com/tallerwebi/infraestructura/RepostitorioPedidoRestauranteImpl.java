@@ -2,6 +2,7 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.RepositorioPedido;
 import com.tallerwebi.dominio.RepositorioPedidoRestaurante;
+import com.tallerwebi.dominio.entidades.EstadoPedido;
 import com.tallerwebi.dominio.entidades.Pedido;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,10 @@ public class RepostitorioPedidoRestauranteImpl implements RepositorioPedidoResta
 
     @Override
     public List<Pedido> traerTodosLosPedidos() {
-        String hql = "FROM Pedido";
+        String hql = "FROM Pedido WHERE estadoPedido = :estado";
        return sessionFactory.getCurrentSession()
                 .createQuery(hql, Pedido.class)
+               .setParameter("estado", EstadoPedido.EN_PROCESO)
                 .getResultList();
     }
 

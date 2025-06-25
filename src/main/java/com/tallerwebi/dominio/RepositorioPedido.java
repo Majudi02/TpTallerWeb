@@ -10,10 +10,8 @@ public interface RepositorioPedido {
     void crearPedido(Pedido pedido);
     void agregarPlatoAlPedido(Plato plato, Long idUsuario);
     List<PedidoPlato> mostrarPlatosDelPedidoActual(Long idUsuario);
-
     Double mostrarPrecioTotalDelPedidoActual(Long idUsuario);
-
     Pedido buscarPedidoActivoPorUsuario(Long idUsuario);
-    void agregarPlatoAlPedido(Long idUsuario,Plato plato);
     void finalizarPedido(Long id);
+    Pedido buscarPorId(Integer idPedido);
 }

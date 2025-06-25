@@ -114,6 +114,27 @@ public class RepositorioPedidoImplTest {
 
         assertTrue(pedidoActualizado.isFinalizo());
     }
+
+
+    @Test
+    @Rollback
+    public void queSePuedaObtenerUnPedidoPorSuId(){
+        Cliente usuario = new Cliente();
+        sessionFactory.getCurrentSession().save(usuario);
+
+        Pedido pedido = new Pedido();
+        pedido.setUsuario(usuario);
+        pedido.setPedidoPlatos(new ArrayList<>());
+        pedido.setFinalizo(false);
+        pedido.setPrecio(100.0);
+        pedido.setEstadoPedido(EstadoPedido.PENDIENTE);
+        sessionFactory.getCurrentSession().save(pedido);
+
+        Pedido pedidoBuscado=repositorioPedido.buscarPorId(pedido.getId());
+
+        assertEquals(usuario.getId(), pedidoBuscado.getUsuario().getId());
+
+    }
 }
 
 
