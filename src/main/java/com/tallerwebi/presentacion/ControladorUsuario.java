@@ -125,6 +125,7 @@ public class ControladorUsuario {
 
         ModelMap modelo = new ModelMap();
         modelo.put("emailEnviadoA", usuarioDTO.getEmail());
+
         return new ModelAndView("confirmacion", modelo);
 
 

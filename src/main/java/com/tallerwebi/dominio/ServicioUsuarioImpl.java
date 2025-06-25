@@ -33,39 +33,38 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
 
         UsuarioNutriya usuario;
         if ("cliente".equalsIgnoreCase(usuarioDTO.getTipoUsuario())) {
-
-            if (usuarioDTO.getDirecciones() == null || usuarioDTO.getDirecciones().isEmpty()) {
-                throw new IllegalArgumentException("Debe registrar al menos una dirección");
+            // Validar que los campos de dirección estén completos
+            if (usuarioDTO.getCalle() == null || usuarioDTO.getCalle().isEmpty()
+                    || usuarioDTO.getNumero() == null
+                    || usuarioDTO.getLocalidad() == null || usuarioDTO.getLocalidad().isEmpty()) {
+                throw new IllegalArgumentException("Debe registrar una dirección completa");
             }
 
             Cliente cliente = new Cliente();
+            // setear campos del cliente
             cliente.setEmail(usuarioDTO.getEmail());
             cliente.setPassword(usuarioDTO.getPassword());
             cliente.setNombre(usuarioDTO.getNombre());
             cliente.setTokenConfirmacion(usuarioDTO.getTokenConfirmacion());
             cliente.setConfirmado(usuarioDTO.getConfirmado());
-
             cliente.setEdad(usuarioDTO.getEdad());
             cliente.setPesoActual(usuarioDTO.getPesoActual());
             cliente.setPesoDeseado(usuarioDTO.getPesoDeseado());
             cliente.setAltura(usuarioDTO.getAltura());
             cliente.setObjetivo(usuarioDTO.getObjetivo());
 
-            // Crear la dirección y asociarla al cliente
+            // Crear y asociar la única dirección
             Direccion direccion = new Direccion();
             direccion.setCalle(usuarioDTO.getCalle());
             direccion.setNumero(usuarioDTO.getNumero());
             direccion.setLocalidad(usuarioDTO.getLocalidad());
             direccion.setCliente(cliente);
 
-            // Si Cliente tiene lista de direcciones
             cliente.getDirecciones().add(direccion);
 
-            usuario = cliente;
+            repositorioDireccion.guardarDireccion(direccion);
 
-            for (Direccion dir : cliente.getDirecciones()) {
-                repositorioDireccion.guardarDireccion(dir); // guardo cada dirección del cliente
-            }
+            usuario = cliente;
         } else if ("restaurante".equalsIgnoreCase(usuarioDTO.getTipoUsuario())) {
             UsuarioRestaurante usuarioRestaurante = new UsuarioRestaurante();
             usuarioRestaurante.setEmail(usuarioDTO.getEmail());

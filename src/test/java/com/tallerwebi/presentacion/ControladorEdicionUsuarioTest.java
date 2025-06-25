@@ -94,7 +94,7 @@ public class ControladorEdicionUsuarioTest {
 
         verify(servicioUsuarioMock).editarUsuario(usuarioEditado);
         verify(servicioUsuarioMock).getUsuario("cliente@mail.com");
-        assertEquals("redirect:/perfil-cliente", vista);
+        assertEquals("redirect:/cliente/perfil", vista);
     }
 
     @Test
@@ -133,7 +133,7 @@ public class ControladorEdicionUsuarioTest {
         verify(servicioUsuarioMock).editarUsuario(any());
 
         // Verifico que se redirige al perfil del restaurantre
-        assertEquals("redirect:/perfil-restaurante", vista);
+        assertEquals("redirect:/restaurante/perfil", vista);
     }
 
     @Test

@@ -2,7 +2,9 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.entidades.Cliente;
+import com.tallerwebi.dominio.entidades.Direccion;
 import com.tallerwebi.dominio.entidades.Restaurante;
+import com.tallerwebi.dominio.entidades.UsuarioNutriya;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.ui.ConcurrentModel;
@@ -13,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -56,13 +59,17 @@ public class ControladorUsuarioTest {
         cliente.setPesoDeseado(55);
         cliente.setAltura(1.65);
         cliente.setObjetivo("bajar de peso");
+        cliente.setCalle("Calle Nombre");
+        cliente.setNumero(123);
+        cliente.setLocalidad("Localidad Nombre");
 
         when(repositorioUsuario.buscarPorEmail("ana@mail.com")).thenReturn(null);
 
         RedirectAttributesModelMap redirect = new RedirectAttributesModelMap();
         ModelAndView resultado = controlador.registrarUsuario(cliente, null, redirect);
 
-        verify(repositorioUsuario).guardar(any(Cliente.class));
+        verify(repositorioUsuario).guardar(any(UsuarioNutriya.class));
+        verify(repositorioDireccion).guardarDireccion(any());
 
         assertEquals("confirmacion", resultado.getViewName());
         assertEquals("ana@mail.com", resultado.getModel().get("emailEnviadoA"));
@@ -190,7 +197,7 @@ public class ControladorUsuarioTest {
         cliente.setCalle("Dante Alighieri");
         cliente.setNumero(123);
         cliente.setLocalidad("La Matanza");
-        
+
         when(repositorioUsuario.buscarPorEmail("ana@mail.com")).thenReturn(null);
 
         RedirectAttributesModelMap redirect = new RedirectAttributesModelMap();

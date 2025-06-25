@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,6 +42,9 @@ public class ServicioUsuarioImplTest {
         dto.setPesoDeseado(55);
         dto.setAltura(1.65);
         dto.setObjetivo("bajar");
+        dto.setCalle("Calle Falsa");
+        dto.setNumero(123);
+        dto.setLocalidad("Localidad");
 
         // Simulo que el email no existe en la bd
         when(repositorioMock.buscarPorEmail("cliente@mail.com")).thenReturn(null);
@@ -48,6 +52,7 @@ public class ServicioUsuarioImplTest {
         servicioUsuario.registrarUsuario(dto);
 
         verify(repositorioMock).guardar(any(Cliente.class));
+        verify(repositorioDireccionMock).guardarDireccion(any());
     }
 
     @Test
@@ -221,7 +226,6 @@ public class ServicioUsuarioImplTest {
         dto.setPesoDeseado(80);
         dto.setAltura(1.72);
         dto.setObjetivo("bajar");
-
         dto.setCalle("Calle Falsa");
         dto.setNumero(123);
         dto.setLocalidad("Localidad");
