@@ -102,23 +102,6 @@
                     .uniqueResult();
         }
 
-        @Override
-        public void agregarPlatoAlPedido(Long idUsuario, Plato plato) {
-            Pedido pedidoBuscado = this.buscarPedidoActivoPorUsuario(idUsuario);
-            if (pedidoBuscado != null) {
-                PedidoPlato pedidoPlato = new PedidoPlato();
-                pedidoPlato.setPedido(pedidoBuscado);
-                pedidoPlato.setPlato(plato);
-                pedidoPlato.setEstadoPlato(EstadoPlato.PENDIENTE);
-
-                pedidoBuscado.getPedidoPlatos().add(pedidoPlato);
-
-                pedidoBuscado.setPrecio(pedidoBuscado.getPrecio() + plato.getPrecio());
-
-                sessionFactory.getCurrentSession().saveOrUpdate(pedidoBuscado);
-            }
-        }
-
 
         @Override
         public void finalizarPedido(Long idUsuario) {
@@ -129,5 +112,16 @@
             sessionFactory.getCurrentSession().saveOrUpdate(pedido);
 
 
+        }
+
+
+
+        @Override
+        public Pedido buscarPorId(Integer idPedido) {
+            String hql = "FROM Pedido p WHERE p.id = :idPedido";
+            return sessionFactory.getCurrentSession()
+                    .createQuery(hql, Pedido.class)
+                    .setParameter("idPedido", idPedido)
+                    .uniqueResult();
         }
     }

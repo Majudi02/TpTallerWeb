@@ -21,9 +21,11 @@ public class ServicioPedidoRestauranteImpl implements  ServicioPedidoRestaurante
 
     private final RepositorioPedidoRestaurante repositorioPedidoRestaurante;
     private final RepositorioPedidoPlato repositorioPedidoPlato;
+    private final RepositorioPedido repositorioPedido;
 
     @Autowired
-    public ServicioPedidoRestauranteImpl(RepositorioPedidoRestaurante repositorioPedidoRestaurante,RepositorioPedidoPlato repositorioPedidoPlato) {
+    public ServicioPedidoRestauranteImpl(RepositorioPedidoRestaurante repositorioPedidoRestaurante,RepositorioPedidoPlato repositorioPedidoPlato,RepositorioPedido repositorioPedido) {
+        this.repositorioPedido=repositorioPedido;
         this.repositorioPedidoRestaurante = repositorioPedidoRestaurante;
         this.repositorioPedidoPlato=repositorioPedidoPlato;
     }
@@ -66,7 +68,7 @@ public class ServicioPedidoRestauranteImpl implements  ServicioPedidoRestaurante
     }
 
     @Override
-    public void finalizarPedido(Long id) {
+    public void finalizarPlatoPedido(Long id) {
         PedidoPlato pedidoPlato = repositorioPedidoPlato.buscarPorId(id);
 
         if (pedidoPlato != null) {
@@ -85,5 +87,19 @@ public class ServicioPedidoRestauranteImpl implements  ServicioPedidoRestaurante
 
  */
         }
+    }
+
+    @Override
+    public void finalizarPedidoCompleto(Integer idPedido) {
+        Pedido pedidoBuscado= repositorioPedido.buscarPorId(idPedido);
+
+        if (pedidoBuscado != null) {
+            pedidoBuscado.setEstadoPedido(EstadoPedido.EN_CAMINO);
+
+            for (PedidoPlato plato : pedidoBuscado.getPedidoPlatos()) {
+                plato.setEstadoPlato(EstadoPlato.FINALIZADO);
+            }
+        }
+
     }
 }
