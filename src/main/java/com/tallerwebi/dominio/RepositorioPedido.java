@@ -14,4 +14,5 @@ public interface RepositorioPedido {
     Pedido buscarPedidoActivoPorUsuario(Long idUsuario);
     void finalizarPedido(Long id);
     Pedido buscarPorId(Integer idPedido);
+    List<Pedido> listarPedidosPorUsuario(Long usuarioId);
 }
