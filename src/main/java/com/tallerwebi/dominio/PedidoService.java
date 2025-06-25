@@ -18,4 +18,5 @@ public interface PedidoService {
     List<PedidoPlatoDto>mostrarPlatosDelPedidoActual(Long idUsuario);
     Double mostrarPrecioTotalDelPedidoActual(Long idUsuario);
     void finalizarPedido(Long id);
+    List<PedidoDto> listarPedidosPorUsuario(Long usuarioId);
 }

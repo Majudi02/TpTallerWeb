@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -104,5 +105,14 @@ public class PedidoControlador {
         pedidoService.agregarPlatoAlPedido(platoBuscado, usuario);
     }
 
+    @GetMapping("/mis-pedidos")
+    public String verMisPedidos(HttpServletRequest req, Model model) {
+        UsuarioDTO user = (UsuarioDTO) req.getSession().getAttribute("usuario");
+        List<PedidoDto> lista = user != null
+                ? pedidoService.listarPedidosPorUsuario(user.getId())
+                : List.of();
+        model.addAttribute("pedidos", lista);
+        return "mis-pedidos";
+    }
 
 }

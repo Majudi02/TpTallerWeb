@@ -75,6 +75,9 @@
                     <a class="nav-link" th:href="@{/restaurantes}">Restaurantes</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" th:href="@{/mis-pedidos}">Mis pedidos</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" th:href="@{/medios-pago}">Medios de Pago</a>
                 </li>
                 <li class="nav-item">
@@ -174,14 +177,13 @@
         const mensaje = event.data;
         console.log("📬 Nuevo mensaje recibido:", mensaje);
 
-        // Ejemplo: mostrarlo en un div
         const contenedor = document.getElementById("notificaciones");
         if (contenedor) {
             const p = document.createElement("p");
             p.textContent = mensaje;
             contenedor.appendChild(p);
         } else {
-            alert(mensaje); // Fallback si no hay div
+            alert(mensaje);
         }
     });
 

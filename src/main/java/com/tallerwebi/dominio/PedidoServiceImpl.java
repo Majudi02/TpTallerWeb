@@ -116,4 +116,12 @@ public class PedidoServiceImpl implements PedidoService {
         }
     }
 
+
+    @Override
+    public List<PedidoDto> listarPedidosPorUsuario(Long usuarioId) {
+        return repositorioPedido.listarPedidosPorUsuario(usuarioId).stream()
+                .map(Pedido::obtenerDto)
+                .collect(Collectors.toList());
+    }
+
 }

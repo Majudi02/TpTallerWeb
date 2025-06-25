@@ -1,7 +1,7 @@
 package com.tallerwebi.dominio;
 
 
-import com.tallerwebi.dominio.entidades.Restaurante;
+import com.tallerwebi.dominio.entidades.*;
 import com.tallerwebi.infraestructura.RepositorioPlatoImpl;
 import com.tallerwebi.presentacion.PedidoDto;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,12 +9,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 public class PedidoServiceImplTest {
@@ -193,6 +195,39 @@ public class PedidoServiceImplTest {
         assertThat(platosOrdenados.get(9).getPrecio(),equalTo(preciosEsperados.get(9)));
     }
 
+    @Test
+    public void queSePuedaListarPedidosPorUsuarioYConvertirADto() {
+        Pedido pedido = new Pedido();
+        pedido.setId(1);
+        pedido.setFecha("2025-06-15");
+        pedido.setPrecio(1000.0);
+        pedido.setFinalizo(true);
+        pedido.setEstadoPedido(EstadoPedido.PENDIENTE);
+
+        Cliente usuario = new Cliente();
+        usuario.setId(1L);
+        pedido.setUsuario(usuario);
+
+        pedido.setPedidoPlatos(new ArrayList<>());
+
+        when(repositorioPedido.listarPedidosPorUsuario(1L))
+                .thenReturn(List.of(pedido));
+
+        List<PedidoDto> resultado = pedidoService.listarPedidosPorUsuario(1L);
+
+        assertEquals(1, resultado.size());
+
+        PedidoDto dto = resultado.get(0);
+        assertEquals(1, dto.getId());
+        assertEquals(1L, dto.getUsuarioId());
+        assertEquals("2025-06-15", dto.getFecha());
+        assertEquals(1000.0, dto.getPrecio(), 0.0001);
+        assertTrue(dto.isFinalizo());
+        assertEquals(EstadoPedido.PENDIENTE, dto.getEstadoPedido());
+
+        assertNotNull(dto.getPedidoPlatos());
+        assertTrue(dto.getPedidoPlatos().isEmpty());
+    }
 
 
 
