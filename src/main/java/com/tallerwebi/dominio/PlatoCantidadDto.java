@@ -1,20 +1,20 @@
 package com.tallerwebi.dominio;
 
 public class PlatoCantidadDto {
-    private String nombreProducto;
+    private String nombre;
     private int cantidad;
 
     public PlatoCantidadDto(String nombreProducto, int cantidad) {
-        this.nombreProducto = nombreProducto;
+        this.nombre = nombreProducto;
         this.cantidad = cantidad;
     }
 
-    public String getNombreProducto() {
-        return nombreProducto;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setNombreProducto(String nombreProducto) {
-        this.nombreProducto = nombreProducto;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public int getCantidad() {

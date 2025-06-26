@@ -63,11 +63,12 @@ public class RepositorioPedidoImpl implements RepositorioPedido {
         String hql = "SELECT pp FROM PedidoPlato pp " +
                 "JOIN FETCH pp.plato " +
                 "JOIN pp.pedido p " +
-                "WHERE p.usuario.id = :usuarioId AND p.finalizo = false";
+                "WHERE p.usuario.id = :usuarioId AND p.estadoPedido = :estado AND p.finalizo = false";
 
         return sessionFactory.getCurrentSession()
                 .createQuery(hql, PedidoPlato.class)
                 .setParameter("usuarioId", idUsuario)
+                .setParameter("estado", EstadoPedido.PENDIENTE)
                 .getResultList();
     }
 
@@ -116,14 +117,16 @@ public class RepositorioPedidoImpl implements RepositorioPedido {
 
 
     @Override
-    public void finalizarPedido(Long idUsuario) {
+    public Pedido finalizarPedido(Long idUsuario) {
         Pedido pedido = this.buscarPedidoActivoPorUsuario(idUsuario);
 
         if (pedido != null) {
-            pedido.setEstadoPedido(EstadoPedido.LISTO_PARA_ENVIAR); // Pedido listo para entrega
-            pedido.setFinalizo(false); // No está entregado aún
+            pedido.setEstadoPedido(EstadoPedido.PENDIENTE);
+            pedido.setFinalizo(false);
             sessionFactory.getCurrentSession().saveOrUpdate(pedido);
         }
+
+        return pedido;
     }
 
     /*
@@ -152,15 +155,6 @@ public class RepositorioPedidoImpl implements RepositorioPedido {
 
      */
 
-    @Override
-    public void entregarPedido(Integer idPedido) {
-        Pedido pedido = sessionFactory.getCurrentSession().get(Pedido.class, idPedido);
-        if (pedido != null) {
-            pedido.setEstadoPedido(EstadoPedido.LISTO_PARA_ENVIAR);
-            pedido.setFinalizo(true);
-            sessionFactory.getCurrentSession().saveOrUpdate(pedido);
-        }
-    }
 
     @Override
     public Pedido buscarPorId(Integer idPedido) {
@@ -183,6 +177,15 @@ public class RepositorioPedidoImpl implements RepositorioPedido {
                 .list();
     }
 
+    @Override
+    public void confirmarPedido(Long idUsuario) {
+        Pedido pedido = buscarPedidoActivoPorUsuario(idUsuario);
+        if (pedido != null) {
+            pedido.setEstadoPedido(EstadoPedido.EN_PROCESO);
+            pedido.setFinalizo(false);
+            sessionFactory.getCurrentSession().saveOrUpdate(pedido);
+        }
+    }
 
 }
 

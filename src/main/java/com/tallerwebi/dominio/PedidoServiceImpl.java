@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.entidades.*;
+import com.tallerwebi.presentacion.NotificacionPedidoController;
 import com.tallerwebi.presentacion.PedidoPlatoDto;
 import com.tallerwebi.infraestructura.RepositorioPlatoImpl;
 import com.tallerwebi.presentacion.PedidoDto;
@@ -22,6 +23,10 @@ public class PedidoServiceImpl implements PedidoService {
     private final RepositorioPlatoImpl repositorioPlatoImpl;
     private RepositorioPedido repositorioPedido;
     private RepositorioUsuarioNutriya repositorioUsuario;
+
+
+    @Autowired
+    private NotificacionPedidoController notificacionController;
 
     @Autowired
     public PedidoServiceImpl(RepositorioPlatoImpl repositorioPlatoImpl, RepositorioPedido repositorioPedido, RepositorioUsuarioNutriya repositorioUsuario) {
@@ -60,14 +65,6 @@ public class PedidoServiceImpl implements PedidoService {
         return platosOrdenados;
     }
 
-
-    @Override
-    public PedidoDto buscarPedidoActivoPorUsuario(Long idUsuario) {
-        Pedido pedido = this.repositorioPedido.buscarPedidoActivoPorUsuario(idUsuario);
-        return pedido != null ? pedido.obtenerDto() : null;
-    }
-
-
     @Override
     public void agregarPlatoAlPedido(PlatoDto platoDto, UsuarioDTO usuarioDTO) {
         List<Etiqueta> etiquetasEntidad = new ArrayList<>();
@@ -105,7 +102,10 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public void finalizarPedido(Long id) {
-        this.repositorioPedido.finalizarPedido(id);
+        Pedido pedidoFinalizado = this.repositorioPedido.finalizarPedido(id);
+        if (pedidoFinalizado != null) {
+            notificacionController.notificarMensaje("**Nuevo pedido disponible**");
+        }
     }
 
     @Override
@@ -114,6 +114,35 @@ public class PedidoServiceImpl implements PedidoService {
                 .map(Pedido::obtenerDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<PedidoDto> listarPedidosActivosPorUsuario(Long idUsuario) {
+        List<Pedido> pedidos = repositorioPedido.listarPedidosPorUsuario(idUsuario);
+        List<PedidoDto> activos = new ArrayList<>();
+
+        for (Pedido pedido : pedidos) {
+            if (!pedido.isFinalizo()) {
+                activos.add(pedido.obtenerDto());
+            }
+        }
+
+        return activos;
+    }
+
+    @Override
+    public List<PedidoDto> listarPedidosEntregadosPorUsuario(Long idUsuario) {
+        List<Pedido> pedidos = repositorioPedido.listarPedidosPorUsuario(idUsuario);
+        List<PedidoDto> entregados = new ArrayList<>();
+
+        for (Pedido pedido : pedidos) {
+            if (pedido.isFinalizo()) {
+                entregados.add(pedido.obtenerDto());
+            }
+        }
+
+        return entregados;
+    }
+
 
     @Override
     public void crearPedido(Long idUsuario) {
@@ -135,6 +164,15 @@ public class PedidoServiceImpl implements PedidoService {
         nuevoPedido.setPedidoPlatos(new ArrayList<>());
 
         repositorioPedido.crearPedido(nuevoPedido);
+    }
+
+    @Override
+    public void confirmarPedido(Long idUsuario) {
+        repositorioPedido.confirmarPedido(idUsuario);
+        Pedido pedido = repositorioPedido.buscarPedidoActivoPorUsuario(idUsuario);
+        if (pedido != null) {
+            notificacionController.notificarMensaje("**Nuevo pedido disponible**");
+        }
     }
 
 

@@ -10,10 +10,63 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
 </head>
 <body>
+<nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top px-3">
+    <div class="container-fluid">
+        <div class="d-flex w-100 justify-content-between align-items-center">
+            <a class="navbar-brand" th:href="@{/nutriya}">Nutri<span style="color: #38BD48;">Ya</span></a>
+            <form class="d-none d-lg-flex mx-auto" role="search" style="width: 40%;">
+                <div class="input-group">
+                    <input class="form-control" type="search" placeholder="Buscá comidas, restaurantes..."
+                           aria-label="Buscar"/>
+                    <button class="btn buscar" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </form>
+            <div class="botones-nav">
+                <a class="btn btn-outline-secondary mx-1" th:href="@{nutriya-login}">
+                    <i class="bi bi-person"></i>
+                </a>
+
+                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#menuLateral" aria-controls="menuLateral">
+                    <i class="bi bi-list"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="offcanvas offcanvas-end" tabindex="-1" id="menuLateral" aria-labelledby="menuLateralLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="menuLateralLabel">Opciones</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="navbar-nav gap-2">
+            <!-- Repartidor -->
+            <li class="nav-item" th:if="${tipoUsuario == 'repartidor'}">
+                <a class="nav-link" th:href="@{/nutriya}">Inicio</a>
+            </li>
+            <li class="nav-item" th:if="${tipoUsuario == 'repartidor'}">
+                <a class="nav-link" th:href="@{/nutriya-login}">Mi Perfil</a>
+            </li>
+            <li class="nav-item" th:if="${tipoUsuario == 'repartidor'}">
+                <a class="nav-link" th:href="@{/pedidos-retirar}">Mis Entregas</a>
+            </li>
+        </ul>
+    </div>
+</div>
 <main class="d-flex flex-column align-items-center gap-5" style="margin-top: 100px;">
     <div class="card w-75 p-4 shadow mx-auto">
         <h2 class="titulo-verde mb-4">Pedidos Listos para Retirar</h2>
-        <div class="d-flex flex-column gap-4">
+
+        <!-- Mensaje si no hay pedidos -->
+        <div th:if="${#lists.isEmpty(pedidos)}" class="alert alert-info text-center p-4 rounded-4 shadow-sm">
+            No hay pedidos listos para retirar.
+        </div>
+
+        <!-- Lista de pedidos -->
+        <div class="d-flex flex-column gap-4" th:if="${!#lists.isEmpty(pedidos)}">
             <div class="card p-4 shadow" th:each="pedido : ${pedidos}">
                 <div class="row mb-3">
                     <div class="col-md-6">
@@ -34,7 +87,7 @@
                     <h5>Platos pedidos</h5>
                     <ul class="list-group">
                         <li class="list-group-item d-flex justify-content-between" th:each="plato : ${pedido.platos}">
-                            <span th:text="${plato.nombreProducto}">Nombre Plato</span>
+                            <span th:text="${plato.nombre}">Nombre Plato</span>
                             <span class="badge bg-success rounded-pill" th:text="${plato.cantidad}">1</span>
                         </li>
                     </ul>
@@ -47,6 +100,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 </main>
 <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>

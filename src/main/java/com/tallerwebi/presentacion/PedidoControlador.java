@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -80,10 +81,7 @@ public class PedidoControlador {
     @PostMapping("/pedido/confirmar")
     public String confirmarPedido(HttpServletRequest request) {
         UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
-
-        // Crear el pedido para ese usuario y restaurante, con estado PENDIENTE
-        pedidoService.crearPedido(usuario.getId());
-
+        pedidoService.confirmarPedido(usuario.getId());
         return "redirect:/pedido/platos";
     }
 
@@ -102,7 +100,6 @@ public class PedidoControlador {
     public void agregarPlatoAlPedido(@RequestParam("platoId") Integer platoId, HttpServletRequest request) {
         UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
 
-
         PlatoDto platoBuscado = servicioRestaurante.obtenerPlatoPorId(platoId);
         System.out.println("Agregando plato al pedido. Usuario ID: " + usuario.getId() + ", Plato ID: " + platoBuscado.getId());
 
@@ -112,10 +109,20 @@ public class PedidoControlador {
     @GetMapping("/mis-pedidos")
     public String verMisPedidos(HttpServletRequest req, Model model) {
         UsuarioDTO user = (UsuarioDTO) req.getSession().getAttribute("usuario");
-        List<PedidoDto> lista = user != null
-                ? pedidoService.listarPedidosPorUsuario(user.getId())
-                : List.of();
-        model.addAttribute("pedidos", lista);
+
+        if (user != null) {
+            List<PedidoDto> pedidosActivos = pedidoService.listarPedidosActivosPorUsuario(user.getId());
+            List<PedidoDto> pedidosEntregados = pedidoService.listarPedidosEntregadosPorUsuario(user.getId());
+
+            model.addAttribute("pedidosActivos", pedidosActivos);
+            model.addAttribute("pedidosEntregados", pedidosEntregados);
+        } else {
+            model.addAttribute("pedidosActivos", new ArrayList<PedidoDto>());
+            model.addAttribute("pedidosEntregados", new ArrayList<PedidoDto>());
+        }
+
         return "mis-pedidos";
     }
+
+
 }

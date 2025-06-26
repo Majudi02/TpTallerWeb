@@ -17,7 +17,8 @@
             <a class="navbar-brand" th:href="@{/restaurante/perfil}">Nutri<span style="color: #38BD48;">Ya</span></a>
             <form class="d-none d-lg-flex mx-auto" role="search" style="width: 40%;">
                 <div class="input-group">
-                    <input class="form-control" type="search" placeholder="Buscá comidas, restaurantes..." aria-label="Buscar"/>
+                    <input class="form-control" type="search" placeholder="Buscá comidas, restaurantes..."
+                           aria-label="Buscar"/>
                     <button class="btn buscar" type="submit"><i class="bi bi-search"></i></button>
                 </div>
             </form>
@@ -39,18 +40,29 @@
     </div>
     <div class="offcanvas-body">
         <ul class="navbar-nav gap-2">
-            <li class="nav-item"><a class="nav-link" href="nutriya.html">Inicio</a></li>
-            <li class="nav-item"><a class="nav-link" href="pedido.html">Comidas</a></li>
-            <li class="nav-item"><a class="nav-link" href="restaurantes.html">Restaurantes</a></li>
-            <li class="nav-item"><a class="nav-link" href="/medios-pago">Medios de Pago</a></li>
-            <li class="nav-item"><a class="nav-link active" href="nutriya-login.html">Mi Perfil</a></li>
+            <li class="nav-item" th:if="${tipoUsuario == 'restaurante'}">
+                <a class="nav-link" th:href="@{/nutriya}">Inicio</a>
+            </li>
+            <li class="nav-item" th:if="${tipoUsuario == 'restaurante'}">
+                <a class="nav-link" th:href="@{/nutriya-login}">Mi Perfil</a>
+            </li>
+            <li class="nav-item" th:if="${tipoUsuario == 'restaurante'}">
+                <a class="nav-link" th:href="@{/pedidos/restaurante}">Mis Pedidos</a>
+            </li>
+            <li class="nav-item" th:if="${tipoUsuario == 'restaurante'}">
+                <a class="nav-link" th:href="@{/editarPlatos}">Gestionar Platos</a>
+            </li>
+            <li class="nav-item" th:if="${tipoUsuario == 'restaurante'}">
+                <a class="nav-link" th:href="@{/crear-plato}">Crear Plato</a>
+            </li>
         </ul>
     </div>
 </div>
 
 <main class="flex-fill d-flex justify-content-center align-items-center">
     <div class="container p-4" style="max-width: 700px; width: 100%;">
-        <form action="/crear-plato/guardar" method="post" enctype="multipart/form-data" class="shadow bg-body-tertiary p-5 contenedor-verde" style="background-color: white">
+        <form action="/crear-plato/guardar" method="post" enctype="multipart/form-data"
+              class="shadow bg-body-tertiary p-5 contenedor-verde" style="background-color: white">
             <h2 class="text-center mb-4">Crear un nuevo Plato</h2>
 
             <div class="mb-3">
@@ -78,7 +90,8 @@
                 <div th:each="etiqueta : ${etiquetasDisponibles}" class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" name="etiquetasIds"
                            th:value="${etiqueta.id}" th:id="'etiqueta_' + ${etiqueta.id}">
-                    <label class="form-check-label" th:for="'etiqueta_' + ${etiqueta.id}" th:text="${etiqueta.nombre}"></label>
+                    <label class="form-check-label" th:for="'etiqueta_' + ${etiqueta.id}"
+                           th:text="${etiqueta.nombre}"></label>
                 </div>
             </div>
 
@@ -88,7 +101,9 @@
         </form>
     </div>
 </main>
-
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1055">
+    <div id="toastContainer"></div>
+</div>
 <footer class="d-flex justify-content-between align-items-center p-4 footer mt-auto">
     <div class="fw-light">© 2025 NutriYa</div>
     <div class="fw-semibold">
@@ -104,5 +119,6 @@
 </footer>
 
 <script src="/webjars/bootstrap/5.2.0/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/mostrar-notificacion.js}" type="text/javascript"></script>
 </body>
 </html>

@@ -47,7 +47,7 @@ public class RepostitorioPedidoRestauranteImpl implements RepositorioPedidoResta
 
     @Override
     public List<Pedido> traerPedidosListosParaRetirar() {
-        String hql = "FROM Pedido p " +
+        String hql = "SELECT DISTINCT p FROM Pedido p " +
                 "JOIN FETCH p.pedidoPlatos pp " +
                 "JOIN FETCH pp.plato pl " +
                 "JOIN FETCH pl.restaurante " +

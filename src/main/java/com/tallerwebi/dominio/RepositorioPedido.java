@@ -18,13 +18,13 @@ public interface RepositorioPedido {
 
     void agregarPlatoAlPedido(Long idUsuario, Plato plato);
 
-    void finalizarPedido(Long id);
+    //void finalizarPedido(Long id);
 
-    // List<Pedido> traerPedidosListosParaRetirar();
-
-    void entregarPedido(Integer idPedido);
+    Pedido finalizarPedido(Long idUsuario);
 
     Pedido buscarPorId(Integer idPedido);
 
     List<Pedido> listarPedidosPorUsuario(Long usuarioId);
+
+    void confirmarPedido(Long idUsuario);
 }

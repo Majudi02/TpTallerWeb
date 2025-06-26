@@ -71,25 +71,20 @@
 
     <div class="offcanvas offcanvas-end" tabindex="-1" id="menuLateral" aria-labelledby="menuLateralLabel">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title">Opciones</h5>
+            <h5 class="offcanvas-title" id="menuLateralLabel">Opciones</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
         </div>
         <div class="offcanvas-body">
             <ul class="navbar-nav gap-2">
-                <li class="nav-item">
+                <!-- Restaurante -->
+                <li class="nav-item" th:if="${tipoUsuario == 'restaurante'}">
                     <a class="nav-link" th:href="@{/nutriya}">Inicio</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/pedido}">Comidas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/restaurantes}">Restaurantes</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/medios-pago}">Medios de Pago</a>
-                </li>
-                <li class="nav-item">
+                <li class="nav-item" th:if="${tipoUsuario == 'restaurante'}">
                     <a class="nav-link" th:href="@{/nutriya-login}">Mi Perfil</a>
+                </li>
+                <li class="nav-item" th:if="${tipoUsuario == 'restaurante'}">
+                    <a class="nav-link" th:href="@{/restaurante/pedidos}">Mis Pedidos</a>
                 </li>
             </ul>
         </div>

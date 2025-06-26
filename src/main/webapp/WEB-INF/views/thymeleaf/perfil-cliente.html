@@ -47,23 +47,43 @@
     </div>
     <div class="offcanvas-body">
         <ul class="navbar-nav gap-2">
-            <li class="nav-item">
+            <li class="nav-item" th:if="${tipoUsuario == null}">
                 <a class="nav-link" th:href="@{/nutriya}">Inicio</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/pedido}">Comidas</a>
+            <li class="nav-item" th:if="${tipoUsuario == null}">
+                <a class="nav-link active" th:href="@{/pedido}">Comidas</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" th:if="${tipoUsuario == null}">
                 <a class="nav-link" th:href="@{/restaurantes}">Restaurantes</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" th:if="${tipoUsuario == null}">
                 <a class="nav-link" th:href="@{/mis-pedidos}">Mis pedidos</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" th:if="${tipoUsuario == null}">
                 <a class="nav-link" th:href="@{/medios-pago}">Medios de Pago</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link active" th:href="@{/nutriya-login}">Mi Perfil</a>
+            <li class="nav-item" th:if="${tipoUsuario == null}">
+                <a class="nav-link" th:href="@{/nutriya-login}">Mi Perfil</a>
+            </li>
+
+            <!-- Cliente -->
+            <li class="nav-item" th:if="${tipoUsuario == 'cliente'}">
+                <a class="nav-link" th:href="@{/nutriya}">Inicio</a>
+            </li>
+            <li class="nav-item" th:if="${tipoUsuario == 'cliente'}">
+                <a class="nav-link active" th:href="@{/pedido}">Comidas</a>
+            </li>
+            <li class="nav-item" th:if="${tipoUsuario == 'cliente'}">
+                <a class="nav-link" th:href="@{/restaurantes}">Restaurantes</a>
+            </li>
+            <li class="nav-item" th:if="${tipoUsuario == 'cliente'}">
+                <a class="nav-link" th:href="@{/mis-pedidos}">Mis pedidos</a>
+            </li>
+            <li class="nav-item" th:if="${tipoUsuario == 'cliente'}">
+                <a class="nav-link" th:href="@{/medios-pago}">Medios de Pago</a>
+            </li>
+            <li class="nav-item" th:if="${tipoUsuario == 'cliente'}">
+                <a class="nav-link" th:href="@{/nutriya-login}">Mi Perfil</a>
             </li>
         </ul>
     </div>
@@ -124,7 +144,7 @@
         </div>
     </div>
 </main>
-<script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 </body>
 
 </html>
