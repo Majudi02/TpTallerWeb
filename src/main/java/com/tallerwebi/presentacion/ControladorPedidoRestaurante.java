@@ -43,8 +43,6 @@ public class ControladorPedidoRestaurante {
         return new ModelAndView("restaurante-pedido", modelo);
     }
 
-
-
     @GetMapping("/restaurante/pedidos-listos-json")
     @ResponseBody
     public List<PedidoDto> obtenerPedidosListosJson(@RequestParam Long id) {

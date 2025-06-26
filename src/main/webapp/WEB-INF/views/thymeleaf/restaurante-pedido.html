@@ -150,10 +150,7 @@
                     </li>
                 </ul>
                 <div class="text-end">
-                    <form method="post" th:action="@{/restaurante/enviar-pedido}">
-                        <input type="hidden" name="pedidoId" th:value="${pedido.id}"/>
-                        <button type="submit" class="btn btn-primary btn-sm">Enviar pedido</button>
-                    </form>
+                    <p class="fw-bold">ESPERANDO A REPARTIDOR </p>
                 </div>
             </div>
         </div>
@@ -186,8 +183,6 @@
                 </div>
             </div>
         </div>
-
-
     </div>
 </main>
 
@@ -196,7 +191,7 @@
 </div>
 
 <script src="/resources/core/js/restaurante-pedido.js"></script>
-
 <script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/mostrar-notificacion.js}" type="text/javascript"></script>
 </body>
 </html>
