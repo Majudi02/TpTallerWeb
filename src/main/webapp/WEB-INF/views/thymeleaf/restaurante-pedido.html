@@ -9,8 +9,6 @@
 </head>
 <body class="d-flex flex-column min-vh-100 justify-content-center">
 
-<div id="notificaciones" style="position: fixed; top: 7em; right: 3em; width: 300px; z-index: 1000;"></div>
-
 <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top px-3">
     <div class="container-fluid">
         <a class="navbar-brand" th:href="@{/restaurante/perfil}">Nutri<span style="color: #38BD48;">Ya</span></a>
@@ -80,128 +78,14 @@
     </div>
 </main>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const formsFinalizarPlato = document.querySelectorAll(".cambiar-estado-del-plato");
-
-        formsFinalizarPlato.forEach(form => {
-            form.addEventListener("submit", function (e) {
-                e.preventDefault();
-
-                const pedidoPlatoId = this.querySelector("input[name='pedidoPlatoId']").value;
-
-                fetch("/restaurante/finalizar-plato-pedido", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    },
-                    body: `pedidoPlatoId=${pedidoPlatoId}`
-                })
-                    .then(response => {
-                        const boton = this.querySelector("button[type='submit']");
-                        boton.style.display = 'none';
-
-                        const liPedidoPlato = this.closest('li');
-                        if (liPedidoPlato) {
-                            const badgeEstado = liPedidoPlato.querySelector('span.badge.ms-2');
-                            if (badgeEstado) {
-                                badgeEstado.textContent = "FINALIZADO";
-                                badgeEstado.classList.remove('bg-warning', 'text-dark');
-                                badgeEstado.classList.add('bg-success');
-                            }
-                        }
-
-                        const pedidoCardBody = this.closest('.card-body');
-                        if (pedidoCardBody) {
-                            verificarPlatosFinalizados(pedidoCardBody);
-                        }
-                    })
-                    .catch(error => {
-                        alert("Error: " + error.message);
-                    });
-            });
-
-        });
-    });
-
-    document.addEventListener("DOMContentLoaded", function () {
-
-        if (!!window.EventSource) {
-            const source = new EventSource("/restaurante/notificaciones-pedidos");
-
-            // Evento personalizado "nuevo-plato"
-            source.addEventListener("nuevo-plato", function (event) {
-                mostrarNotificacion(event.data);
-            });
-
-            source.onerror = function () {
-                console.error("Error en la conexión con SSE.");
-                source.close(); // Cierra si hay un error grave
-            };
-        } else {
-            console.warn("Este navegador no soporta Server-Sent Events");
-        }
-
-        function mostrarNotificacion(mensaje) {
-            const contenedor = document.getElementById("notificaciones");
-
-            const alerta = document.createElement("div");
-            alerta.classList.add("alert", "alert-success", "mt-5");
-            alerta.style.border = "1px solid #28a745";
-            alerta.style.borderRadius = "6px";
-            alerta.style.boxShadow = "0px 2px 6px rgba(0,0,0,0.15)";
-            alerta.textContent = mensaje;
-
-            contenedor.appendChild(alerta);
-
-            // Desaparece a los 5 segundos
-            setTimeout(() => {
-                contenedor.removeChild(alerta);
-            }, 8000);
-        }
-    });
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1055">
+    <div id="toastContainer"></div>
+</div>
 
 
-    const botonesFinalizarPedido = document.querySelectorAll(".finalizar-pedido");
+<script src="/resources/core/js/restaurante-pedido.js"></script>
 
-    botonesFinalizarPedido.forEach(boton => {
-        boton.addEventListener("click", function () {
-            const pedidoId = this.closest('.finalizar-pedido-completo').querySelector("input[name='pedidoId']").value;
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
 
-            fetch("/restaurante/finalizar-pedido-completo", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                body: `pedidoId=${pedidoId}`
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error("No se pudo finalizar el pedido");
-                    }
-                    const card = this.closest('.card');
-                    if (card) {
-                        card.remove();
-                    }
-                })
-
-        });
-    });
-
-
-    function verificarPlatosFinalizados(pedidoCardBody) {
-        const badges = pedidoCardBody.querySelectorAll('.list-group-item .badge');
-        const todosFinalizados = Array.from(badges).every(badge => badge.textContent.trim() === "FINALIZADO");
-
-        if (todosFinalizados) {
-            const finalizarBtnContainer = pedidoCardBody.querySelector('.finalizar-pedido-completo');
-            if (finalizarBtnContainer) {
-                finalizarBtnContainer.classList.remove('d-none');
-            }
-        }
-    }
-</script>
-
-<script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 </body>
 </html>
