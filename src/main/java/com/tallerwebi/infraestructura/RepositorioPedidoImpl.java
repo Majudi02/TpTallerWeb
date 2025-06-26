@@ -117,15 +117,23 @@ public class RepositorioPedidoImpl implements RepositorioPedido {
 
 
     @Override
-    public void finalizarPedido(Long idUsuario) {
+    public Pedido finalizarPedido(Long idUsuario) {
         Pedido pedido = this.buscarPedidoActivoPorUsuario(idUsuario);
 
         if (pedido != null) {
+<<<<<<< HEAD
             pedido.setEstadoPedido(EstadoPedido.PENDIENTE); // pendiente
             pedido.setFinalizo(false); // NO está entregado, sigue activo
+=======
+            pedido.setFinalizo(true);
+            pedido.setEstadoPedido(EstadoPedido.EN_PROCESO);
+>>>>>>> arregloPedidos
             sessionFactory.getCurrentSession().saveOrUpdate(pedido);
         }
+
+        return pedido;
     }
+
 
     /*
     @Override

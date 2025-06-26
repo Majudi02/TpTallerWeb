@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.entidades.*;
+import com.tallerwebi.presentacion.NotificacionPedidoController;
 import com.tallerwebi.presentacion.PedidoPlatoDto;
 import com.tallerwebi.infraestructura.RepositorioPlatoImpl;
 import com.tallerwebi.presentacion.PedidoDto;
@@ -22,6 +23,10 @@ public class PedidoServiceImpl implements PedidoService {
     private final RepositorioPlatoImpl repositorioPlatoImpl;
     private RepositorioPedido repositorioPedido;
     private RepositorioUsuarioNutriya repositorioUsuario;
+
+
+    @Autowired
+    private NotificacionPedidoController notificacionController;
 
     @Autowired
     public PedidoServiceImpl(RepositorioPlatoImpl repositorioPlatoImpl, RepositorioPedido repositorioPedido, RepositorioUsuarioNutriya repositorioUsuario) {
@@ -97,7 +102,10 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public void finalizarPedido(Long id) {
-        this.repositorioPedido.finalizarPedido(id);
+        Pedido pedidoFinalizado = this.repositorioPedido.finalizarPedido(id);
+        if (pedidoFinalizado != null) {
+            notificacionController.notificarMensaje("**Nuevo pedido disponible**");
+        }
     }
 
     @Override

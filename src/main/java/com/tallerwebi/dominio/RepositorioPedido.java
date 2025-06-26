@@ -18,7 +18,7 @@ public interface RepositorioPedido {
 
     void agregarPlatoAlPedido(Long idUsuario, Plato plato);
 
-    void finalizarPedido(Long id);
+    //void finalizarPedido(Long id);
 
     Pedido buscarPorId(Integer idPedido);
 
