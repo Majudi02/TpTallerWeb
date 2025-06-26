@@ -107,7 +107,12 @@
             <a class="btn btn-lg btn-danger" th:href="@{/cerrar-sesion}">Cerrar Sesión</a>
         </div>
     </div>
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1055">
+        <div id="toastContainer"></div>
+    </div>
 </main>
+
+<script src="/resources/core/js/mostrar-notificacion.js"></script>
 <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 </body>
 </html>
