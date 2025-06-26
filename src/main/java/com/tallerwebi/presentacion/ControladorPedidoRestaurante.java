@@ -50,25 +50,6 @@ public class ControladorPedidoRestaurante {
     }
 
 
-    @GetMapping("/restaurante/pedidos-listos-json")
-    @ResponseBody
-    public List<PedidoDto> obtenerPedidosListosJson(@RequestParam Long id) {
-        Long idRestaurante = servicioPedidoRestaurante.obtenerIdDelRestaurate(id);
-        List<PedidoDto> todosLosPedidos = servicioPedidoRestaurante.traerPedidosDelRestaurante(idRestaurante);
-
-        List<PedidoDto> pedidosListosParaEnviar = new ArrayList<>();
-
-        for (PedidoDto pedido : todosLosPedidos) {
-            List<PedidoPlatoDto> filtrados = pedido.getPedidoPlatosDelRestaurante(idRestaurante);
-            pedido.setPedidoPlatos(filtrados);
-            if (pedido.getEstadoPedido() == EstadoPedido.LISTO_PARA_ENVIAR) {
-                pedidosListosParaEnviar.add(pedido);
-            }
-        }
-
-        return pedidosListosParaEnviar;
-    }
-
     @PostMapping("/restaurante/finalizar-plato-pedido")
     @ResponseBody
     public ResponseEntity<Void> finalizarPlato(@RequestParam Long pedidoPlatoId) {
