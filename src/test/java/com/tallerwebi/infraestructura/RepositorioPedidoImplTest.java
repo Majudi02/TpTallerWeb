@@ -12,7 +12,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,6 +32,25 @@ public class RepositorioPedidoImplTest {
     @BeforeEach
     public void setUp() {
         repositorioPedido = new RepositorioPedidoImpl(sessionFactory);
+    }
+
+    @Test
+    @Rollback
+    public void quePuedaCrearPedido() {
+        Cliente cliente = new Cliente();
+        sessionFactory.getCurrentSession().save(cliente);
+
+        Pedido pedido = new Pedido();
+        pedido.setUsuario(cliente);
+        pedido.setFinalizo(false);
+        pedido.setEstadoPedido(EstadoPedido.PENDIENTE);
+        pedido.setFecha(String.valueOf(LocalDateTime.now()));
+
+        repositorioPedido.crearPedido(pedido);
+
+        Pedido pedidoGuardado = sessionFactory.getCurrentSession().get(Pedido.class, pedido.getId());
+        assertNotNull(pedidoGuardado);
+        assertEquals(cliente.getId(), pedidoGuardado.getUsuario().getId());
     }
 
 
@@ -53,7 +74,6 @@ public class RepositorioPedidoImplTest {
     @Test
     @Rollback
     public void queSePuedaGuardarUnPlatoEnUnPedidoExistente() {
-
         Cliente usuario = new Cliente();
         sessionFactory.getCurrentSession().save(usuario);
 
@@ -79,6 +99,79 @@ public class RepositorioPedidoImplTest {
         assertEquals(1, pedidoActualizado.getPedidoPlatos().size());
 
     }
+
+
+    @Test
+    @Rollback
+    public void queAgregarUnPlatoAlPedidoCreaPedidoSiNoHayUnoActivo() {
+        Cliente usuario = new Cliente();
+        sessionFactory.getCurrentSession().save(usuario);
+
+        Plato plato = new Plato();
+        plato.setPrecio(150.0);
+        sessionFactory.getCurrentSession().save(plato);
+
+        repositorioPedido.agregarPlatoAlPedido(plato, usuario.getId());
+
+        Pedido pedido = repositorioPedido.buscarPedidoActivoPorUsuario(usuario.getId());
+        assertNotNull(pedido);
+        assertFalse(pedido.isFinalizo());
+        assertEquals(1, pedido.getPedidoPlatos().size());
+        assertEquals(plato.getPrecio(), pedido.getPrecio());
+    }
+
+    @Test
+    @Rollback
+    public void queMostrarPlatosDelPedidoActualDevuelveTodosLosPlatos() {
+        Cliente cliente = new Cliente();
+        sessionFactory.getCurrentSession().save(cliente);
+
+        Plato plato = new Plato();
+        sessionFactory.getCurrentSession().save(plato);
+
+        Pedido pedido = new Pedido();
+        pedido.setUsuario(cliente);
+        pedido.setEstadoPedido(EstadoPedido.PENDIENTE);
+        pedido.setFinalizo(false);
+        pedido.setPedidoPlatos(new ArrayList<>());
+        sessionFactory.getCurrentSession().save(pedido);
+
+        PedidoPlato pedidoPlatoPendiente = new PedidoPlato();
+        pedidoPlatoPendiente.setPedido(pedido);
+        pedidoPlatoPendiente.setPlato(plato);
+        pedidoPlatoPendiente.setEstadoPlato(EstadoPlato.PENDIENTE);
+        sessionFactory.getCurrentSession().save(pedidoPlatoPendiente);
+
+        PedidoPlato pedidoPlatoFinalizado = new PedidoPlato();
+        pedidoPlatoFinalizado.setPedido(pedido);
+        pedidoPlatoFinalizado.setPlato(plato);
+        pedidoPlatoFinalizado.setEstadoPlato(EstadoPlato.FINALIZADO);
+        sessionFactory.getCurrentSession().save(pedidoPlatoFinalizado);
+
+        pedido.getPedidoPlatos().add(pedidoPlatoPendiente);
+        pedido.getPedidoPlatos().add(pedidoPlatoFinalizado);
+        sessionFactory.getCurrentSession().saveOrUpdate(pedido);
+
+        List<PedidoPlato> platos = repositorioPedido.mostrarPlatosDelPedidoActual(cliente.getId());
+
+        assertEquals(2, platos.size());
+
+        boolean tienePendiente = false;
+        boolean tieneFinalizado = false;
+
+        for (PedidoPlato pp : platos) {
+            if (pp.getEstadoPlato() == EstadoPlato.PENDIENTE) {
+                tienePendiente = true;
+            }
+            if (pp.getEstadoPlato() == EstadoPlato.FINALIZADO) {
+                tieneFinalizado = true;
+            }
+        }
+
+        assertTrue(tienePendiente, "Debe contener al menos un plato pendiente");
+        assertTrue(tieneFinalizado, "Debe contener al menos un plato finalizado");
+    }
+
 
     @Test
     @Rollback
@@ -108,39 +201,17 @@ public class RepositorioPedidoImplTest {
         pedido.getPedidoPlatos().add(pedidoPlato);
         sessionFactory.getCurrentSession().saveOrUpdate(pedido);
 
-        repositorioPedido.finalizarPedido(usuario.getId());
+        repositorioPedido.confirmarPedido(usuario.getId());
 
         Pedido pedidoActualizado = sessionFactory.getCurrentSession().get(Pedido.class, pedido.getId());
 
-        assertEquals(EstadoPedido.LISTO_PARA_ENVIAR, pedidoActualizado.getEstadoPedido());
+        assertEquals(EstadoPedido.EN_PROCESO, pedidoActualizado.getEstadoPedido());
+        assertFalse(pedidoActualizado.isFinalizo());
     }
 
     @Test
     @Rollback
-    public void queSePuedaEntregarUnPedido() {
-        Cliente usuario = new Cliente();
-        sessionFactory.getCurrentSession().save(usuario);
-
-        Pedido pedido = new Pedido();
-        pedido.setUsuario(usuario);
-        pedido.setPedidoPlatos(new ArrayList<>());
-        pedido.setFinalizo(false);
-        pedido.setPrecio(100.0);
-        pedido.setEstadoPedido(EstadoPedido.LISTO_PARA_ENVIAR); // ya fue finalizado por cocina
-        sessionFactory.getCurrentSession().save(pedido);
-
-        repositorioPedido.entregarPedido(pedido.getId());
-
-        Pedido pedidoEntregado = sessionFactory.getCurrentSession().get(Pedido.class, pedido.getId());
-
-        assertTrue(pedidoEntregado.isFinalizo()); // se marcó como entregado
-        assertEquals(EstadoPedido.LISTO_PARA_ENVIAR, pedidoEntregado.getEstadoPedido()); // sigue siendo finalizado
-    }
-
-
-    @Test
-    @Rollback
-    public void queSePuedaObtenerUnPedidoPorSuId(){
+    public void queSePuedaObtenerUnPedidoPorSuId() {
         Cliente usuario = new Cliente();
         sessionFactory.getCurrentSession().save(usuario);
 
@@ -152,7 +223,7 @@ public class RepositorioPedidoImplTest {
         pedido.setEstadoPedido(EstadoPedido.PENDIENTE);
         sessionFactory.getCurrentSession().save(pedido);
 
-        Pedido pedidoBuscado=repositorioPedido.buscarPorId(pedido.getId());
+        Pedido pedidoBuscado = repositorioPedido.buscarPorId(pedido.getId());
 
         assertEquals(usuario.getId(), pedidoBuscado.getUsuario().getId());
 

@@ -20,11 +20,9 @@ public interface RepositorioPedido {
 
     void finalizarPedido(Long id);
 
-    // List<Pedido> traerPedidosListosParaRetirar();
-
-    void entregarPedido(Integer idPedido);
-
     Pedido buscarPorId(Integer idPedido);
 
     List<Pedido> listarPedidosPorUsuario(Long usuarioId);
+
+    void confirmarPedido(Long idUsuario);
 }

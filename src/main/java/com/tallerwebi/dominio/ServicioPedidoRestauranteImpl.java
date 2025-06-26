@@ -73,7 +73,8 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
             // Guardar el cambio del plato
             repositorioPedidoPlato.guardar(pedidoPlato);
 
-            confirmarPedidoListoParaEnviar(pedidoPlato.getPedido().getId());
+            // NO LLAMAR confirmacion acá, porque no siempre estarán todos finalizados
+            // confirmarPedidoListoParaEnviar(pedidoPlato.getPedido().getId());
         }
     }
 
@@ -92,12 +93,10 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
                 pedido.setFinalizo(false);
                 repositorioPedidoRestaurante.guardar(pedido);
             } else {
-                // Opcional: lanzar excepción o error si no todos están finalizados
                 throw new IllegalStateException("No todos los platos están finalizados");
             }
         }
     }
-
 
     @Override
     public List<PedidoVistaDto> traerPedidosListosParaVista() {
@@ -134,7 +133,7 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
 
                     // Sumamos cantidades iguales
                     for (int i = 0; i < platos.size(); i++) {
-                        if (platos.get(i).getNombreProducto().equals(plato.getNombre())) {
+                        if (platos.get(i).getNombre().equals(plato.getNombre())) {
                             yaExistente = i;
                             break;
                         }
@@ -149,7 +148,7 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
                 }
             }
 
-            dto.setProductos(platos);
+            dto.setPlatos(platos);
             dtos.add(dto);
         }
 
@@ -194,7 +193,7 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
             Plato plato = pp.getPlato();
             int index = -1;
             for (int i = 0; i < platos.size(); i++) {
-                if (platos.get(i).getNombreProducto().equals(plato.getNombre())) {
+                if (platos.get(i).getNombre().equals(plato.getNombre())) {
                     index = i;
                     break;
                 }
@@ -205,7 +204,7 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
                 platos.add(new PlatoCantidadDto(plato.getNombre(), 1));
             }
         }
-        dto.setProductos(platos);
+        dto.setPlatos(platos);
 
         return dto;
     }

@@ -38,7 +38,7 @@ public class PedidoVistaDto {
         return platos;
     }
 
-    public void setProductos(List<PlatoCantidadDto> platos) {
+    public void setPlatos(List<PlatoCantidadDto> platos) {
         this.platos = platos;
     }
 

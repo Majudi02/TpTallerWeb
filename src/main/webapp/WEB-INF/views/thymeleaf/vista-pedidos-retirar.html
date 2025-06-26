@@ -13,20 +13,24 @@
 <main class="d-flex flex-column align-items-center gap-5" style="margin-top: 100px;">
     <div class="card w-75 p-4 shadow mx-auto">
         <h2 class="titulo-verde mb-4">Pedidos Listos para Retirar</h2>
-        <div class="d-flex flex-column gap-4">
+
+        <!-- Mensaje si no hay pedidos -->
+        <div th:if="${#lists.isEmpty(pedidos)}" class="alert alert-info text-center p-4 rounded-4 shadow-sm">
+            No hay pedidos listos para retirar.
+        </div>
+
+        <!-- Lista de pedidos -->
+        <div class="d-flex flex-column gap-4" th:if="${!#lists.isEmpty(pedidos)}">
             <div class="card p-4 shadow" th:each="pedido : ${pedidos}">
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <h5>Restaurante</h5>
-                        <p class="mb-1"><strong>Nombre:</strong> <span th:text="${pedido.nombreRestaurante}">Nombre Restaurante</span>
-                        </p>
-                        <p class="mb-0"><strong>Dirección:</strong> <span th:text="${pedido.direccionRestaurante}">Dirección Restaurante</span>
-                        </p>
+                        <p class="mb-1"><strong>Nombre:</strong> <span th:text="${pedido.nombreRestaurante}">Nombre Restaurante</span></p>
+                        <p class="mb-0"><strong>Dirección:</strong> <span th:text="${pedido.direccionRestaurante}">Dirección Restaurante</span></p>
                     </div>
                     <div class="col-md-6">
                         <h5>Cliente</h5>
-                        <p class="mb-1"><strong>Dirección:</strong> <span th:text="${pedido.direccionCliente}">Dirección Cliente</span>
-                        </p>
+                        <p class="mb-1"><strong>Dirección:</strong> <span th:text="${pedido.direccionCliente}">Dirección Cliente</span></p>
                     </div>
                 </div>
 
@@ -34,7 +38,7 @@
                     <h5>Platos pedidos</h5>
                     <ul class="list-group">
                         <li class="list-group-item d-flex justify-content-between" th:each="plato : ${pedido.platos}">
-                            <span th:text="${plato.nombreProducto}">Nombre Plato</span>
+                            <span th:text="${plato.nombre}">Nombre Plato</span>
                             <span class="badge bg-success rounded-pill" th:text="${plato.cantidad}">1</span>
                         </li>
                     </ul>
@@ -47,6 +51,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 </main>
 <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>

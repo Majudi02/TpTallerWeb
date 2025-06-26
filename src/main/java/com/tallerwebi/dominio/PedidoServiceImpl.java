@@ -60,14 +60,6 @@ public class PedidoServiceImpl implements PedidoService {
         return platosOrdenados;
     }
 
-
-    @Override
-    public PedidoDto buscarPedidoActivoPorUsuario(Long idUsuario) {
-        Pedido pedido = this.repositorioPedido.buscarPedidoActivoPorUsuario(idUsuario);
-        return pedido != null ? pedido.obtenerDto() : null;
-    }
-
-
     @Override
     public void agregarPlatoAlPedido(PlatoDto platoDto, UsuarioDTO usuarioDTO) {
         List<Etiqueta> etiquetasEntidad = new ArrayList<>();
@@ -116,6 +108,35 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
+    public List<PedidoDto> listarPedidosActivosPorUsuario(Long idUsuario) {
+        List<Pedido> pedidos = repositorioPedido.listarPedidosPorUsuario(idUsuario);
+        List<PedidoDto> activos = new ArrayList<>();
+
+        for (Pedido pedido : pedidos) {
+            if (!pedido.isFinalizo()) {
+                activos.add(pedido.obtenerDto());
+            }
+        }
+
+        return activos;
+    }
+
+    @Override
+    public List<PedidoDto> listarPedidosEntregadosPorUsuario(Long idUsuario) {
+        List<Pedido> pedidos = repositorioPedido.listarPedidosPorUsuario(idUsuario);
+        List<PedidoDto> entregados = new ArrayList<>();
+
+        for (Pedido pedido : pedidos) {
+            if (pedido.isFinalizo()) {
+                entregados.add(pedido.obtenerDto());
+            }
+        }
+
+        return entregados;
+    }
+
+
+    @Override
     public void crearPedido(Long idUsuario) {
         // Verificar si ya existe un pedido activo para ese usuario
         Pedido pedidoExistente = repositorioPedido.buscarPedidoActivoPorUsuario(idUsuario);
@@ -135,6 +156,11 @@ public class PedidoServiceImpl implements PedidoService {
         nuevoPedido.setPedidoPlatos(new ArrayList<>());
 
         repositorioPedido.crearPedido(nuevoPedido);
+    }
+
+    @Override
+    public void confirmarPedido(Long idUsuario) {
+        repositorioPedido.confirmarPedido(idUsuario);
     }
 
 

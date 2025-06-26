@@ -73,41 +73,68 @@
 
 <!-- CONTENIDO PRINCIPAL -->
 <main class="container-lg py-5" style="margin-top: 100px;">
-  <h2 class="text-center fw-bold mb-5" style="color: #38BD48;">Mis Pedidos</h2>
+    <h2 class="text-center fw-bold mb-5" style="color: #38BD48;">Mis Pedidos Activos</h2>
 
-  <!-- Si no hay pedidos -->
-  <div th:if="${#lists.isEmpty(pedidos)}" class="alert alert-info text-center shadow-sm rounded-4 p-4">
-    No tenés pedidos aún. ¡Explorá platos y armá tu pedido!
-    <div class="mt-3">
-      <a th:href="@{/pedido}" class="btn btn-green">Ir a Comidas</a>
-    </div>
-  </div>
-
-  <!-- Grid de pedidos -->
-  <div class="row g-4" th:if="${!#lists.isEmpty(pedidos)}">
-    <div class="col-12 col-md-6 col-lg-4" th:each="pedido : ${pedidos}">
-      <div class="card shadow-lg rounded-4 h-100 p-3">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <h5 class="fw-bold mb-0">Pedido #<span th:text="${pedido.id}">123</span></h5>
-          <span class="badge text-uppercase fw-semibold px-3 py-2"
-                th:text="${pedido.estadoPedido.name().replace('_',' ')}"
-                th:classappend="${pedido.estadoPedido.name() == 'EN_PREPARACION' ? ' bg-warning text-dark'
-                       : (pedido.estadoPedido.name() == 'EN_CAMINO' ? ' bg-primary'
-                       : ' bg-success')}"></span>
+    <div th:if="${#lists.isEmpty(pedidosActivos)}" class="alert alert-info text-center shadow-sm rounded-4 p-4">
+        No tenés pedidos activos.
+        <div class="mt-3">
+            <a th:href="@{/pedido}" class="btn btn-green">Ir a Comidas</a>
         </div>
-        <p class="mb-1 text-muted"><strong>Fecha:</strong> <span th:text="${pedido.fecha}">2025-06-15</span></p>
-        <p class="mb-2 text-muted"><strong>Total:</strong> $<span th:text="${pedido.precio}">999</span></p>
-
-        <ul class="list-group list-group-flush mt-3 border-top pt-2"
-            th:each="pp : ${pedido.pedidoPlatos}">
-          <li class="list-group-item d-flex justify-content-between px-0">
-            <span class="text-dark" th:text="${pp.plato.nombre}">Plato</span>
-            <span class="text-muted" th:text="'$ ' + ${pp.plato.precio}">Precio</span>
-          </li>
-        </ul>
-      </div>
     </div>
-  </div>
+
+    <div class="row g-4" th:if="${!#lists.isEmpty(pedidosActivos)}">
+        <div class="col-12 col-md-6 col-lg-4" th:each="pedido : ${pedidosActivos}">
+            <div class="card shadow-lg rounded-4 h-100 p-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="fw-bold mb-0">Pedido #<span th:text="${pedido.id}">123</span></h5>
+                    <span class="badge text-uppercase fw-semibold px-3 py-2"
+                          th:text="${pedido.estadoPedido.name().replace('_',' ')}"
+                          th:classappend="${pedido.estadoPedido.name() == 'EN_PREPARACION' ? ' bg-warning text-dark'
+                     : (pedido.estadoPedido.name() == 'EN_CAMINO' ? ' bg-primary'
+                     : ' bg-success')}"></span>
+                </div>
+                <p class="mb-1 text-muted"><strong>Fecha:</strong> <span th:text="${pedido.fecha}">2025-06-15</span></p>
+                <p class="mb-2 text-muted"><strong>Total:</strong> $<span th:text="${pedido.precio}">999</span></p>
+
+                <ul class="list-group list-group-flush mt-3 border-top pt-2">
+                    <li class="list-group-item d-flex justify-content-between px-0"
+                        th:each="pp : ${pedido.pedidoPlatos}">
+                        <span class="text-dark" th:text="${pp.plato.nombre}">Plato</span>
+                        <span class="text-muted" th:text="'$ ' + ${pp.plato.precio}">Precio</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <h2 class="text-center fw-bold my-5" style="color: #38BD48;">Pedidos Entregados</h2>
+
+    <div th:if="${#lists.isEmpty(pedidosEntregados)}" class="alert alert-info text-center shadow-sm rounded-4 p-4">
+        No tenés pedidos entregados.
+    </div>
+
+    <div class="row g-4" th:if="${!#lists.isEmpty(pedidosEntregados)}">
+        <div class="col-12 col-md-6 col-lg-4" th:each="pedido : ${pedidosEntregados}">
+            <div class="card shadow-lg rounded-4 h-100 p-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="fw-bold mb-0">Pedido #<span th:text="${pedido.id}">123</span></h5>
+                    <span class="badge bg-success text-uppercase fw-semibold px-3 py-2">Entregado</span>
+                </div>
+                <p class="mb-1 text-muted"><strong>Fecha:</strong> <span th:text="${pedido.fecha}">2025-06-15</span></p>
+                <p class="mb-2 text-muted"><strong>Total:</strong> $<span th:text="${pedido.precio}">999</span></p>
+
+                <ul class="list-group list-group-flush mt-3 border-top pt-2">
+                    <li class="list-group-item d-flex justify-content-between px-0"
+                        th:each="pp : ${pedido.pedidoPlatos}">
+                        <span class="text-dark" th:text="${pp.plato.nombre}">Plato</span>
+                        <span class="text-muted" th:text="'$ ' + ${pp.plato.precio}">Precio</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
 </main>
 
 <script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.bundle.min.js}"></script>

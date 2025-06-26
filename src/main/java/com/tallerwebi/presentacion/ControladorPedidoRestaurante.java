@@ -65,4 +65,11 @@ public class ControladorPedidoRestaurante {
         servicioPedidoRestaurante.finalizarPlatoPedido(pedidoPlatoId);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/restaurante/finalizar-pedido-completo")
+    @ResponseBody
+    public void finalizarPedidoCompleto(@RequestParam Integer pedidoId) {
+        servicioPedidoRestaurante.confirmarPedidoListoParaEnviar(pedidoId);
+    }
+
 }

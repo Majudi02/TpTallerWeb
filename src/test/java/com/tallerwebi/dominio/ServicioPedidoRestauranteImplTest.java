@@ -59,7 +59,6 @@ public class ServicioPedidoRestauranteImplTest {
         // Simular repo para buscar pedido para entregar
         when(repoPedido.buscarPorId(100)).thenReturn(pedido);
 
-        // Simular repo para entregar pedido
         doAnswer(invocation -> {
             Integer id = invocation.getArgument(0);
             if (id.equals(pedido.getId())) {
@@ -69,21 +68,24 @@ public class ServicioPedidoRestauranteImplTest {
             return null;
         }).when(repoPedido).entregarPedido(anyInt());
 
-        // 1) Finalizar plato
+        // finalizar plato y confirmar el pedido listo para entregar
         servicio.finalizarPlatoPedido(10L);
+        servicio.confirmarPedidoListoParaEnviar(pedido.getId());
+
+        // validar plato finalizado
         assertEquals(EstadoPlato.FINALIZADO, pedidoPlato.getEstadoPlato());
 
-        // 2) Validar que el pedido tiene todos los platos finalizados
+        // validar que el pedido tiene todos los platos finalizados
         assertTrue(pedido.todosLosPlatosFinalizados());
 
-        // 3) Validar que el estado del pedido cambió a FINALIZADO (ya que todos los platos están finalizados)
+        // validar que el estado del pedido cambio a listo para enviar
         assertEquals(EstadoPedido.LISTO_PARA_ENVIAR, pedido.getEstadoPedido());
 
-        // 4) Traer pedidos listos para retirar (simulado)
+        // traer pedidos listos para retirar
         List<Pedido> listos = repoPedido.traerPedidosListosParaRetirar();
         assertFalse(listos.isEmpty());
 
-        // 5) Entregar pedido
+        // entregar pedido
         servicio.entregarPedido(100);
         assertEquals(EstadoPedido.ENTREGADO, pedido.getEstadoPedido());
         assertTrue(pedido.isFinalizo());
