@@ -12,15 +12,13 @@ public interface ServicioPedidoRestaurante {
 
     Long obtenerIdDelRestaurate(Long id);
 
-<<<<<<< HEAD
-    void finalizarPedido(Long id);
+    void finalizarPlatoPedido(Long id);
+
+    void confirmarPedidoListoParaEnviar(Integer idPedido);
 
     List<PedidoVistaDto> traerPedidosListosParaVista();
 
     void entregarPedido(Integer idPedido);
-=======
-    void finalizarPlatoPedido(Long id);
 
-    void finalizarPedidoCompleto(Integer idPedido);
->>>>>>> origin/main
+    PedidoVistaDto traerDetallePedidoPorId(Integer id);
 }

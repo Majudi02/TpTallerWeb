@@ -15,4 +15,6 @@ public interface RepositorioPedidoRestaurante {
     void entregarPedido(Integer idPedido);
 
     Pedido buscarPorId(int i);
+
+    void guardar(Pedido pedido);
 }

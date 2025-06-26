@@ -28,10 +28,20 @@ public class ControladorRepartidor {
         return "vista-pedidos-retirar"; // el nombre del archivo Thymeleaf o JSP
     }
 
-    @PostMapping("/pedido/entregar/{id}")
-    public String entregarPedido(@PathVariable("id") Integer id) {
-        servicioPedidoRestaurante.entregarPedido(id);
-        return "redirect:/pedidos-retirar";
+    @GetMapping("/pedido/entregar/{id}")
+    public String mostrarDetallePedido(@PathVariable("id") Integer id, Model model) {
+        // Obtener pedido con todos los datos para mostrar (podés usar un método en servicio)
+        PedidoVistaDto pedido = servicioPedidoRestaurante.traerDetallePedidoPorId(id);
+
+        model.addAttribute("pedido", pedido);
+        return "detalle-pedido-entrega"; // nombre de la nueva vista
     }
+
+    @PostMapping("/pedido/entregar/{id}")
+    public String finalizarEntregaPedido(@PathVariable("id") Integer id) {
+        servicioPedidoRestaurante.entregarPedido(id);  // Cambia el estado a ENTREGADO
+        return "redirect:/pedidos-retirar";  // Redirige a la lista de pedidos
+    }
+
 
 }

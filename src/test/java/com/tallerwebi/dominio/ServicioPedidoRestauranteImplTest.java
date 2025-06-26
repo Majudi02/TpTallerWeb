@@ -70,14 +70,14 @@ public class ServicioPedidoRestauranteImplTest {
         }).when(repoPedido).entregarPedido(anyInt());
 
         // 1) Finalizar plato
-        servicio.finalizarPedido(10L);
+        servicio.finalizarPlatoPedido(10L);
         assertEquals(EstadoPlato.FINALIZADO, pedidoPlato.getEstadoPlato());
 
         // 2) Validar que el pedido tiene todos los platos finalizados
         assertTrue(pedido.todosLosPlatosFinalizados());
 
         // 3) Validar que el estado del pedido cambió a FINALIZADO (ya que todos los platos están finalizados)
-        assertEquals(EstadoPedido.FINALIZADO, pedido.getEstadoPedido());
+        assertEquals(EstadoPedido.LISTO_PARA_ENVIAR, pedido.getEstadoPedido());
 
         // 4) Traer pedidos listos para retirar (simulado)
         List<Pedido> listos = repoPedido.traerPedidosListosParaRetirar();

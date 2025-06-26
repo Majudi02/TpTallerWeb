@@ -32,7 +32,7 @@ public class RepositorioPedidoPlatoImpl implements RepositorioPedidoPlato {
 
         Pedido pedido = pedidoPlato.getPedido();
         if (pedido.todosLosPlatosFinalizados()) {
-            pedido.setEstadoPedido(EstadoPedido.FINALIZADO);
+            pedido.setEstadoPedido(EstadoPedido.LISTO_PARA_ENVIAR);
             pedido.setFinalizo(true);
         }
         sessionFactory.getCurrentSession().saveOrUpdate(pedidoPlato);

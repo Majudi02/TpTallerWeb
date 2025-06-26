@@ -112,7 +112,7 @@ public class RepositorioPedidoImplTest {
 
         Pedido pedidoActualizado = sessionFactory.getCurrentSession().get(Pedido.class, pedido.getId());
 
-        assertEquals(EstadoPedido.FINALIZADO, pedidoActualizado.getEstadoPedido());
+        assertEquals(EstadoPedido.LISTO_PARA_ENVIAR, pedidoActualizado.getEstadoPedido());
     }
 
     @Test
@@ -126,7 +126,7 @@ public class RepositorioPedidoImplTest {
         pedido.setPedidoPlatos(new ArrayList<>());
         pedido.setFinalizo(false);
         pedido.setPrecio(100.0);
-        pedido.setEstadoPedido(EstadoPedido.FINALIZADO); // ya fue finalizado por cocina
+        pedido.setEstadoPedido(EstadoPedido.LISTO_PARA_ENVIAR); // ya fue finalizado por cocina
         sessionFactory.getCurrentSession().save(pedido);
 
         repositorioPedido.entregarPedido(pedido.getId());
@@ -134,7 +134,7 @@ public class RepositorioPedidoImplTest {
         Pedido pedidoEntregado = sessionFactory.getCurrentSession().get(Pedido.class, pedido.getId());
 
         assertTrue(pedidoEntregado.isFinalizo()); // se marcó como entregado
-        assertEquals(EstadoPedido.FINALIZADO, pedidoEntregado.getEstadoPedido()); // sigue siendo finalizado
+        assertEquals(EstadoPedido.LISTO_PARA_ENVIAR, pedidoEntregado.getEstadoPedido()); // sigue siendo finalizado
     }
 
 

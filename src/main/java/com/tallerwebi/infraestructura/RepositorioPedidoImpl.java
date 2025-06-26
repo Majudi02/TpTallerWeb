@@ -121,12 +121,13 @@ public class RepositorioPedidoImpl implements RepositorioPedido {
         Pedido pedido = this.buscarPedidoActivoPorUsuario(idUsuario);
 
         if (pedido != null) {
-            pedido.setEstadoPedido(EstadoPedido.FINALIZADO); // Pedido listo para entrega
+            pedido.setEstadoPedido(EstadoPedido.LISTO_PARA_ENVIAR); // Pedido listo para entrega
             pedido.setFinalizo(false); // No está entregado aún
             sessionFactory.getCurrentSession().saveOrUpdate(pedido);
         }
     }
 
+    /*
     @Override
     public List<Pedido> traerPedidosListosParaRetirar() {
         String hql = "FROM Pedido p " +
@@ -150,11 +151,13 @@ public class RepositorioPedidoImpl implements RepositorioPedido {
         return pedidosListos;
     }
 
+     */
+
     @Override
     public void entregarPedido(Integer idPedido) {
         Pedido pedido = sessionFactory.getCurrentSession().get(Pedido.class, idPedido);
         if (pedido != null) {
-            pedido.setEstadoPedido(EstadoPedido.FINALIZADO);
+            pedido.setEstadoPedido(EstadoPedido.LISTO_PARA_ENVIAR);
             pedido.setFinalizo(true);
             sessionFactory.getCurrentSession().saveOrUpdate(pedido);
         }

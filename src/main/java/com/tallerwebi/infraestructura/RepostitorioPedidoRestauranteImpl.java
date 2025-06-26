@@ -26,12 +26,16 @@ public class RepostitorioPedidoRestauranteImpl implements RepositorioPedidoResta
 
     @Override
     public List<Pedido> traerTodosLosPedidos() {
-        String hql = "FROM Pedido WHERE estadoPedido = :estado";
+        String hql = "SELECT DISTINCT p FROM Pedido p " +
+                "JOIN FETCH p.pedidoPlatos pp " +
+                "JOIN FETCH pp.plato pl " +
+                "JOIN FETCH pl.restaurante";
+
         return sessionFactory.getCurrentSession()
                 .createQuery(hql, Pedido.class)
-                .setParameter("estado", EstadoPedido.EN_PROCESO)
                 .getResultList();
     }
+
 
     @Override
     public Long obtenerIdDelRestaurate(Long id) {
@@ -86,5 +90,10 @@ public class RepostitorioPedidoRestauranteImpl implements RepositorioPedidoResta
     @Override
     public Pedido buscarPorId(int id) {
         return sessionFactory.getCurrentSession().get(Pedido.class, id);
+    }
+
+    @Override
+    public void guardar(Pedido pedido) {
+        sessionFactory.getCurrentSession().saveOrUpdate(pedido);
     }
 }

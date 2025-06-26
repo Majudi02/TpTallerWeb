@@ -28,9 +28,9 @@ public class PedidoControlador {
 
 
     @Autowired
-    public PedidoControlador(PedidoService pedidoService,ServicioRestaurante servicioRestaurante) {
+    public PedidoControlador(PedidoService pedidoService, ServicioRestaurante servicioRestaurante) {
         this.pedidoService = pedidoService;
-        this.servicioRestaurante =servicioRestaurante;
+        this.servicioRestaurante = servicioRestaurante;
     }
 
     @GetMapping("/pedido")
@@ -39,12 +39,12 @@ public class PedidoControlador {
         modeloMap.put("restaurantes", servicioRestaurante.traerRestaurantesDestacados());
         modeloMap.put("platos", pedidoService.traerPlatosDestacados());
 
-        return new ModelAndView("pedido",modeloMap);
+        return new ModelAndView("pedido", modeloMap);
     }
 
     @GetMapping("/pedido/platos")
     public ModelAndView listarPlatos(@RequestParam(required = false) String ordenar,
-                                     @RequestParam(required = false) String tipo,HttpServletRequest request) {
+                                     @RequestParam(required = false) String tipo, HttpServletRequest request) {
         ModelMap modeloMap = new ModelMap();
         List<PlatoDto> platosMostrados;
         System.out.println("Tipo recibido: " + tipo);
@@ -77,11 +77,13 @@ public class PedidoControlador {
     }
 
 
-
     @PostMapping("/pedido/confirmar")
-    public String confirmarPedidoPorGet(HttpServletRequest request){
+    public String confirmarPedido(HttpServletRequest request) {
         UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
-        this.pedidoService.finalizarPedido(usuario.getId());
+
+        // Crear el pedido para ese usuario y restaurante, con estado PENDIENTE
+        pedidoService.crearPedido(usuario.getId());
+
         return "redirect:/pedido/platos";
     }
 
@@ -94,17 +96,17 @@ public class PedidoControlador {
         }
         return pedidoService.mostrarPlatosDelPedidoActual(usuario.getId());
     }
+
     @PostMapping("/pedido/agregar")
     @ResponseBody
     public void agregarPlatoAlPedido(@RequestParam("platoId") Integer platoId, HttpServletRequest request) {
-            UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
+        UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
 
 
-            PlatoDto platoBuscado = servicioRestaurante.obtenerPlatoPorId(platoId);
+        PlatoDto platoBuscado = servicioRestaurante.obtenerPlatoPorId(platoId);
         System.out.println("Agregando plato al pedido. Usuario ID: " + usuario.getId() + ", Plato ID: " + platoBuscado.getId());
 
         pedidoService.agregarPlatoAlPedido(platoBuscado, usuario);
-
     }
 
     @GetMapping("/mis-pedidos")
@@ -116,7 +118,4 @@ public class PedidoControlador {
         model.addAttribute("pedidos", lista);
         return "mis-pedidos";
     }
-
-
-
 }

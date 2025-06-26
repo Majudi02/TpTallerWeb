@@ -33,7 +33,7 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
 
     @Override
     public List<PedidoDto> traerPedidosDelRestaurante(Long id) {
-        List<PedidoDto> pedidosTotales = this.traerTodosLosPedidos();
+        List<PedidoDto> pedidosTotales = this.traerTodosLosPedidos(); // trae todos, sin filtrar por estado
 
         List<PedidoDto> pedidosFiltrados = new ArrayList<>();
 
@@ -58,6 +58,7 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
         return pedidosFiltrados;
     }
 
+
     @Override
     public Long obtenerIdDelRestaurate(Long id) {
         return repositorioPedidoRestaurante.obtenerIdDelRestaurate(id);
@@ -69,16 +70,31 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
 
         if (pedidoPlato != null) {
             pedidoPlato.setEstadoPlato(EstadoPlato.FINALIZADO);
+            // Guardar el cambio del plato
+            repositorioPedidoPlato.guardar(pedidoPlato);
 
-            Pedido pedido = pedidoPlato.getPedido();
+            // NO cambiar el estado del pedido aquí
+            // El pedido se mantiene en estado PENDIENTE o similar
+        }
+    }
 
+    @Override
+    public void confirmarPedidoListoParaEnviar(Integer idPedido) {
+        Pedido pedido = repositorioPedidoRestaurante.buscarPorId(idPedido);
+
+        if (pedido != null) {
+            // Validar que TODOS los platos están finalizados antes de cambiar
             boolean todosFinalizados = pedido.getPedidoPlatos()
                     .stream()
                     .allMatch(pp -> pp.getEstadoPlato() == EstadoPlato.FINALIZADO);
 
             if (todosFinalizados) {
-                pedido.setEstadoPedido(EstadoPedido.FINALIZADO);
-                pedido.setFinalizo(false); // Todavía no entregado
+                pedido.setEstadoPedido(EstadoPedido.LISTO_PARA_ENVIAR);
+                pedido.setFinalizo(false);
+                repositorioPedidoRestaurante.guardar(pedido);
+            } else {
+                // Opcional: lanzar excepción o error si no todos están finalizados
+                throw new IllegalStateException("No todos los platos están finalizados");
             }
         }
     }
@@ -146,19 +162,53 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
         repositorioPedidoRestaurante.entregarPedido(idPedido);
     }
 
-
     @Override
-    public void finalizarPedidoCompleto(Integer idPedido) {
-        Pedido pedidoBuscado = repositorioPedidoRestaurante.buscarPorId(idPedido);
+    public PedidoVistaDto traerDetallePedidoPorId(Integer id) {
+        Pedido pedido = repositorioPedidoRestaurante.buscarPorId(id);
+        if (pedido == null) return null;
 
-        if (pedidoBuscado != null) {
-            pedidoBuscado.setEstadoPedido(EstadoPedido.EN_CAMINO);
+        // Aquí convertís Pedido a PedidoVistaDto (similar a traerPedidosListosParaVista pero solo uno)
+        PedidoVistaDto dto = new PedidoVistaDto();
+        dto.setPedidoId(pedido.getId());
 
-            for (PedidoPlato plato : pedidoBuscado.getPedidoPlatos()) {
-                plato.setEstadoPlato(EstadoPlato.FINALIZADO);
+        // Dirección cliente (como hacés ya)
+        if (pedido.getUsuario() instanceof Cliente) {
+            Cliente cliente = (Cliente) pedido.getUsuario();
+            if (cliente.getDirecciones() != null && !cliente.getDirecciones().isEmpty()) {
+                Direccion direccion = cliente.getDirecciones().get(0);
+                dto.setDireccionCliente(direccion.getCalle() + " " + direccion.getNumero() + ", Localidad: " + direccion.getLocalidad());
+            } else {
+                dto.setDireccionCliente("Dirección no disponible");
             }
         }
 
+        // Datos restaurante
+        if (!pedido.getPedidoPlatos().isEmpty()) {
+            Restaurante restaurante = pedido.getPedidoPlatos().get(0).getPlato().getRestaurante();
+            dto.setNombreRestaurante(restaurante.getNombre());
+            dto.setDireccionRestaurante(restaurante.getCalle() + " " + restaurante.getNumero() + ", Localidad: " + restaurante.getLocalidad());
+        }
+
+        // Platos con cantidades
+        List<PlatoCantidadDto> platos = new ArrayList<>();
+        for (PedidoPlato pp : pedido.getPedidoPlatos()) {
+            Plato plato = pp.getPlato();
+            int index = -1;
+            for (int i = 0; i < platos.size(); i++) {
+                if (platos.get(i).getNombreProducto().equals(plato.getNombre())) {
+                    index = i;
+                    break;
+                }
+            }
+            if (index != -1) {
+                platos.get(index).setCantidad(platos.get(index).getCantidad() + 1);
+            } else {
+                platos.add(new PlatoCantidadDto(plato.getNombre(), 1));
+            }
+        }
+        dto.setProductos(platos);
+
+        return dto;
     }
 
 }
