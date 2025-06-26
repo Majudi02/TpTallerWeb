@@ -21,5 +21,7 @@ public interface ServicioUsuario {
     Boolean confirmarUsuarioPorToken(String token);
 
     void editarUsuario(UsuarioDTO usuarioDTO);
+
+    UsuarioDTO obtenerClienteConEtiquetas(Long id);
 }
 

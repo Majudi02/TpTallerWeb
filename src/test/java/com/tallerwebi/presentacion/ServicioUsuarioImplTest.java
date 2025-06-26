@@ -22,12 +22,13 @@ public class ServicioUsuarioImplTest {
     private ServicioUsuarioImpl servicioUsuario;
     private RepositorioUsuarioNutriya repositorioMock;
     private RepositorioDireccion repositorioDireccionMock;
+    private RepositorioEtiqueta repositorioEtiquetaMock;
 
     @BeforeEach
     public void init() {
         repositorioMock = mock(RepositorioUsuarioNutriya.class);
         repositorioDireccionMock = mock(RepositorioDireccion.class);
-        servicioUsuario = new ServicioUsuarioImpl(repositorioMock, repositorioDireccionMock);
+        servicioUsuario = new ServicioUsuarioImpl(repositorioMock, repositorioDireccionMock, repositorioEtiquetaMock);
     }
 
     @Test

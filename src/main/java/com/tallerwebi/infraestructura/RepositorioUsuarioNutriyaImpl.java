@@ -1,7 +1,9 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.RepositorioUsuarioNutriya;
+import com.tallerwebi.dominio.entidades.Cliente;
 import com.tallerwebi.dominio.entidades.UsuarioNutriya;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -64,5 +66,14 @@ public class RepositorioUsuarioNutriyaImpl implements RepositorioUsuarioNutriya 
     @Override
     public UsuarioNutriya buscarPorId(Long id) {
         return sessionFactory.getCurrentSession().get(UsuarioNutriya.class, id);
+    }
+
+    @Override
+    public Cliente obtenerClienteConEtiquetas(Long id) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery(
+                        "SELECT c FROM Cliente c LEFT JOIN FETCH c.etiquetas WHERE c.id = :id", Cliente.class)
+                .setParameter("id", id)
+                .uniqueResult();
     }
 }

@@ -201,40 +201,34 @@
             <!-- Paso 3 Cliente (etiquetas) -->
             <div id="paso3-cliente" class="paso cliente">
                 <h3 class="mb-4">¿Qué etiquetas te gustan?</h3>
+
                 <div class="form-check">
-                    <input class="form-check-input cliente-input" th:field="*{etiquetas}" value="Sin TACC"
-                           type="checkbox" id="sinTacc"/>
+                    <input class="form-check-input cliente-input" th:field="*{etiquetas}" value="4" type="checkbox" id="sinTacc"/>
                     <label class="form-check-label" for="sinTacc">Sin TACC</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input cliente-input" th:field="*{etiquetas}" value="Vegano"
-                           type="checkbox" id="vegano"/>
+                    <input class="form-check-input cliente-input" th:field="*{etiquetas}" value="1" type="checkbox" id="vegano"/>
                     <label class="form-check-label" for="vegano">Vegano</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input cliente-input" th:field="*{etiquetas}" value="Vegetariano"
-                           type="checkbox" id="vegetariano"/>
+                    <input class="form-check-input cliente-input" th:field="*{etiquetas}" value="2" type="checkbox" id="vegetariano"/>
                     <label class="form-check-label" for="vegetariano">Vegetariano</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input cliente-input" th:field="*{etiquetas}" value="Alto en proteínas"
-                           type="checkbox" id="proteinas"/>
+                    <input class="form-check-input cliente-input" th:field="*{etiquetas}" value="3" type="checkbox" id="proteinas"/>
                     <label class="form-check-label" for="proteinas">Alto en proteínas</label>
                 </div>
                 <div class="form-check mb-4">
-                    <input class="form-check-input cliente-input" th:field="*{etiquetas}" value="Sin gluten"
-                           type="checkbox" id="sinGluten"/>
+                    <input class="form-check-input cliente-input" th:field="*{etiquetas}" value="4" type="checkbox" id="sinGluten"/>
                     <label class="form-check-label" for="sinGluten">Sin gluten</label>
                 </div>
+
                 <div class="d-flex justify-content-between btn-group">
-                    <button type="button" class="btn btn-secondary"
-                            onclick="cambiarPaso('paso3-cliente', 'paso2-cliente')">Volver
-                    </button>
-                    <button type="button" class="btn btn-green"
-                            onclick="cambiarPaso('paso3-cliente', 'paso4-cliente')">Siguiente
-                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="cambiarPaso('paso3-cliente', 'paso2-cliente')">Volver</button>
+                    <button type="button" class="btn btn-green" onclick="cambiarPaso('paso3-cliente', 'paso4-cliente')">Siguiente</button>
                 </div>
             </div>
+
             <!-- Paso 4 Cliente (datos de salud) -->
             <div id="paso4-cliente" class="paso cliente">
                 <h3 class="mb-4">Datos de salud</h3>
