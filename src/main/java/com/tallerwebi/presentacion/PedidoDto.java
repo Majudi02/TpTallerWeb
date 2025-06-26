@@ -19,8 +19,6 @@ public class PedidoDto {
     private boolean platosFinalizados;
 
 
-
-
     public PedidoDto() {
     }
 
@@ -56,11 +54,13 @@ public class PedidoDto {
 
 
     public List<PedidoPlatoDto> getPedidoPlatosDelRestaurante(Long idRestaurante) {
-        return pedidoPlatos != null
-                ? pedidoPlatos.stream()
-                .filter(pp -> pp.getPlato().getIdRestaurante().equals(idRestaurante))
-                .collect(Collectors.toList())
-                : new ArrayList<>();
+        if (pedidoPlatos == null) return new ArrayList<>();
+
+        return pedidoPlatos.stream()
+                .filter(pp -> pp.getPlato() != null
+                        && pp.getPlato().getIdRestaurante() != null
+                        && pp.getPlato().getIdRestaurante().equals(idRestaurante))
+                .collect(Collectors.toList());
     }
 
 

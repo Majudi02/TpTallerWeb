@@ -19,68 +19,106 @@
     <div class="card contenedor-verde shadow p-4 w-100" style="max-width: 900px;">
         <h2 class="titulo-verde text-center mb-4">Pedidos del Restaurante</h2>
 
-        <div th:if="${pedidos.size() == 0}">
+        <!-- Sección: Pedidos en preparación -->
+        <h4 class="mb-3">Pedidos en preparación</h4>
+        <div th:if="${pedidosEnPreparacion.size() == 0}">
             <div class="alert alert-warning text-center">
-                No tenés pedidos por el momento.
+                No tenés pedidos en preparación por el momento.
             </div>
         </div>
 
-        <div th:if="${pedidos.size() >= 1}">
-            <div th:each="pedido : ${pedidos}" class="card mb-3 shadow-sm">
-                <div class="card-header d-flex justify-content-between align-items-center text-white" style="background-color: #38BD48;">
-                    <div>
-                        Pedido ID: <span th:text="${pedido.id}"></span>
-                        <span class="badge rounded-pill ms-2"
-                              th:classappend="${pedido.estadoPedido.name() == 'FINALIZADO'} ? 'bg-success' : 'bg-warning text-dark'"
-                              th:text="${pedido.estadoPedido}"></span>
-                    </div>
-                    <button class="btn btn-light btn-sm"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            th:attr="data-bs-target='#platos-' + ${pedido.id}">
-                        Ver Platos
-                    </button>
+        <div th:each="pedido : ${pedidosEnPreparacion}" class="card mb-3 shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center text-white"
+                 style="background-color: #38BD48;">
+                <div>
+                    Pedido ID: <span th:text="${pedido.id}"></span>
+                    <span class="badge rounded-pill ms-2"
+                          th:classappend="${pedido.estadoPedido.name() == 'FINALIZADO'} ? 'bg-success' : 'bg-warning text-dark'"
+                          th:text="${pedido.estadoPedido}"></span>
                 </div>
+                <button class="btn btn-light btn-sm"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        th:attr="data-bs-target='#platos-' + ${pedido.id}">
+                    Ver Platos
+                </button>
+            </div>
 
-                <div class="collapse" th:attr="id='platos-' + ${pedido.id}">
-                    <div class="card-body" th:attr="data-pedido-id=${pedido.id}">
-                        <ul class="list-group list-group-flush mb-3">
-                            <li th:each="pedidoPlato : ${pedido.pedidoPlatos}" class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <span th:text="${pedidoPlato.plato.nombre}"></span>
-                                    <span class="badge ms-2"
-                                          th:classappend="${pedidoPlato.estadoPlato.name() == 'FINALIZADO'} ? 'bg-success' : 'bg-warning text-dark'"
-                                          th:text="${pedidoPlato.estadoPlato}"></span>
-                                </div>
+            <div class="collapse" th:attr="id='platos-' + ${pedido.id}">
+                <div class="card-body" th:attr="data-pedido-id=${pedido.id}">
+                    <ul class="list-group list-group-flush mb-3">
+                        <li th:each="pedidoPlato : ${pedido.pedidoPlatos}"
+                            class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <span th:text="${pedidoPlato.plato.nombre}"></span>
+                                <span class="badge ms-2"
+                                      th:classappend="${pedidoPlato.estadoPlato.name() == 'FINALIZADO'} ? 'bg-success' : 'bg-warning text-dark'"
+                                      th:text="${pedidoPlato.estadoPlato}"></span>
+                            </div>
 
-                                <div th:if="${pedidoPlato.estadoPlato.name() == 'PENDIENTE'}">
-                                    <form method="post" class="cambiar-estado-del-plato" th:action="@{/restaurante/finalizar-plato-pedido}">
-                                        <input type="hidden" name="pedidoPlatoId" th:value="${pedidoPlato.id}" />
-                                        <input type="hidden" name="idUsuario" th:value="${idUsuario}" />
-                                        <button type="submit" class="btn btn-danger btn-sm">Finalizar plato</button>
-                                    </form>
-                                </div>
-                            </li>
-                        </ul>
+                            <div th:if="${pedidoPlato.estadoPlato.name() == 'PENDIENTE'}">
+                                <form method="post" class="cambiar-estado-del-plato"
+                                      th:action="@{/restaurante/finalizar-plato-pedido}">
+                                    <input type="hidden" name="pedidoPlatoId" th:value="${pedidoPlato.id}"/>
+                                    <input type="hidden" name="idUsuario" th:value="${idUsuario}"/>
+                                    <button type="submit" class="btn btn-danger btn-sm">Finalizar plato</button>
+                                </form>
+                            </div>
+                        </li>
+                    </ul>
 
-                        <div th:if="${pedido.estadoPedido.name() != 'FINALIZADO'}"
-                             class="text-end mt-3 finalizar-pedido-completo d-none">
-                            <input type="hidden" name="pedidoId" th:value="${pedido.id}" />
-                            <button type="button" class="btn btn-success btn-sm finalizar-pedido">
-                                <i class="bi bi-check-circle"></i> Finalizar pedido completo
-                            </button>
+                    <div th:if="${pedido.estadoPedido.name() != 'FINALIZADO'}"
+                         class="text-end mt-3 finalizar-pedido-completo d-none">
+                        <input type="hidden" name="pedidoId" th:value="${pedido.id}"/>
+                        <button type="button" class="btn btn-success btn-sm finalizar-pedido">
+                            <i class="bi bi-check-circle"></i> Finalizar pedido completo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Sección: Pedidos listos para enviar -->
+        <h4 class="mt-4 mb-3">Pedidos listos para enviar</h4>
+        <div th:if="${pedidosListosParaEnviar.isEmpty()}">
+            <div class="alert alert-info text-center">
+                No tenés pedidos listos para enviar.
+            </div>
+        </div>
+
+        <div th:each="pedido : ${pedidosListosParaEnviar}" class="card mb-3 shadow-sm border-success">
+            <div class="card-header bg-success text-white d-flex justify-content-between">
+                Pedido ID: <span th:text="${pedido.id}"></span>
+                <span class="badge bg-light text-success">LISTO PARA ENVIAR</span>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush mb-3">
+                    <li th:each="pedidoPlato : ${pedido.pedidoPlatos}"
+                        class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <span th:text="${pedidoPlato.plato.nombre}"></span>
+                            <span class="badge bg-success ms-2">FINALIZADO</span>
                         </div>
-
-                    </div>
+                    </li>
+                </ul>
+                <div class="text-end">
+                    <form method="post" th:action="@{/restaurante/enviar-pedido}">
+                        <input type="hidden" name="pedidoId" th:value="${pedido.id}"/>
+                        <button type="submit" class="btn btn-primary btn-sm">Enviar pedido</button>
+                    </form>
                 </div>
             </div>
         </div>
+
     </div>
 </main>
+
 
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1055">
     <div id="toastContainer"></div>
 </div>
+
 
 
 <script src="/resources/core/js/restaurante-pedido.js"></script>

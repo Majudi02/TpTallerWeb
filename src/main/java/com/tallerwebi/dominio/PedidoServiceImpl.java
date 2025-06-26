@@ -5,6 +5,8 @@ import com.tallerwebi.dominio.entidades.Etiqueta;
 import com.tallerwebi.dominio.entidades.Pedido;
 import com.tallerwebi.dominio.entidades.Plato;
 import com.tallerwebi.dominio.entidades.PedidoPlato;
+
+import com.tallerwebi.dominio.entidades.*;
 import com.tallerwebi.presentacion.PedidoPlatoDto;
 import com.tallerwebi.infraestructura.RepositorioPlatoImpl;
 import com.tallerwebi.presentacion.PedidoDto;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -24,14 +27,17 @@ import java.util.stream.Collectors;
 public class PedidoServiceImpl implements PedidoService {
     private final RepositorioPlatoImpl repositorioPlatoImpl;
     private RepositorioPedido repositorioPedido;
+    private RepositorioUsuarioNutriya repositorioUsuario;
 
     @Autowired
+
     private NotificacionPedidoController notificacionController;
 
-    @Autowired
-    public PedidoServiceImpl(RepositorioPlatoImpl repositorioPlatoImpl,RepositorioPedido repositorioPedido) {
+
+    public PedidoServiceImpl(RepositorioPlatoImpl repositorioPlatoImpl, RepositorioPedido repositorioPedido, RepositorioUsuarioNutriya repositorioUsuario) {
         this.repositorioPlatoImpl = repositorioPlatoImpl;
-        this.repositorioPedido=repositorioPedido;
+        this.repositorioPedido = repositorioPedido;
+        this.repositorioUsuario = repositorioUsuario;
     }
 
 
@@ -67,15 +73,13 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public PedidoDto buscarPedidoActivoPorUsuario(Long idUsuario) {
-        Pedido pedido= this.repositorioPedido.buscarPedidoActivoPorUsuario(idUsuario);
-        return  pedido.obtenerDto();
+        Pedido pedido = this.repositorioPedido.buscarPedidoActivoPorUsuario(idUsuario);
+        return pedido != null ? pedido.obtenerDto() : null;
     }
-
 
 
     @Override
     public void agregarPlatoAlPedido(PlatoDto platoDto, UsuarioDTO usuarioDTO) {
-
         List<Etiqueta> etiquetasEntidad = new ArrayList<>();
         if (platoDto.getEtiquetas() != null) {
             for (EtiquetaDto etiquetaDto : platoDto.getEtiquetas()) {
@@ -89,7 +93,7 @@ public class PedidoServiceImpl implements PedidoService {
 
         Plato platoEntidad = platoDto.obtenerEntidad(etiquetasEntidad);
 
-        this.repositorioPedido.agregarPlatoAlPedido(platoEntidad,usuarioDTO.getId());
+        this.repositorioPedido.agregarPlatoAlPedido(platoEntidad, usuarioDTO.getId());
     }
 
     @Override
@@ -123,5 +127,31 @@ public class PedidoServiceImpl implements PedidoService {
                 .map(Pedido::obtenerDto)
                 .collect(Collectors.toList());
     }
+
+
+}
+
+    @Override
+    public void crearPedido(Long idUsuario) {
+        // Verificar si ya existe un pedido activo para ese usuario
+        Pedido pedidoExistente = repositorioPedido.buscarPedidoActivoPorUsuario(idUsuario);
+        if (pedidoExistente != null) {
+            // Ya hay un pedido activo, no crear uno nuevo
+            return;
+        }
+
+        UsuarioNutriya usuario = repositorioUsuario.buscarPorId(idUsuario);
+
+        Pedido nuevoPedido = new Pedido();
+        nuevoPedido.setUsuario(usuario);
+        nuevoPedido.setEstadoPedido(EstadoPedido.PENDIENTE);
+        nuevoPedido.setFecha(LocalDateTime.now().toString());
+        nuevoPedido.setFinalizo(false);
+        nuevoPedido.setPrecio(0.0);
+        nuevoPedido.setPedidoPlatos(new ArrayList<>());
+
+        repositorioPedido.crearPedido(nuevoPedido);
+    }
+
 
 }

@@ -60,4 +60,9 @@ public class RepositorioUsuarioNutriyaImpl implements RepositorioUsuarioNutriya 
                 .uniqueResult();
 
     }
+
+    @Override
+    public UsuarioNutriya buscarPorId(Long id) {
+        return sessionFactory.getCurrentSession().get(UsuarioNutriya.class, id);
+    }
 }

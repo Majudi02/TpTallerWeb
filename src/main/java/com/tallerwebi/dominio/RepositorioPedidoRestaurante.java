@@ -10,4 +10,11 @@ public interface RepositorioPedidoRestaurante {
 
     Long obtenerIdDelRestaurate(Long id);
 
+    List<Pedido> traerPedidosListosParaRetirar();
+
+    void entregarPedido(Integer idPedido);
+
+    Pedido buscarPorId(int i);
+
+    void guardar(Pedido pedido);
 }

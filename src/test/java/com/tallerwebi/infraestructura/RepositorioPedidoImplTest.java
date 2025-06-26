@@ -112,7 +112,29 @@ public class RepositorioPedidoImplTest {
 
         Pedido pedidoActualizado = sessionFactory.getCurrentSession().get(Pedido.class, pedido.getId());
 
-        assertTrue(pedidoActualizado.isFinalizo());
+        assertEquals(EstadoPedido.LISTO_PARA_ENVIAR, pedidoActualizado.getEstadoPedido());
+    }
+
+    @Test
+    @Rollback
+    public void queSePuedaEntregarUnPedido() {
+        Cliente usuario = new Cliente();
+        sessionFactory.getCurrentSession().save(usuario);
+
+        Pedido pedido = new Pedido();
+        pedido.setUsuario(usuario);
+        pedido.setPedidoPlatos(new ArrayList<>());
+        pedido.setFinalizo(false);
+        pedido.setPrecio(100.0);
+        pedido.setEstadoPedido(EstadoPedido.LISTO_PARA_ENVIAR); // ya fue finalizado por cocina
+        sessionFactory.getCurrentSession().save(pedido);
+
+        repositorioPedido.entregarPedido(pedido.getId());
+
+        Pedido pedidoEntregado = sessionFactory.getCurrentSession().get(Pedido.class, pedido.getId());
+
+        assertTrue(pedidoEntregado.isFinalizo()); // se marcó como entregado
+        assertEquals(EstadoPedido.LISTO_PARA_ENVIAR, pedidoEntregado.getEstadoPedido()); // sigue siendo finalizado
     }
 
 

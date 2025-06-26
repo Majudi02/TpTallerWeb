@@ -24,13 +24,14 @@ public class PedidoServiceImplTest {
     private RepositorioPlatoImpl repositorioPlato;
     private RepositorioPedido repositorioPedido;
     private PedidoServiceImpl pedidoService;
-
+    private RepositorioUsuarioNutriya repositorioUsuario;
 
     @BeforeEach
     public void setUp() {
         repositorioPlato = Mockito.mock(RepositorioPlatoImpl.class);
         repositorioPedido = Mockito.mock(RepositorioPedido.class);
-        pedidoService = new PedidoServiceImpl(repositorioPlato, repositorioPedido);
+        repositorioUsuario = Mockito.mock(RepositorioUsuarioNutriya.class);
+        pedidoService = new PedidoServiceImpl(repositorioPlato, repositorioPedido, repositorioUsuario);
     }
 
 /*
