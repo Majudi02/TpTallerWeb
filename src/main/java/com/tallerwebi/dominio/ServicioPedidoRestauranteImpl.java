@@ -73,8 +73,7 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
             // Guardar el cambio del plato
             repositorioPedidoPlato.guardar(pedidoPlato);
 
-            // NO cambiar el estado del pedido aquí
-            // El pedido se mantiene en estado PENDIENTE o similar
+            confirmarPedidoListoParaEnviar(pedidoPlato.getPedido().getId());
         }
     }
 
