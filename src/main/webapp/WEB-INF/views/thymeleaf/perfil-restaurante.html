@@ -100,11 +100,7 @@
         </div>
         <div class="d-flex flex-wrap justify-content-center gap-4">
             <a class="btn btn-lg btn-green" th:href="@{/editar-usuario}">Editar</a>
-
-            <form method="post" action="/pedidos/restaurante">
-                <input type="hidden" name="id" th:value="${usuario.id}"/>
-                <button class="btn btn-lg btn-green" type="submit">Pedidos</button>
-            </form>
+            <a class="btn btn-lg btn-green" th:href="@{/pedidos/restaurante}">Mi Pedidos</a>
             <a class="btn btn-lg btn-green" th:href="@{/editarPlatos}">Gestionar Platos</a>
             <a class="btn btn-lg btn-green" th:href="@{/crear-plato}">Agregar Plato</a>
             <a class="btn btn-lg btn-danger" th:href="@{/cerrar-sesion}">Cerrar Sesión</a>
