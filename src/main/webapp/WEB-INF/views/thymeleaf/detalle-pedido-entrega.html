@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Detalle Pedido para Entrega</title>
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+</head>
+<body>
+<main class="container mt-5">
+  <h2>Detalle Pedido #<span th:text="${pedido.pedidoId}"></span></h2>
+
+  <div class="mb-3">
+    <h4>Restaurante</h4>
+    <p><strong>Nombre:</strong> <span th:text="${pedido.nombreRestaurante}"></span></p>
+    <p><strong>Dirección:</strong> <span th:text="${pedido.direccionRestaurante}"></span></p>
+  </div>
+
+  <div class="mb-3">
+    <h4>Cliente</h4>
+    <p><strong>Dirección:</strong> <span th:text="${pedido.direccionCliente}"></span></p>
+  </div>
+
+  <div class="mb-3">
+    <h4>Platos</h4>
+    <ul class="list-group">
+      <li class="list-group-item d-flex justify-content-between" th:each="plato : ${pedido.platos}">
+        <span th:text="${plato.nombreProducto}"></span>
+        <span class="badge bg-primary rounded-pill" th:text="${plato.cantidad}"></span>
+      </li>
+    </ul>
+  </div>
+
+  <form th:action="@{'/pedido/entregar/' + ${pedido.pedidoId}}" method="post">
+    <button type="submit" class="btn btn-success">Confirmar Entrega</button>
+    <a href="/pedidos-retirar" class="btn btn-secondary">Volver</a>
+  </form>
+</main>
+<script th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+</body>
+</html>

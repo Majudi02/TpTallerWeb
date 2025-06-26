@@ -14,5 +14,11 @@ public interface ServicioPedidoRestaurante {
 
     void finalizarPlatoPedido(Long id);
 
-    void finalizarPedidoCompleto(Integer idPedido);
+    void confirmarPedidoListoParaEnviar(Integer idPedido);
+
+    List<PedidoVistaDto> traerPedidosListosParaVista();
+
+    void entregarPedido(Integer idPedido);
+
+    PedidoVistaDto traerDetallePedidoPorId(Integer id);
 }

@@ -20,9 +20,9 @@ public class Pedido {
     private String fecha;
 
 
-     @ManyToOne
-     @JoinColumn(name = "usuario_id")
-     private UsuarioNutriya usuario;
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private UsuarioNutriya usuario;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PedidoPlato> pedidoPlatos;

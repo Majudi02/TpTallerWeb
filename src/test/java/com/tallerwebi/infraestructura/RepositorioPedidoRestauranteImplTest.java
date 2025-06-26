@@ -38,26 +38,44 @@ public class RepositorioPedidoRestauranteImplTest {
 
     @Test
     @Rollback
-    public void queSePuedanTraerTodosLosPedidos(){
+    public void queSePuedanTraerTodosLosPedidosConPlatosYRestauranteRelacionados() {
+        Restaurante restaurante = new Restaurante();
+        restaurante.setNombre("Restaurante Test");
+        sessionFactory.getCurrentSession().save(restaurante);
+
+        Plato plato = new Plato();
+        plato.setNombre("Plato Test");
+        plato.setRestaurante(restaurante);
+        sessionFactory.getCurrentSession().save(plato);
 
         Pedido pedido1 = new Pedido();
         pedido1.setEstadoPedido(EstadoPedido.EN_PROCESO);
+        sessionFactory.getCurrentSession().save(pedido1);
+
+        PedidoPlato pp1 = new PedidoPlato();
+        pp1.setPedido(pedido1);
+        pp1.setPlato(plato);
+        sessionFactory.getCurrentSession().save(pp1);
+
         Pedido pedido2 = new Pedido();
         pedido2.setEstadoPedido(EstadoPedido.EN_PROCESO);
+        sessionFactory.getCurrentSession().save(pedido2);
 
-    sessionFactory.getCurrentSession().save(pedido1);
-    sessionFactory.getCurrentSession().save(pedido2);
+        PedidoPlato pp2 = new PedidoPlato();
+        pp2.setPedido(pedido2);
+        pp2.setPlato(plato);
+        sessionFactory.getCurrentSession().save(pp2);
 
-    List<Pedido> pedidosTotales=this.repositorio.traerTodosLosPedidos();
+        List<Pedido> pedidosTotales = this.repositorio.traerTodosLosPedidos();
 
-    assertNotNull(pedidosTotales);
-    assertEquals(2, pedidosTotales.size());
-
+        assertNotNull(pedidosTotales);
+        assertEquals(2, pedidosTotales.size());
     }
+
 
     @Test
     @Rollback
-    public void queSePuedaObtenerElIdDelRestauranteConElIdDelUsuarioQueLoRealizo(){
+    public void queSePuedaObtenerElIdDelRestauranteConElIdDelUsuarioQueLoRealizo() {
         Restaurante restaurante = new Restaurante();
         restaurante.setNombre("Mi Restaurante");
         sessionFactory.getCurrentSession().save(restaurante);
