@@ -9,14 +9,58 @@
 </head>
 <body class="d-flex flex-column min-vh-100 justify-content-center">
 
+
 <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top px-3">
     <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/restaurante/perfil}">Nutri<span style="color: #38BD48;">Ya</span></a>
+        <div class="d-flex w-100 justify-content-between align-items-center">
+            <a class="navbar-brand" th:href="@{/restaurante/perfil}">Nutri<span style="color: #38BD48;">Ya</span></a>
+            <form class="d-none d-lg-flex mx-auto" role="search" style="width: 40%;">
+                <div class="input-group">
+                    <input class="form-control" type="search" placeholder="Buscá comidas, restaurantes..."
+                           aria-label="Buscar"/>
+                    <button class="btn buscar" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </form>
+            <div class="botones-nav">
+                <a class="btn btn-outline-secondary mx-1" th:href="@{nutriya-login}">
+                    <i class="bi bi-person"></i>
+                </a>
+
+                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#menuLateral" aria-controls="menuLateral">
+                    <i class="bi bi-list"></i>
+                </button>
+            </div>
+        </div>
     </div>
 </nav>
-<p>Pedidos en preparación: <span th:text="${pedidosEnPreparacion.size()}">0</span></p>
-<p>Pedidos listos para enviar: <span th:text="${pedidosListosParaEnviar.size()}">0</span></p>
-
+<div class="offcanvas offcanvas-end" tabindex="-1" id="menuLateral" aria-labelledby="menuLateralLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="menuLateralLabel">Opciones</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="navbar-nav gap-2">
+            <li class="nav-item" th:if="${tipoUsuario == 'restaurante'}">
+                <a class="nav-link" th:href="@{/nutriya}">Inicio</a>
+            </li>
+            <li class="nav-item" th:if="${tipoUsuario == 'restaurante'}">
+                <a class="nav-link" th:href="@{/nutriya-login}">Mi Perfil</a>
+            </li>
+            <li class="nav-item" th:if="${tipoUsuario == 'restaurante'}">
+                <a class="nav-link" th:href="@{/pedidos/restaurante}">Mis Pedidos</a>
+            </li>
+            <li class="nav-item" th:if="${tipoUsuario == 'restaurante'}">
+                <a class="nav-link" th:href="@{/editarPlatos}">Gestionar Platos</a>
+            </li>
+            <li class="nav-item" th:if="${tipoUsuario == 'restaurante'}">
+                <a class="nav-link" th:href="@{/crear-plato}">Crear Plato</a>
+            </li>
+        </ul>
+    </div>
+</div>
 <main class="d-flex flex-column justify-content-center align-items-center mt-5 pt-5 mx-3">
     <div class="card contenedor-verde shadow p-4 w-100" style="max-width: 900px;">
         <h2 class="titulo-verde text-center mb-4">Pedidos del Restaurante</h2>
@@ -113,6 +157,36 @@
                 </div>
             </div>
         </div>
+        <!-- Sección: Pedidos entregados -->
+        <h4 class="mt-4 mb-3">Pedidos entregados</h4>
+        <div id="contenedor-pedidos-entregados" th:if="${pedidosEntregados.isEmpty()}">
+            <div class="alert alert-info text-center">
+                No tenés pedidos entregados aún.
+            </div>
+        </div>
+
+        <div id="lista-pedidos-entregados" th:each="pedido : ${pedidosEntregados}"
+             class="card mb-3 shadow-sm border-secondary">
+            <div class="card-header bg-secondary text-white d-flex justify-content-between">
+                Pedido ID: <span th:text="${pedido.id}"></span>
+                <span class="badge bg-light text-secondary">ENTREGADO</span>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush mb-3">
+                    <li th:each="pedidoPlato : ${pedido.pedidoPlatos}"
+                        class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <span th:text="${pedidoPlato.plato.nombre}"></span>
+                            <span class="badge bg-secondary ms-2">FINALIZADO</span>
+                        </div>
+                    </li>
+                </ul>
+                <div class="text-end">
+                    <small class="text-muted">Pedido entregado al cliente</small>
+                </div>
+            </div>
+        </div>
+
 
     </div>
 </main>

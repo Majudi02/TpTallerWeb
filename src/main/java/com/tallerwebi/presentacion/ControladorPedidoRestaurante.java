@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.PedidosRestauranteDto;
 import com.tallerwebi.dominio.ServicioPedidoRestaurante;
 import com.tallerwebi.dominio.entidades.EstadoPedido;
 import com.tallerwebi.dominio.entidades.EstadoPlato;
@@ -10,6 +11,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,32 +24,25 @@ public class ControladorPedidoRestaurante {
         this.servicioPedidoRestaurante = servicioPedidoRestaurante;
     }
 
-    @RequestMapping(value = "/pedidos/restaurante", method = {RequestMethod.GET, RequestMethod.POST})
-    public ModelAndView mostrarPedidosDelRestaurante(@RequestParam Long id) {
-        ModelMap modelo = new ModelMap();
+    @GetMapping("/pedidos/restaurante")
+    public ModelAndView mostrarPedidosDelRestaurante(HttpSession session) {
+        UsuarioDTO usuario = (UsuarioDTO) session.getAttribute("usuario");
 
-        Long idRestaurante = servicioPedidoRestaurante.obtenerIdDelRestaurate(id);
-        List<PedidoDto> todosLosPedidos = servicioPedidoRestaurante.traerPedidosDelRestaurante(idRestaurante);
-
-        List<PedidoDto> pedidosEnPreparacion = new ArrayList<>();
-        List<PedidoDto> pedidosListosParaEnviar = new ArrayList<>();
-
-        for (PedidoDto pedido : todosLosPedidos) {
-            List<PedidoPlatoDto> filtrados = pedido.getPedidoPlatosDelRestaurante(idRestaurante);
-            pedido.setPedidoPlatos(filtrados);
-
-            if (pedido.getEstadoPedido() == EstadoPedido.LISTO_PARA_ENVIAR) {
-                pedidosListosParaEnviar.add(pedido);
-            } else {
-                pedidosEnPreparacion.add(pedido);
-            }
+        if (usuario == null || !"restaurante".equals(usuario.getTipoUsuario())) {
+            return new ModelAndView("redirect:/nutriya-login");
         }
 
-        modelo.put("pedidosEnPreparacion", pedidosEnPreparacion);
-        modelo.put("pedidosListosParaEnviar", pedidosListosParaEnviar);
+        Long idRestaurante = servicioPedidoRestaurante.obtenerIdDelRestaurate(usuario.getId());
+        PedidosRestauranteDto pedidos = servicioPedidoRestaurante.obtenerPedidosClasificados(idRestaurante);
+
+        ModelMap modelo = new ModelMap();
+        modelo.put("pedidosEnPreparacion", pedidos.getEnPreparacion());
+        modelo.put("pedidosListosParaEnviar", pedidos.getListosParaEnviar());
+        modelo.put("pedidosEntregados", pedidos.getEntregados());
 
         return new ModelAndView("restaurante-pedido", modelo);
     }
+
 
 
     @GetMapping("/restaurante/pedidos-listos-json")

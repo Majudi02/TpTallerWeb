@@ -21,10 +21,10 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
     private final RepositorioPedido repositorioPedido;
 
     @Autowired
-    public ServicioPedidoRestauranteImpl(RepositorioPedidoRestaurante repositorioPedidoRestaurante,RepositorioPedidoPlato repositorioPedidoPlato,RepositorioPedido repositorioPedido) {
-        this.repositorioPedido=repositorioPedido;
+    public ServicioPedidoRestauranteImpl(RepositorioPedidoRestaurante repositorioPedidoRestaurante, RepositorioPedidoPlato repositorioPedidoPlato, RepositorioPedido repositorioPedido) {
+        this.repositorioPedido = repositorioPedido;
         this.repositorioPedidoRestaurante = repositorioPedidoRestaurante;
-        this.repositorioPedidoPlato=repositorioPedidoPlato;
+        this.repositorioPedidoPlato = repositorioPedidoPlato;
     }
 
     @Override
@@ -210,7 +210,7 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
 
     @Override
     public void finalizarPedidoCompleto(Integer idPedido) {
-        Pedido pedidoBuscado= repositorioPedido.buscarPorId(idPedido);
+        Pedido pedidoBuscado = repositorioPedido.buscarPorId(idPedido);
 
         if (pedidoBuscado != null) {
             pedidoBuscado.setEstadoPedido(EstadoPedido.LISTO_PARA_ENVIAR);
@@ -222,4 +222,26 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
 
     }
 
+    @Override
+    public PedidosRestauranteDto obtenerPedidosClasificados(Long idRestaurante) {
+        List<PedidoDto> todosLosPedidos = traerPedidosDelRestaurante(idRestaurante);
+
+        List<PedidoDto> enPreparacion = new ArrayList<>();
+        List<PedidoDto> listosParaEnviar = new ArrayList<>();
+        List<PedidoDto> entregados = new ArrayList<>();
+
+        for (PedidoDto pedido : todosLosPedidos) {
+            List<PedidoPlatoDto> filtrados = pedido.getPedidoPlatosDelRestaurante(idRestaurante);
+            pedido.setPedidoPlatos(filtrados);
+
+            if (pedido.getEstadoPedido() == EstadoPedido.LISTO_PARA_ENVIAR) {
+                listosParaEnviar.add(pedido);
+            } else if (pedido.getEstadoPedido() == EstadoPedido.ENTREGADO) {
+                entregados.add(pedido);
+            } else {
+                enPreparacion.add(pedido);
+            }
+        }
+        return new PedidosRestauranteDto(enPreparacion, listosParaEnviar, entregados);
+    }
 }

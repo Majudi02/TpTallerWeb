@@ -121,19 +121,13 @@ public class RepositorioPedidoImpl implements RepositorioPedido {
         Pedido pedido = this.buscarPedidoActivoPorUsuario(idUsuario);
 
         if (pedido != null) {
-<<<<<<< HEAD
-            pedido.setEstadoPedido(EstadoPedido.PENDIENTE); // pendiente
-            pedido.setFinalizo(false); // NO está entregado, sigue activo
-=======
-            pedido.setFinalizo(true);
-            pedido.setEstadoPedido(EstadoPedido.EN_PROCESO);
->>>>>>> arregloPedidos
+            pedido.setEstadoPedido(EstadoPedido.PENDIENTE);
+            pedido.setFinalizo(false);
             sessionFactory.getCurrentSession().saveOrUpdate(pedido);
         }
 
         return pedido;
     }
-
 
     /*
     @Override

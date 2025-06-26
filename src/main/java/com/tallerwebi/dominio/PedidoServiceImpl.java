@@ -169,6 +169,10 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     public void confirmarPedido(Long idUsuario) {
         repositorioPedido.confirmarPedido(idUsuario);
+        Pedido pedido = repositorioPedido.buscarPedidoActivoPorUsuario(idUsuario);
+        if (pedido != null) {
+            notificacionController.notificarMensaje("**Nuevo pedido disponible**");
+        }
     }
 
 

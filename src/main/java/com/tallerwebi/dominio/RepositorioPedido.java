@@ -20,6 +20,8 @@ public interface RepositorioPedido {
 
     //void finalizarPedido(Long id);
 
+    Pedido finalizarPedido(Long idUsuario);
+
     Pedido buscarPorId(Integer idPedido);
 
     List<Pedido> listarPedidosPorUsuario(Long usuarioId);

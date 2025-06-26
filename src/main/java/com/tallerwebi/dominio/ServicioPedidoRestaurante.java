@@ -23,4 +23,6 @@ public interface ServicioPedidoRestaurante {
     PedidoVistaDto traerDetallePedidoPorId(Integer id);
 
     void finalizarPedidoCompleto(Integer idPedido);
+
+    PedidosRestauranteDto obtenerPedidosClasificados(Long idRestaurante);
 }

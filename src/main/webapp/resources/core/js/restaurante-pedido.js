@@ -134,10 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     </li>
                 </ul>
                 <div class="text-end">
-                    <form method="post" action="/restaurante/enviar-pedido">
-                        <input type="hidden" name="pedidoId" value="${pedidoId}"/>
-                        <button type="submit" class="btn btn-primary btn-sm">Enviar pedido</button>
-                    </form>
+                    <p>Esperando a Repartidor</p>
                 </div>
             </div>
         </div>`;
