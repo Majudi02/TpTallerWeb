@@ -80,12 +80,12 @@ public class PedidoControlador {
     @PostMapping("/pedido/confirmar")
     public String confirmarPedido(HttpServletRequest request) {
         UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
-
-        // Crear el pedido para ese usuario y restaurante, con estado PENDIENTE
-        pedidoService.crearPedido(usuario.getId());
-
+        this.pedidoService.finalizarPedido(usuario.getId());
+        //pedidoService.crearPedido(usuario.getId());
         return "redirect:/pedido/platos";
     }
+
+
 
     @GetMapping("/pedido/carrito")
     @ResponseBody
@@ -101,7 +101,6 @@ public class PedidoControlador {
     @ResponseBody
     public void agregarPlatoAlPedido(@RequestParam("platoId") Integer platoId, HttpServletRequest request) {
         UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
-
 
         PlatoDto platoBuscado = servicioRestaurante.obtenerPlatoPorId(platoId);
         System.out.println("Agregando plato al pedido. Usuario ID: " + usuario.getId() + ", Plato ID: " + platoBuscado.getId());

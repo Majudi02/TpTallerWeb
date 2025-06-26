@@ -15,12 +15,13 @@ public class ServicioPedidoRestauranteImplTest {
     private RepositorioPedidoRestaurante repoPedido;
     private RepositorioPedidoPlato repoPedidoPlato;
     private ServicioPedidoRestaurante servicio;
+    private RepositorioPedido repositorioPedido;
 
     @BeforeEach
     void setup() {
         repoPedido = mock(RepositorioPedidoRestaurante.class);
         repoPedidoPlato = mock(RepositorioPedidoPlato.class);
-        servicio = new ServicioPedidoRestauranteImpl(repoPedido, repoPedidoPlato);
+        servicio = new ServicioPedidoRestauranteImpl(repoPedido, repoPedidoPlato,repositorioPedido);
     }
 
     @Test

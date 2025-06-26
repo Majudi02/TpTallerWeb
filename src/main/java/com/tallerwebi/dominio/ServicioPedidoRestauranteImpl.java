@@ -18,11 +18,13 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
 
     private final RepositorioPedidoRestaurante repositorioPedidoRestaurante;
     private final RepositorioPedidoPlato repositorioPedidoPlato;
+    private final RepositorioPedido repositorioPedido;
 
     @Autowired
-    public ServicioPedidoRestauranteImpl(RepositorioPedidoRestaurante repositorioPedidoRestaurante, RepositorioPedidoPlato repositorioPedidoPlato) {
+    public ServicioPedidoRestauranteImpl(RepositorioPedidoRestaurante repositorioPedidoRestaurante,RepositorioPedidoPlato repositorioPedidoPlato,RepositorioPedido repositorioPedido) {
+        this.repositorioPedido=repositorioPedido;
         this.repositorioPedidoRestaurante = repositorioPedidoRestaurante;
-        this.repositorioPedidoPlato = repositorioPedidoPlato;
+        this.repositorioPedidoPlato=repositorioPedidoPlato;
     }
 
     @Override
@@ -73,7 +75,7 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
             // Guardar el cambio del plato
             repositorioPedidoPlato.guardar(pedidoPlato);
 
-            confirmarPedidoListoParaEnviar(pedidoPlato.getPedido().getId());
+       //     confirmarPedidoListoParaEnviar(pedidoPlato.getPedido().getId());
         }
     }
 
@@ -208,6 +210,20 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
         dto.setProductos(platos);
 
         return dto;
+    }
+
+    @Override
+    public void finalizarPedidoCompleto(Integer idPedido) {
+        Pedido pedidoBuscado= repositorioPedido.buscarPorId(idPedido);
+
+        if (pedidoBuscado != null) {
+            pedidoBuscado.setEstadoPedido(EstadoPedido.LISTO_PARA_ENVIAR);
+
+            for (PedidoPlato plato : pedidoBuscado.getPedidoPlatos()) {
+                plato.setEstadoPlato(EstadoPlato.FINALIZADO);
+            }
+        }
+
     }
 
 }

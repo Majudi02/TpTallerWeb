@@ -18,7 +18,7 @@ public interface RepositorioPedido {
 
     void agregarPlatoAlPedido(Long idUsuario, Plato plato);
 
-    void finalizarPedido(Long id);
+    //void finalizarPedido(Long id);
 
     // List<Pedido> traerPedidosListosParaRetirar();
 
@@ -27,4 +27,6 @@ public interface RepositorioPedido {
     Pedido buscarPorId(Integer idPedido);
 
     List<Pedido> listarPedidosPorUsuario(Long usuarioId);
+
+    Pedido finalizarPedido(Long idUsuario);
 }
