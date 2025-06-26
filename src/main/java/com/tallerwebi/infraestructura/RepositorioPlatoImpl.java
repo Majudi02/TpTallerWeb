@@ -2,6 +2,7 @@ package com.tallerwebi.infraestructura;
 
 
 import com.tallerwebi.dominio.RepositorioPlato;
+import com.tallerwebi.dominio.entidades.Plato;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
@@ -47,13 +48,14 @@ public class RepositorioPlatoImpl implements RepositorioPlato {
     }
 
     @Override
-    public Boolean editarEtiquetas(com.tallerwebi.dominio.entidades.Plato plato) {
-        int actualizados = sessionFactory.getCurrentSession()
-                .createQuery("UPDATE Plato p SET p.etiquetas = :etiquetas WHERE p.id = :id")
-                .setParameter("etiquetas", plato.getEtiquetas())
-                .setParameter("id", plato.getId())
-                .executeUpdate();
-        return actualizados > 0;
+    public Boolean editarEtiquetas(Plato platoConEtiquetasActualizadas) {
+        Plato plato = sessionFactory.getCurrentSession().get(Plato.class, platoConEtiquetasActualizadas.getId());
+        if (plato == null) {
+            return false;
+        }
+
+        plato.setEtiquetas(platoConEtiquetasActualizadas.getEtiquetas());
+        return true;
     }
 
     @Override

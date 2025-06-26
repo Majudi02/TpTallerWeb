@@ -4,140 +4,117 @@ import com.tallerwebi.dominio.RepositorioPlato;
 import com.tallerwebi.dominio.entidades.Etiqueta;
 import com.tallerwebi.dominio.entidades.Plato;
 import com.tallerwebi.infraestructura.RepositorioPlatoImpl;
-import org.hibernate.Session;
+import com.tallerwebi.infraestructura.config.HibernateInfraestructuraTestConfig;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import javax.transaction.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.*;
 
-//@ExtendWith(SpringExtension.class)
+
+
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {HibernateInfraestructuraTestConfig.class})
 @Transactional
 public class RepositorioRestauranteImplTest {
 
-    private SessionFactory sessionFactoryMock;
-    private Session sessionMock;
-
+    @Autowired
+    private SessionFactory sessionFactory;
     private RepositorioPlato repositorioPlato;
 
     @BeforeEach
     public void setUp() {
-        sessionFactoryMock = mock(SessionFactory.class);
-        sessionMock = mock(Session.class);
-
-        when(sessionFactoryMock.getCurrentSession()).thenReturn(sessionMock);
-
-        repositorioPlato = new RepositorioPlatoImpl(sessionFactoryMock);
+        repositorioPlato = new RepositorioPlatoImpl(sessionFactory);
     }
 
 
-
-    @Test
-    public void dadoQueTengoUnPlatoEntoncesLeQuieroModificarSusEtiquetas() {
-
-        Plato platoMock = mock(Plato.class);
-        when(platoMock.getId()).thenReturn(1);
-
-        List<String> nombres = List.of("Saludable", "Vegetariano");
-        List<Etiqueta> etiquetas = new ArrayList<>();
-        Integer contador=0;
-        for (String nombre : nombres) {
-            contador+=1;
-            Etiqueta etiqueta = new Etiqueta();
-            etiqueta.setId(contador);
-            etiqueta.setNombre(nombre);
-            etiquetas.add(etiqueta);
-        }
-
-        when(platoMock.getEtiquetas()).thenReturn(etiquetas);
-
-        Query queryMock = mock(Query.class);
-        when(sessionMock.createQuery("UPDATE Plato p SET p.etiquetas = :etiquetas WHERE p.id = :id"))
-                .thenReturn(queryMock);
-        when(queryMock.setParameter(eq("etiquetas"), eq(etiquetas))).thenReturn(queryMock);
-        when(queryMock.setParameter(eq("id"), eq(1))).thenReturn(queryMock);
-        when(queryMock.executeUpdate()).thenReturn(1);
-
-        Boolean actualizado = repositorioPlato.editarEtiquetas(platoMock);
-
-        assertThat(actualizado, is(true));
-        verify(queryMock).setParameter("etiquetas", etiquetas);
-        verify(queryMock).setParameter("id", 1);
-        verify(queryMock).executeUpdate();
-    }
 
     @Test
     public void dadoQueCreoUnPlatoLoQuieroGuardarEnLaBaseDeDatos(){
-        List<String> nombres = List.of("Saludable", "Vegetariano");
-        List<Etiqueta> etiquetas = new ArrayList<>();
-        Integer contador=0;
-        for (String nombre : nombres) {
-            contador+=1;
-            Etiqueta etiqueta = new Etiqueta();
-            etiqueta.setId(contador);
-            etiqueta.setNombre(nombre);
-            etiquetas.add(etiqueta);
-        }
+        Etiqueta etiqueta1 = sessionFactory.getCurrentSession().get(Etiqueta.class, 1);
+        Etiqueta etiqueta2 = sessionFactory.getCurrentSession().get(Etiqueta.class, 2);
 
-        Plato platoMock = mock(Plato.class);
-        when(platoMock.getId()).thenReturn(1);
-        when(platoMock.getNombre()).thenReturn("Milanesa");
-        when(platoMock.getDescripcion()).thenReturn("Milanesa con pasa muy ricas");
-        when(platoMock.getPrecio()).thenReturn(1000.5);
-        when(platoMock.getEtiquetas()).thenReturn(etiquetas);
+        List<Etiqueta> nuevasEtiquetas = new ArrayList<>();
+        nuevasEtiquetas.add(etiqueta1);
+        nuevasEtiquetas.add(etiqueta2);
 
+        Plato platoOriginal = new Plato();
+        platoOriginal.setNombre("Milanesa");
+        platoOriginal.setPrecio(80.0);
+        platoOriginal.setEtiquetas(new ArrayList<>());
+        sessionFactory.getCurrentSession().save(platoOriginal);
 
-        repositorioPlato = mock(RepositorioPlato.class);
-        when(repositorioPlato.crearPlato(platoMock)).thenReturn(true);
+        Boolean platoCreado = repositorioPlato.crearPlato(platoOriginal);
 
-        Boolean resultado = repositorioPlato.crearPlato(platoMock);
-
-        assertThat(resultado, is(true));
-        verify(repositorioPlato).crearPlato(platoMock);
+        assertThat(platoCreado, is(true));
     }
 
     @Test
     public void dadoQueTengoUnPlatoLoQuieroActualizar(){
-        List<String> nombres = List.of("Saludable", "Vegetariano");
-        List<Etiqueta> etiquetas = new ArrayList<>();
-        Integer contador=0;
-        for (String nombre : nombres) {
-            contador+=1;
-            Etiqueta etiqueta = new Etiqueta();
-            etiqueta.setId(contador);
-            etiqueta.setNombre(nombre);
-            etiquetas.add(etiqueta);
-        }
+        Etiqueta etiqueta1 = sessionFactory.getCurrentSession().get(Etiqueta.class, 1);
+        Etiqueta etiqueta2 = sessionFactory.getCurrentSession().get(Etiqueta.class, 2);
+
+        List<Etiqueta> nuevasEtiquetas = new ArrayList<>();
+        nuevasEtiquetas.add(etiqueta1);
+        nuevasEtiquetas.add(etiqueta2);
+
+        Plato platoOriginal = new Plato();
+        platoOriginal.setNombre("Milanesa");
+        platoOriginal.setPrecio(80.0);
+        platoOriginal.setEtiquetas(new ArrayList<>());
+        sessionFactory.getCurrentSession().save(platoOriginal);
 
 
-        Plato plato = new Plato();
-        plato.setId(1);
-        plato.setNombre("Milanesa");
-        plato.setDescripcion("Milanesa con pasa muy ricas");
-        plato.setPrecio(1000.5);
-        plato.setEtiquetas(etiquetas);
 
-        RepositorioPlato repositorioPlato = mock(RepositorioPlato.class);
-        when(repositorioPlato.actualizarPlato(any(Plato.class))).thenReturn(true);
-
-        plato.setDescripcion("xdasdx");
-
-        // Ejecutar
-        Boolean actualizado = repositorioPlato.actualizarPlato(plato);
+       Plato platoGuardado= repositorioPlato.buscarPlatoPorId(platoOriginal.getId());
+       platoGuardado.setNombre("Empanadas");
+       Boolean actualizado = repositorioPlato.actualizarPlato(platoGuardado);
 
         assertTrue(actualizado);
-        assertThat(plato.getDescripcion(), is("xdasdx"));
+        assertThat(platoGuardado.getNombre(), is("Empanadas"));
 
     }
+
+    @Test
+    public void dadoQueTengoUnPlatoEntoncesLeQuieroModificarSusEtiquetas() {
+        Etiqueta etiqueta1 = sessionFactory.getCurrentSession().get(Etiqueta.class, 1);
+        Etiqueta etiqueta2 = sessionFactory.getCurrentSession().get(Etiqueta.class, 2);
+
+        List<Etiqueta> nuevasEtiquetas = new ArrayList<>();
+        nuevasEtiquetas.add(etiqueta1);
+        nuevasEtiquetas.add(etiqueta2);
+
+        Plato platoOriginal = new Plato();
+        platoOriginal.setNombre("Milanesa");
+        platoOriginal.setPrecio(80.0);
+        platoOriginal.setEtiquetas(new ArrayList<>());
+        sessionFactory.getCurrentSession().save(platoOriginal);
+        Integer idGenerado = platoOriginal.getId();
+
+        Plato platoParaActualizar = new Plato();
+        platoParaActualizar.setId(idGenerado);
+        platoParaActualizar.setEtiquetas(nuevasEtiquetas);
+
+        Boolean modificado = repositorioPlato.editarEtiquetas(platoParaActualizar);
+
+        assertThat(modificado, is(true));
+
+        Plato platoVerificado = sessionFactory.getCurrentSession().get(Plato.class, idGenerado);
+        assertThat(platoVerificado.getEtiquetas().size(), is(2));
+    }
+
 
 
 
