@@ -150,6 +150,20 @@ public class RepositorioPedidoImpl implements RepositorioPedido {
         return pedidosListos;
     }
 
+
+        @Override
+        public Pedido finalizarPedido(Long idUsuario) {
+            Pedido pedido = this.buscarPedidoActivoPorUsuario(idUsuario);
+
+            if (pedido != null) {
+                pedido.setFinalizo(true);
+                pedido.setEstadoPedido(EstadoPedido.EN_PROCESO);
+                sessionFactory.getCurrentSession().saveOrUpdate(pedido);
+            }
+
+            return pedido;
+        }
+
      */
 
     @Override
@@ -182,6 +196,7 @@ public class RepositorioPedidoImpl implements RepositorioPedido {
                 .setParameter("uid", usuarioId)
                 .list();
     }
+
 
 
 }

@@ -1,5 +1,11 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.config.NotificacionPedidoController;
+import com.tallerwebi.dominio.entidades.Etiqueta;
+import com.tallerwebi.dominio.entidades.Pedido;
+import com.tallerwebi.dominio.entidades.Plato;
+import com.tallerwebi.dominio.entidades.PedidoPlato;
+
 import com.tallerwebi.dominio.entidades.*;
 import com.tallerwebi.presentacion.PedidoPlatoDto;
 import com.tallerwebi.infraestructura.RepositorioPlatoImpl;
@@ -24,6 +30,10 @@ public class PedidoServiceImpl implements PedidoService {
     private RepositorioUsuarioNutriya repositorioUsuario;
 
     @Autowired
+
+    private NotificacionPedidoController notificacionController;
+
+
     public PedidoServiceImpl(RepositorioPlatoImpl repositorioPlatoImpl, RepositorioPedido repositorioPedido, RepositorioUsuarioNutriya repositorioUsuario) {
         this.repositorioPlatoImpl = repositorioPlatoImpl;
         this.repositorioPedido = repositorioPedido;
@@ -88,7 +98,6 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public List<PedidoPlatoDto> mostrarPlatosDelPedidoActual(Long idUsuario) {
-        System.out.println("Buscando platos del pedido actual del usuario ID: " + idUsuario);
         return this.repositorioPedido
                 .mostrarPlatosDelPedidoActual(idUsuario)
                 .stream()
@@ -105,8 +114,12 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public void finalizarPedido(Long id) {
-        this.repositorioPedido.finalizarPedido(id);
+        Pedido pedidoFinalizado = this.repositorioPedido.finalizarPedido(id);
+        if (pedidoFinalizado != null) {
+            notificacionController.notificarMensaje("**Nuevo pedido disponible**");
+        }
     }
+
 
     @Override
     public List<PedidoDto> listarPedidosPorUsuario(Long usuarioId) {
@@ -114,6 +127,9 @@ public class PedidoServiceImpl implements PedidoService {
                 .map(Pedido::obtenerDto)
                 .collect(Collectors.toList());
     }
+
+
+}
 
     @Override
     public void crearPedido(Long idUsuario) {

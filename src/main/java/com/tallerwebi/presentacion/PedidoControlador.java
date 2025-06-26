@@ -69,6 +69,7 @@ public class PedidoControlador {
 
             Double precioTotalDelPedido = pedidoService.mostrarPrecioTotalDelPedidoActual(usuario.getId());
             modeloMap.addAttribute("precioTotal", precioTotalDelPedido);
+
         }
 
 
@@ -102,7 +103,6 @@ public class PedidoControlador {
     public void agregarPlatoAlPedido(@RequestParam("platoId") Integer platoId, HttpServletRequest request) {
         UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
 
-
         PlatoDto platoBuscado = servicioRestaurante.obtenerPlatoPorId(platoId);
         System.out.println("Agregando plato al pedido. Usuario ID: " + usuario.getId() + ", Plato ID: " + platoBuscado.getId());
 
@@ -118,4 +118,5 @@ public class PedidoControlador {
         model.addAttribute("pedidos", lista);
         return "mis-pedidos";
     }
+
 }

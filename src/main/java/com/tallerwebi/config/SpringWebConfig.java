@@ -28,6 +28,7 @@ public class    SpringWebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/js/**").addResourceLocations("/resources/core/js/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("/webjars/");
         registry.addResourceHandler("/assets/**").addResourceLocations("/resources/assets/");
+        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
     }
 
     // https://www.thymeleaf.org/doc/tutorials/3.0/thymeleafspring.html
