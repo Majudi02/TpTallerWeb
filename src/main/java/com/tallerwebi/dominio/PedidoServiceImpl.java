@@ -62,9 +62,9 @@ public class PedidoServiceImpl implements PedidoService {
 
 
     @Override
-    public PedidoDto buscarPedidoActivoPorUsuario() {
-        Pedido pedido = this.repositorioPedido.buscarPedidoActivoPorUsuario();
-        return pedido.obtenerDto();
+    public PedidoDto buscarPedidoActivoPorUsuario(Long idUsuario) {
+        Pedido pedido = this.repositorioPedido.buscarPedidoActivoPorUsuario(idUsuario);
+        return pedido != null ? pedido.obtenerDto() : null;
     }
 
 
@@ -117,6 +117,13 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public void crearPedido(Long idUsuario) {
+        // Verificar si ya existe un pedido activo para ese usuario
+        Pedido pedidoExistente = repositorioPedido.buscarPedidoActivoPorUsuario(idUsuario);
+        if (pedidoExistente != null) {
+            // Ya hay un pedido activo, no crear uno nuevo
+            return;
+        }
+
         UsuarioNutriya usuario = repositorioUsuario.buscarPorId(idUsuario);
 
         Pedido nuevoPedido = new Pedido();

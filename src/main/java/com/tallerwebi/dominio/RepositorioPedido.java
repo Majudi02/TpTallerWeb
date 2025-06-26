@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface RepositorioPedido {
 
-    Pedido buscarPedidoActivoPorUsuario();
-
     void crearPedido(Pedido pedido);
 
     void agregarPlatoAlPedido(Plato plato, Long idUsuario);

@@ -13,7 +13,7 @@ public interface PedidoService {
     List<PlatoDto> traerTodosLosPlatos();
     List<PlatoDto> buscarPlatosPorTipoComida(String tipoComida);
     List<PlatoDto> ordenarPlatos(List<PlatoDto> platos,String tipoOrdenar);
-    PedidoDto buscarPedidoActivoPorUsuario();
+    PedidoDto buscarPedidoActivoPorUsuario(Long idUsuario);
     void agregarPlatoAlPedido(PlatoDto plato, UsuarioDTO usuario);
     List<PedidoPlatoDto>mostrarPlatosDelPedidoActual(Long idUsuario);
     Double mostrarPrecioTotalDelPedidoActual(Long idUsuario);

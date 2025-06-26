@@ -26,14 +26,6 @@ public class RepositorioPedidoImpl implements RepositorioPedido {
 
 
     @Override
-    public Pedido buscarPedidoActivoPorUsuario() {
-        String hql = "FROM Pedido p WHERE p.finalizo = false";
-        return sessionFactory.getCurrentSession()
-                .createQuery(hql, Pedido.class)
-                .uniqueResult();
-    }
-
-    @Override
     public void crearPedido(Pedido pedido) {
         sessionFactory.getCurrentSession().save(pedido);
     }
@@ -92,11 +84,18 @@ public class RepositorioPedidoImpl implements RepositorioPedido {
         UsuarioNutriya usuario = sessionFactory.getCurrentSession().get(UsuarioNutriya.class, idUsuario);
 
         String hql = "FROM Pedido p WHERE p.usuario = :usuario AND p.finalizo = false";
-        return sessionFactory.getCurrentSession()
+        List<Pedido> pedidos = sessionFactory.getCurrentSession()
                 .createQuery(hql, Pedido.class)
                 .setParameter("usuario", usuario)
-                .uniqueResult();
+                .getResultList();
+
+        if (pedidos.size() > 1) {
+            System.out.println("⚠️ Usuario con múltiples pedidos activos: " + idUsuario);
+        }
+
+        return pedidos.isEmpty() ? null : pedidos.get(0);
     }
+
 
     @Override
     public void agregarPlatoAlPedido(Long idUsuario, Plato plato) {
