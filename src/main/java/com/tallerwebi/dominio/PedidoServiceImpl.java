@@ -175,5 +175,11 @@ public class PedidoServiceImpl implements PedidoService {
         }
     }
 
+    @Override
+    public PedidoDto buscarPorId(Integer idPedido) {
+        Pedido pedido= repositorioPedido.buscarPorId(idPedido);
+        return pedido.obtenerDto();
+    }
+
 
 }

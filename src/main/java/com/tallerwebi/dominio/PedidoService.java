@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.entidades.Pedido;
 import com.tallerwebi.dominio.entidades.Restaurante;
 import com.tallerwebi.presentacion.PedidoDto;
 import com.tallerwebi.presentacion.PedidoPlatoDto;
@@ -25,4 +26,5 @@ public interface PedidoService {
 
     void crearPedido(Long idUsuario);
     void confirmarPedido(Long idUsuario);
+    PedidoDto buscarPorId(Integer idPedido);
 }

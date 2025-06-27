@@ -11,20 +11,19 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 @Service
 @Transactional
 public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante {
 
     private final RepositorioPedidoRestaurante repositorioPedidoRestaurante;
-    private final RepositorioPedidoPlato repositorioPedidoPlato;
-    private final RepositorioPedido repositorioPedido;
+    private final PedidoService pedidoService;
+    private final ServicioPedidoPlato servicioPedidoPlato;
 
     @Autowired
-    public ServicioPedidoRestauranteImpl(RepositorioPedidoRestaurante repositorioPedidoRestaurante, RepositorioPedidoPlato repositorioPedidoPlato, RepositorioPedido repositorioPedido) {
-        this.repositorioPedido = repositorioPedido;
+    public ServicioPedidoRestauranteImpl(RepositorioPedidoRestaurante repositorioPedidoRestaurante, ServicioPedidoPlato servicioPedidoPlato,PedidoService pedidoService) {
+        this.pedidoService = pedidoService;
         this.repositorioPedidoRestaurante = repositorioPedidoRestaurante;
-        this.repositorioPedidoPlato = repositorioPedidoPlato;
+        this.servicioPedidoPlato = servicioPedidoPlato;
     }
 
     @Override
@@ -35,7 +34,7 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
 
     @Override
     public List<PedidoDto> traerPedidosDelRestaurante(Long id) {
-        List<PedidoDto> pedidosTotales = this.traerTodosLosPedidos(); // trae todos, sin filtrar por estado
+        List<PedidoDto> pedidosTotales = this.traerTodosLosPedidos();
 
         List<PedidoDto> pedidosFiltrados = new ArrayList<>();
 
@@ -68,12 +67,11 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
 
     @Override
     public void finalizarPlatoPedido(Long id) {
-        PedidoPlato pedidoPlato = repositorioPedidoPlato.buscarPorId(id);
+        PedidoPlatoDto pedidoPlato = servicioPedidoPlato.buscarPorId(id);
 
         if (pedidoPlato != null) {
             pedidoPlato.setEstadoPlato(EstadoPlato.FINALIZADO);
-            // Guardar el cambio del plato
-            repositorioPedidoPlato.guardar(pedidoPlato);
+            servicioPedidoPlato.guardar(pedidoPlato);
         }
     }
 
@@ -82,7 +80,6 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
         Pedido pedido = repositorioPedidoRestaurante.buscarPorId(idPedido);
 
         if (pedido != null) {
-            // Validar que TODOS los platos están finalizados antes de cambiar
             boolean todosFinalizados = pedido.getPedidoPlatos()
                     .stream()
                     .allMatch(pp -> pp.getEstadoPlato() == EstadoPlato.FINALIZADO);
@@ -106,8 +103,7 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
             PedidoVistaDto dto = new PedidoVistaDto();
             dto.setPedidoId(pedido.getId());
 
-            // Dirección del cliente
-            // CAMBIAR DESPUES, SOLO AGARRA LA 1ER DIRECCION
+
             if (pedido.getUsuario() instanceof Cliente) {
                 Cliente cliente = (Cliente) pedido.getUsuario();
                 if (cliente.getDirecciones() != null && !cliente.getDirecciones().isEmpty()) {
@@ -118,7 +114,6 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
                 }
             }
 
-            // Armado de platos y datos del restaurante
             List<PlatoCantidadDto> platos = new ArrayList<>();
 
             if (pedido.getPedidoPlatos() != null && !pedido.getPedidoPlatos().isEmpty()) {
@@ -164,11 +159,10 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
         Pedido pedido = repositorioPedidoRestaurante.buscarPorId(id);
         if (pedido == null) return null;
 
-        // Aquí convertís Pedido a PedidoVistaDto (similar a traerPedidosListosParaVista pero solo uno)
         PedidoVistaDto dto = new PedidoVistaDto();
         dto.setPedidoId(pedido.getId());
 
-        // Dirección cliente (como hacés ya)
+
         if (pedido.getUsuario() instanceof Cliente) {
             Cliente cliente = (Cliente) pedido.getUsuario();
             if (cliente.getDirecciones() != null && !cliente.getDirecciones().isEmpty()) {
@@ -179,14 +173,12 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
             }
         }
 
-        // Datos restaurante
         if (!pedido.getPedidoPlatos().isEmpty()) {
             Restaurante restaurante = pedido.getPedidoPlatos().get(0).getPlato().getRestaurante();
             dto.setNombreRestaurante(restaurante.getNombre());
             dto.setDireccionRestaurante(restaurante.getCalle() + " " + restaurante.getNumero() + ", Localidad: " + restaurante.getLocalidad());
         }
 
-        // Platos con cantidades
         List<PlatoCantidadDto> platos = new ArrayList<>();
         for (PedidoPlato pp : pedido.getPedidoPlatos()) {
             Plato plato = pp.getPlato();
@@ -210,12 +202,12 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
 
     @Override
     public void finalizarPedidoCompleto(Integer idPedido) {
-        Pedido pedidoBuscado = repositorioPedido.buscarPorId(idPedido);
+        PedidoDto pedidoBuscado = pedidoService.buscarPorId(idPedido);
 
         if (pedidoBuscado != null) {
             pedidoBuscado.setEstadoPedido(EstadoPedido.LISTO_PARA_ENVIAR);
 
-            for (PedidoPlato plato : pedidoBuscado.getPedidoPlatos()) {
+            for (PedidoPlatoDto plato : pedidoBuscado.getPedidoPlatos()) {
                 plato.setEstadoPlato(EstadoPlato.FINALIZADO);
             }
         }

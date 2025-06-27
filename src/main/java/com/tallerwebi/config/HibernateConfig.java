@@ -27,8 +27,6 @@ public class HibernateConfig {
         return dataSource;
     }
 
-
-
 /*
 //DOCKER
     @Bean
