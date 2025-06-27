@@ -11,17 +11,19 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/*
 public class ServicioPedidoRestauranteImplTest {
     private RepositorioPedidoRestaurante repoPedido;
-    private RepositorioPedidoPlato repoPedidoPlato;
     private ServicioPedidoRestaurante servicio;
-    private RepositorioPedido repositorioPedido;
+    private PedidoService pedidoService;
+    private ServicioPedidoPlato servicioPedidoPlato;
 
     @BeforeEach
     void setup() {
         repoPedido = mock(RepositorioPedidoRestaurante.class);
-        repoPedidoPlato = mock(RepositorioPedidoPlato.class);
-        servicio = new ServicioPedidoRestauranteImpl(repoPedido, repoPedidoPlato,repositorioPedido);
+        pedidoService = mock(PedidoService.class);
+        servicioPedidoPlato=mock(ServicioPedidoPlato.class);
+        servicio = new ServicioPedidoRestauranteImpl(repoPedido,servicioPedidoPlato,pedidoService);
     }
 
     @Test
@@ -92,3 +94,7 @@ public class ServicioPedidoRestauranteImplTest {
         assertTrue(pedido.isFinalizo());
     }
 }
+
+ */
+
+

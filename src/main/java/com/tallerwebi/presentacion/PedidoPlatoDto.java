@@ -2,6 +2,8 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.PlatoDto;
 import com.tallerwebi.dominio.entidades.EstadoPlato;
+import com.tallerwebi.dominio.entidades.Pedido;
+import com.tallerwebi.dominio.entidades.PedidoPlato;
 
 public class PedidoPlatoDto {
 
@@ -32,5 +34,25 @@ public class PedidoPlatoDto {
 
     public void setEstadoPlato(EstadoPlato estadoPlato) {
         this.estadoPlato = estadoPlato;
+    }
+
+
+    public PedidoPlato obtenerEntidad() {
+        PedidoPlato entidad = new PedidoPlato();
+        entidad.setId(this.id);
+        entidad.setEstadoPlato(this.estadoPlato);
+
+        if (this.plato != null) {
+            entidad.setPlato(this.plato.obtenerEntidad());
+        }
+
+        return entidad;
+    }
+
+
+    public PedidoPlato obtenerEntidad(Pedido pedido) {
+        PedidoPlato entidad = obtenerEntidad();
+        entidad.setPedido(pedido);
+        return entidad;
     }
 }
