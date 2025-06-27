@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-/*
+
 public class RestauranteServiceTest {
     private RepositorioUsuarioRestaurante repositorioUsuarioRestauranteMock;
     private RepositorioPlato repositorioPlatoMock;
@@ -106,4 +106,3 @@ public class RestauranteServiceTest {
 }
 
 
- */
