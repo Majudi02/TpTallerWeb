@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio.entidades;
 
+import com.tallerwebi.presentacion.DireccionDto;
+
 import javax.persistence.*;
 
 @Entity
@@ -55,4 +57,14 @@ public class Direccion {
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
+
+    public DireccionDto obtenerDto() {
+        DireccionDto dto = new DireccionDto();
+        dto.setId(this.id);
+        dto.setCalle(this.calle);
+        dto.setNumero(this.numero);
+        dto.setLocalidad(this.localidad);
+        return dto;
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.entidades.Cliente;
 import com.tallerwebi.dominio.entidades.UsuarioNutriya;
 
 public interface RepositorioUsuarioNutriya {
@@ -10,4 +11,6 @@ public interface RepositorioUsuarioNutriya {
     UsuarioNutriya buscarPorTokenConfirmacion(String token);
 
     UsuarioNutriya buscarPorId(Long id);
+
+    Cliente obtenerClienteConEtiquetas(Long id);
 }

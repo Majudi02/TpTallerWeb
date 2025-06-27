@@ -14,7 +14,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 public class HibernateConfig {
 
-    /*
+
 //LOCAL
     @Bean
     public DataSource dataSource() {
@@ -27,9 +27,9 @@ public class HibernateConfig {
         return dataSource;
     }
 
-     */
 
 
+/*
 //DOCKER
     @Bean
     public DataSource dataSource() {
@@ -40,7 +40,7 @@ public class HibernateConfig {
         dataSource.setPassword("user");
         return dataSource;
     }
-
+*/
 
 
 
