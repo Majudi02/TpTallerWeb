@@ -27,8 +27,9 @@ public class HibernateConfig {
         return dataSource;
     }
 
-/*
+
 //DOCKER
+    /*
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -38,7 +39,9 @@ public class HibernateConfig {
         dataSource.setPassword("user");
         return dataSource;
     }
-*/
+
+     */
+
 
 
 
