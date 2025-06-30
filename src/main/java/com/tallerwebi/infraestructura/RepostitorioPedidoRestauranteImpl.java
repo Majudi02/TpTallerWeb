@@ -51,11 +51,14 @@ public class RepostitorioPedidoRestauranteImpl implements RepositorioPedidoResta
                 "JOIN FETCH p.pedidoPlatos pp " +
                 "JOIN FETCH pp.plato pl " +
                 "JOIN FETCH pl.restaurante " +
-                "WHERE p.finalizo = false";
+                "WHERE p.finalizo = false " +
+                "AND p.estadoPedido = :estado";
 
         List<Pedido> pedidos = sessionFactory.getCurrentSession()
                 .createQuery(hql, Pedido.class)
+                .setParameter("estado", EstadoPedido.EN_PROCESO)
                 .getResultList();
+
 
         List<Pedido> pedidosListos = new ArrayList<>();
 

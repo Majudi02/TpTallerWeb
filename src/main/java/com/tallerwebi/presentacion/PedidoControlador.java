@@ -98,7 +98,7 @@ public class PedidoControlador {
         try{
             List<PedidoPlatoDto> platosAPagar = pedidoService.mostrarPlatosDelPedidoActual(usuario.getId());
 
-            Preference preference = mercadoPagoService.crearPreferencia(platosAPagar);
+            Preference preference = mercadoPagoService.crearPreferencia(platosAPagar, usuario.getId());
 
             return new RedirectView(preference.getInitPoint());
 

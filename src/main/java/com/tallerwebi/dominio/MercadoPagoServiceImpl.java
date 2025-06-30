@@ -21,11 +21,14 @@ public class MercadoPagoServiceImpl {
 
     private final PreferenceClient preferenceClient;
 
+    private static final String BASE_URL = "https://50ab-2800-810-507-abe6-7c62-729c-d494-4870.ngrok-free.app";
+
     public MercadoPagoServiceImpl() {
         this.preferenceClient = new PreferenceClient();
     }
 
-    public Preference crearPreferencia(List<PedidoPlatoDto> platos) throws MPException, MPApiException {
+
+    public Preference crearPreferencia(List<PedidoPlatoDto> platos, Long idUsuario) throws MPException, MPApiException {
         List<PreferenceItemRequest> items = platos.stream()
                 .map(pedidoPlato -> PreferenceItemRequest.builder()
                         .title(pedidoPlato.getPlato().getNombre())
@@ -39,12 +42,11 @@ public class MercadoPagoServiceImpl {
                 .items(items)
                 .backUrls(
                         PreferenceBackUrlsRequest.builder()
-                                .success("http://localhost:8080/pago-exitoso")
-                                .failure("http://localhost:8080/pago-fallido")
-                                .pending("http://localhost:8080/pago-pendiente")
+                                .success(BASE_URL+"/pago-exitoso?idUsuario=" + idUsuario)
+                                .failure(BASE_URL+"/pago-fallido")
+                                .pending(BASE_URL+"/pago-pendiente")
                                 .build()
                 )
-                //.autoReturn("approved")
                 .build();
 
         return preferenceClient.create(preferenceRequest);

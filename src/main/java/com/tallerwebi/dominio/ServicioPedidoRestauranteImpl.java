@@ -230,7 +230,7 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
                 listosParaEnviar.add(pedido);
             } else if (pedido.getEstadoPedido() == EstadoPedido.ENTREGADO) {
                 entregados.add(pedido);
-            } else {
+            } else if (pedido.getEstadoPedido() == EstadoPedido.EN_PROCESO) {
                 enPreparacion.add(pedido);
             }
         }
