@@ -189,3 +189,26 @@ body {
 .titulo-verde{
     color: #38bd48;
 }
+
+.etiquetas-bottom-right {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    max-width: 8rem;
+    justify-content: flex-end;
+}
+
+.badge-etiqueta {
+    background-color: #38bd48;
+    color: white;
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+
+.plato {
+    position: relative;
+}
