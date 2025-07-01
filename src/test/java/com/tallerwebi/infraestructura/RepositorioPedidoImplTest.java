@@ -245,7 +245,7 @@ public class RepositorioPedidoImplTest {
         pedido2.setFecha("2025-06-10");
         sessionFactory.getCurrentSession().save(pedido2);
 
-        var pedidos = repositorioPedido.listarPedidosPorUsuario(usuario.getId());
+        List<Pedido> pedidos = repositorioPedido.listarPedidosPorUsuario(usuario.getId());
 
         assertEquals(2, pedidos.size());
         assertTrue(pedidos.get(0).getFecha().compareTo(pedidos.get(1).getFecha()) > 0); // orden descendente

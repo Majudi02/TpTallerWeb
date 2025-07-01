@@ -23,5 +23,7 @@ public interface ServicioUsuario {
     void editarUsuario(UsuarioDTO usuarioDTO);
 
     UsuarioDTO obtenerClienteConEtiquetas(Long id);
+
+    UsuarioNutriya buscarPorId(Long id);
 }
 

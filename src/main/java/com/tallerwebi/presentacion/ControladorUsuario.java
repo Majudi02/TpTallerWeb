@@ -81,13 +81,13 @@ public class ControladorUsuario {
             return mostrarFormularioRegistro();
         }
 
-        UsuarioDTO usuarioEncontrado = servicioUsuario.getUsuario(usuarioDTO.getEmail());
-        if (usuarioEncontrado != null) {
-            redirectAttributes.addFlashAttribute("errorEmail", "Ya existe un usuario registrado con ese email.");
-            return new ModelAndView("redirect:/resultado-registro");
-        }
-
         if ("restaurante".equals(usuarioDTO.getTipoUsuario())) {
+            UsuarioDTO usuarioEncontrado = servicioUsuario.getUsuario(usuarioDTO.getEmail());
+            if (usuarioEncontrado != null) {
+                redirectAttributes.addFlashAttribute("errorEmail", "Ya existe un usuario registrado con ese email.");
+                return new ModelAndView("redirect:/resultado-registro");
+            }
+
             if (imagen != null && !imagen.isEmpty()) {
                 try {
                     String rutaProyecto = System.getProperty("user.dir");

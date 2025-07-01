@@ -64,4 +64,17 @@ public class RepositorioPlatoImpl implements RepositorioPlato {
         return true;
     }
 
+    @Override
+    public List<Plato> buscarPlatosPorEtiquetasDelCliente(Long idCliente) {
+        String hql = "select distinct p from Plato p join p.etiquetas e " +
+                "where e.id in (" +
+                "   select ce.id from Cliente c join c.etiquetas ce where c.id = :idCliente" +
+                ")";
+        return sessionFactory.getCurrentSession()
+                .createQuery(hql, Plato.class)
+                .setParameter("idCliente", idCliente)
+                .setMaxResults(4)
+                .getResultList();
+    }
+
 }

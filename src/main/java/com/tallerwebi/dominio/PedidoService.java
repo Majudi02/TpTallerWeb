@@ -1,7 +1,5 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.dominio.entidades.Pedido;
-import com.tallerwebi.dominio.entidades.Restaurante;
 import com.tallerwebi.presentacion.PedidoDto;
 import com.tallerwebi.presentacion.PedidoPlatoDto;
 import com.tallerwebi.presentacion.UsuarioDTO;
@@ -10,7 +8,6 @@ import java.util.List;
 
 public interface PedidoService {
 
-    List<PlatoDto> traerPlatosDestacados();
     List<PlatoDto> traerTodosLosPlatos();
     List<PlatoDto> buscarPlatosPorTipoComida(String tipoComida);
     List<PlatoDto> ordenarPlatos(List<PlatoDto> platos,String tipoOrdenar);
@@ -27,4 +24,5 @@ public interface PedidoService {
     void crearPedido(Long idUsuario);
     void confirmarPedido(Long idUsuario);
     PedidoDto buscarPorId(Integer idPedido);
+    List<PlatoDto> traerPlatosDestacadosPorLaEtiquetaDelCliente(Long idCliente);
 }

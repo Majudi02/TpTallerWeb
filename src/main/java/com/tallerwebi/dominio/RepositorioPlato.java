@@ -13,4 +13,5 @@ public interface RepositorioPlato {
     List<Plato> traerTodosLosPlatos();
     Boolean editarEtiquetas(Plato plato);
     Boolean actualizarPlato(Plato plato);
+    List<Plato> buscarPlatosPorEtiquetasDelCliente(Long idCliente);
 }
