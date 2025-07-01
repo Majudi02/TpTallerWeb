@@ -5,11 +5,7 @@ import com.tallerwebi.dominio.MercadoPagoServiceImpl;
 import com.tallerwebi.dominio.PedidoService;
 import com.tallerwebi.dominio.PlatoDto;
 import com.tallerwebi.dominio.ServicioRestaurante;
-import com.tallerwebi.dominio.entidades.Pedido;
-import com.tallerwebi.dominio.entidades.PedidoPlato;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -41,10 +37,15 @@ public class PedidoControlador {
     }
 
     @GetMapping("/pedido")
-    public ModelAndView irAPedido() {
+    public ModelAndView irAPedido(HttpServletRequest request, ModelMap modelMap) {
+        UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
         ModelMap modeloMap = new ModelMap();
+
+        modeloMap.put("usuario", usuario);
         modeloMap.put("restaurantes", servicioRestaurante.traerRestaurantesDestacados());
-        modeloMap.put("platos", pedidoService.traerPlatosDestacados());
+        if (usuario != null) {
+            modeloMap.put("platos", pedidoService.traerPlatosDestacadosPorLaEtiquetaDelCliente(usuario.getId()));
+        }
 
         return new ModelAndView("pedido", modeloMap);
     }

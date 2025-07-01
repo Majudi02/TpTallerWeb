@@ -21,17 +21,18 @@ import static org.mockito.Mockito.when;
 
 public class PedidoServiceImplTest {
 
-    private RepositorioPlatoImpl repositorioPlato;
+
     private RepositorioPedido repositorioPedido;
     private PedidoServiceImpl pedidoService;
-    private RepositorioUsuarioNutriya repositorioUsuario;
+    private ServicioPlato servicioPlato;
+    private ServicioUsuario servicioUsuario;
 
     @BeforeEach
     public void setUp() {
-        repositorioPlato = Mockito.mock(RepositorioPlatoImpl.class);
+        servicioPlato = Mockito.mock(ServicioPlato.class);
         repositorioPedido = Mockito.mock(RepositorioPedido.class);
-        repositorioUsuario = Mockito.mock(RepositorioUsuarioNutriya.class);
-        pedidoService = new PedidoServiceImpl(repositorioPlato, repositorioPedido, repositorioUsuario);
+        servicioUsuario = Mockito.mock(ServicioUsuario.class);
+        pedidoService = new PedidoServiceImpl(servicioPlato, repositorioPedido, servicioUsuario);
     }
 
 /*
@@ -77,44 +78,28 @@ public class PedidoServiceImplTest {
     @Test
     public void DadoQueExistenDiezPlatosConLaEtiquetaProteicaObtengoSoloLosDelTipoDeComidaFiltrada(){
         List<PlatoDto> platosTotales = List.of(
-                new PlatoDto(1, 1L, "Milanesa con papas fritas", "Clásica milanesa de carne acompañada con papas fritas crujientes.", "/assets/imagen-plato.png", 2500.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(2, 1L, "Ravioles de ricota", "Ravioles caseros rellenos de ricota y nuez, servidos con salsa bolognesa.", "/assets/imagen-plato.png", 2800.0, List.of(new EtiquetaDto(2, "Vegetariana"))),
-                new PlatoDto(3, 1L, "Pizza napolitana", "Pizza con tomate, mozzarella, ajo y albahaca fresca.", "/assets/imagen-plato.png", 3200.0, List.of(new EtiquetaDto(2, "Vegetariana"))),
-                new PlatoDto(4, 1L, "Hamburguesa completa", "Hamburguesa con lechuga, tomate, queso, panceta y papas fritas.", "/assets/imagen-plato.png", 2900.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(5, 1L, "Ensalada César", "Ensalada con lechuga romana, pollo, crutones, parmesano y aderezo César.", "/assets/imagen-plato.png", 2300.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(6, 1L, "Tarta de espinaca", "Tarta casera de espinaca y queso con masa hojaldrada.", "/assets/imagen-plato.png", 2000.0, List.of(new EtiquetaDto(2, "Vegetariana"))),
-                new PlatoDto(7, 1L, "Lasaña de carne", "Capas de pasta con carne, salsa bechamel y queso gratinado.", "/assets/imagen-plato.png", 3100.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(8, 1L, "Empanadas salteñas", "Empanadas rellenas de carne cortada a cuchillo, típicas del norte argentino.", "/assets/imagen-plato.png", 1800.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(9, 1L, "Pollo al horno con papas", "Muslo de pollo al horno con papas doradas y especias.", "/assets/imagen-plato.png", 2600.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(10, 1L, "Ñoquis con salsa rosa", "Ñoquis de papa acompañados con salsa de tomate y crema.", "/assets/imagen-plato.png", 2700.0, List.of(new EtiquetaDto(2, "Vegetariana"))),
-                new PlatoDto(11, 1L, "Sopa crema de calabaza", "Sopa suave y cremosa de calabaza natural.", "/assets/imagen-plato.png", 1900.0, List.of(
-                        new EtiquetaDto(2, "Vegetariana"),
-                        new EtiquetaDto(3, "Vegana"),
-                        new EtiquetaDto(4, "Sin Gluten"))),
-                new PlatoDto(12, 1L, "Tacos de carne", "Tortillas mexicanas rellenas de carne, cebolla y cilantro.", "/assets/imagen-plato.png", 3000.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(13, 1L, "Milanesa napolitana", "Milanesa con jamón, queso y salsa de tomate, servida con papas.", "/assets/imagen-plato.png", 3200.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(14, 1L, "Pizza cuatro quesos", "Pizza con una mezcla de mozzarella, azul, provolone y parmesano.", "/assets/imagen-plato.png", 3400.0, List.of(new EtiquetaDto(2, "Vegetariana"))),
-                new PlatoDto(15, 1L, "Panqueques con dulce de leche", "Postre de panqueques caseros rellenos con dulce de leche argentino.", "/assets/imagen-plato.png", 1600.0, List.of()),
-                new PlatoDto(16, 1L, "Churrasco con ensalada", "Carne asada a la plancha con guarnición de ensalada fresca.", "/assets/imagen-plato.png", 3500.0, List.of(
-                        new EtiquetaDto(1, "Proteica"),
-                        new EtiquetaDto(4, "Sin Gluten"))),
-                new PlatoDto(17, 1L, "Fideos al pesto", "Fideos largos acompañados con salsa pesto casera.", "/assets/imagen-plato.png", 2500.0, List.of(new EtiquetaDto(2, "Vegetariana"))),
-                new PlatoDto(18, 1L, "Sándwich de lomito", "Lomito con huevo, jamón, queso, lechuga y tomate en pan tostado.", "/assets/imagen-plato.png", 2800.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(19, 1L, "Canelones de verdura", "Pasta rellena de verdura con salsa blanca y gratinada al horno.", "/assets/imagen-plato.png", 3000.0, List.of(new EtiquetaDto(2, "Vegetariana"))),
-                new PlatoDto(20, 1L, "Helado artesanal", "Helado de elaboración artesanal, sabores surtidos.", "/assets/imagen-plato.png", 1500.0, List.of(new EtiquetaDto(4, "Sin Gluten")))
+                new PlatoDto(1, 1L, "Milanesa con papas fritas", "...", "/img.png", 2500.0, List.of(new EtiquetaDto(1, "Proteica"))),
+                new PlatoDto(2, 1L, "Ravioles de ricota", "...", "/img.png", 2800.0, List.of(new EtiquetaDto(2, "Vegetariana"))),
+                new PlatoDto(3, 1L, "Pizza napolitana", "...", "/img.png", 3200.0, List.of(new EtiquetaDto(2, "Vegetariana"))),
+                new PlatoDto(4, 1L, "Hamburguesa completa", "...", "/img.png", 2900.0, List.of(new EtiquetaDto(1, "Proteica"))),
+                new PlatoDto(5, 1L, "Ensalada César", "...", "/img.png", 2300.0, List.of(new EtiquetaDto(1, "Proteica"))),
+                new PlatoDto(6, 1L, "Tarta de espinaca", "...", "/img.png", 2000.0, List.of(new EtiquetaDto(2, "Vegetariana"))),
+                new PlatoDto(7, 1L, "Lasaña de carne", "...", "/img.png", 3100.0, List.of(new EtiquetaDto(1, "Proteica"))),
+                new PlatoDto(8, 1L, "Empanadas salteñas", "...", "/img.png", 1800.0, List.of(new EtiquetaDto(1, "Proteica"))),
+                new PlatoDto(9, 1L, "Pollo al horno con papas", "...", "/img.png", 2600.0, List.of(new EtiquetaDto(1, "Proteica"))),
+                new PlatoDto(10, 1L, "Tacos de carne", "...", "/img.png", 3000.0, List.of(new EtiquetaDto(1, "Proteica")))
         );
 
-
-        when(repositorioPlato.buscarPlatosPorTipoComida("Proteica"))
-                .thenReturn(platosTotales.stream()
+        when(servicioPlato.buscarPlatosPorTipoComida("Proteica")).thenReturn(
+                platosTotales.stream()
                         .filter(dto -> dto.getEtiquetas().stream()
                                 .anyMatch(e -> e.getNombre().equalsIgnoreCase("Proteica")))
-                        .map(dto -> dto.obtenerEntidad())
-                        .collect(Collectors.toList()));
+                        .collect(Collectors.toList())
+        );
 
         List<PlatoDto> platosFiltrados = pedidoService.buscarPlatosPorTipoComida("Proteica");
 
-        assertThat(platosFiltrados.size(), equalTo(10));
+        assertThat(platosFiltrados.size(), equalTo(7));
     }
 
 
@@ -159,7 +144,7 @@ public class PedidoServiceImplTest {
     }
 
     @Test
-    public void DadoQueExistenDiezPlatosConLaEtiquetaProteicaLosQuieroOrdenarDeMenorAMayor(){
+    public void DadoQueExistenDiezPlatosConLaEtiquetaProteicaLosQuieroOrdenarDeMenorAMayor() {
         List<PlatoDto> platosTotales = List.of(
                 new PlatoDto(1, 1L, "Milanesa con papas fritas", "...", "/img.png", 2500.0, List.of(new EtiquetaDto(1, "Proteica"))),
                 new PlatoDto(4, 1L, "Hamburguesa completa", "...", "/img.png", 2900.0, List.of(new EtiquetaDto(1, "Proteica"))),
@@ -173,27 +158,16 @@ public class PedidoServiceImplTest {
                 new PlatoDto(18, 1L, "Sándwich de lomito", "...", "/img.png", 2800.0, List.of(new EtiquetaDto(1, "Proteica")))
         );
 
-
-        when(repositorioPlato.buscarPlatosPorTipoComida("Proteica"))
-                .thenReturn(platosTotales.stream()
-                        .map(dto -> dto.obtenerEntidad(
-                                dto.getEtiquetas().stream()
-                                        .map(e -> {
-                                            var et = new com.tallerwebi.dominio.entidades.Etiqueta();
-                                            et.setId(e.getId());
-                                            et.setNombre(e.getNombre());
-                                            return et;
-                                        }).collect(Collectors.toList())
-                        )).collect(Collectors.toList())
-                );
+        when(servicioPlato.buscarPlatosPorTipoComida("Proteica"))
+                .thenReturn(platosTotales);
 
         List<Double> preciosEsperados = List.of(1800.0, 2300.0, 2500.0, 2600.0, 2800.0, 2900.0, 3000.0, 3100.0, 3200.0, 3500.0);
 
         List<PlatoDto> platosFiltrados = pedidoService.buscarPlatosPorTipoComida("Proteica");
+        List<PlatoDto> platosOrdenados = pedidoService.ordenarPlatos(platosFiltrados, "menorAMayor");
 
-        List<PlatoDto> platosOrdenados = pedidoService.ordenarPlatos(platosFiltrados,"menorAMayor");
-        assertThat(platosOrdenados.get(0).getPrecio(),equalTo(preciosEsperados.get(0)));
-        assertThat(platosOrdenados.get(9).getPrecio(),equalTo(preciosEsperados.get(9)));
+        assertThat(platosOrdenados.get(0).getPrecio(), equalTo(preciosEsperados.get(0)));
+        assertThat(platosOrdenados.get(9).getPrecio(), equalTo(preciosEsperados.get(9)));
     }
 
     @Test

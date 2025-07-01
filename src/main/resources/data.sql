@@ -1,3 +1,4 @@
+/*
 INSERT
 IGNORE INTO Etiqueta (id, nombre) VALUES
 (1, 'Vegana'),
@@ -76,16 +77,10 @@ VALUES (200, 'cliente@nutriya.com', '$2a$10$T1U4R6S.z0O2z5Q8.2Y.J.Z0J9L.J.J.Z0J9
 INSERT IGNORE INTO Cliente (id, nombre, edad, pesoActual, pesoDeseado, altura, objetivo)
 VALUES (200, 'Juan Pérez', 30, 80, 70, 1.75, 'Bajar de peso');
 
-CREATE TABLE IF NOT EXISTS cliente_etiquetas (
-                                                 cliente_id BIGINT NOT NULL,
-                                                 etiquetas VARCHAR(255),
-    CONSTRAINT fk_cliente_etiquetas FOREIGN KEY (cliente_id) REFERENCES Cliente (id) ON DELETE CASCADE
-    );
 
-
-INSERT IGNORE INTO cliente_etiquetas (cliente_id, etiquetas)
+INSERT IGNORE INTO Cliente_Etiqueta (cliente_id, etiqueta_id)
 VALUES
-(200, 'Vegana');
+(200, 1);
 
 
 INSERT
@@ -225,3 +220,5 @@ INSERT
 IGNORE INTO Plato_Etiqueta (plato_id, etiqueta_id) VALUES (28, 2);
 INSERT
 IGNORE INTO Plato_Etiqueta (plato_id, etiqueta_id) VALUES (30, 2);
+
+ */

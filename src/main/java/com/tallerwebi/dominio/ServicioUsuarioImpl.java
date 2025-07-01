@@ -317,4 +317,9 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
         return dto;
     }
 
+    @Override
+    public UsuarioNutriya buscarPorId(Long id) {
+        return repositorioUsuario.buscarPorId(id);
+    }
+
 }
