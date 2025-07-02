@@ -18,7 +18,9 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class PedidoControlador {
@@ -96,27 +98,60 @@ public class PedidoControlador {
     @PostMapping("/pedido/confirmar")
     public RedirectView confirmarPedido(HttpServletRequest request) {
         UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
-        try{
+        try {
             List<PedidoPlatoDto> platosAPagar = pedidoService.mostrarPlatosDelPedidoActual(usuario.getId());
 
             Preference preference = mercadoPagoService.crearPreferencia(platosAPagar, usuario.getId());
 
             return new RedirectView(preference.getInitPoint());
 
-        }catch (Exception e){
+        } catch (Exception e) {
             return new RedirectView("/pedido?error=pago");
         }
     }
 
     @GetMapping("/pedido/carrito")
     @ResponseBody
-    public List<PedidoPlatoDto> mostrarCarrito(HttpServletRequest request) {
+    public Map<String, Object> mostrarCarrito(HttpServletRequest request) {
         UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
+        Map<String, Object> resultado = new HashMap<>();
+
         if (usuario == null) {
-            return new java.util.ArrayList<>();
+            resultado.put("platos", new ArrayList<>());
+            resultado.put("totales", Map.of(
+                    "calorias", 0,
+                    "proteinas", 0,
+                    "carbohidratos", 0,
+                    "grasas", 0
+            ));
+            return resultado;
         }
-        return pedidoService.mostrarPlatosDelPedidoActual(usuario.getId());
+
+        List<PedidoPlatoDto> platos = pedidoService.mostrarPlatosDelPedidoActual(usuario.getId());
+        resultado.put("platos", platos);
+
+        double totalCalorias = 0;
+        double totalProteinas = 0;
+        double totalCarbohidratos = 0;
+        double totalGrasas = 0;
+
+        for (PedidoPlatoDto pp : platos) {
+            totalCalorias += pp.getPlato().getCalorias();
+            totalProteinas += pp.getPlato().getProteinas();
+            totalCarbohidratos += pp.getPlato().getCarbohidratos();
+            totalGrasas += pp.getPlato().getGrasas();
+        }
+
+        resultado.put("totales", Map.of(
+                "calorias", totalCalorias,
+                "proteinas", totalProteinas,
+                "carbohidratos", totalCarbohidratos,
+                "grasas", totalGrasas
+        ));
+
+        return resultado;
     }
+
 
     @PostMapping("/pedido/agregar")
     @ResponseBody
@@ -128,6 +163,17 @@ public class PedidoControlador {
 
         pedidoService.agregarPlatoAlPedido(platoBuscado, usuario);
     }
+
+    @PostMapping("/pedido/eliminar")
+    @ResponseBody
+    public void eliminarPlatoDelCarrito(@RequestParam Integer platoId, HttpServletRequest request) {
+        UsuarioDTO usuarioLogueado = (UsuarioDTO) request.getSession().getAttribute("usuario");
+
+        if (usuarioLogueado != null) {
+            pedidoService.eliminarPlatoDelCarrito(usuarioLogueado.getId(), platoId);
+        }
+    }
+
 
     @GetMapping("/mis-pedidos")
     public String verMisPedidos(HttpServletRequest req, Model model) {
@@ -145,6 +191,21 @@ public class PedidoControlador {
         }
 
         return "mis-pedidos";
+    }
+
+    @GetMapping("/pedido/plato")
+    public ModelAndView verDetallePlato(@RequestParam("id") Integer platoId,
+                                        HttpServletRequest request) {
+
+        PlatoDto plato = servicioRestaurante.obtenerPlatoPorId(platoId);
+
+        UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
+
+        ModelMap model = new ModelMap();
+        model.addAttribute("plato", plato);
+        model.addAttribute("usuario", usuario);
+
+        return new ModelAndView("detalle-plato", model);
     }
 
 

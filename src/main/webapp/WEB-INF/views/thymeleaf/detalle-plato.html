@@ -1,27 +1,17 @@
 <!DOCTYPE html>
-<html lang="es">
-
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>NutriYa - Detalle de Restaurante</title>
-
-    <!-- Bootstrap 5.2.0 CSS & Icons -->
+    <title>Detalle del Plato</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-
+    <link rel="stylesheet" th:href="@{/css/hacer-pedido-platos.css}"/>
+    <link rel="stylesheet" th:href="@{/css/plato.css}"/>
     <link rel="stylesheet" th:href="@{/css/estilo-principal.css}">
-    <link rel="stylesheet" th:href="@{/css/estilo-detalle-restaurante.css}">
-    <link rel="stylesheet" th:href="@{/css/estilo-restaurante.css}">
-
-    <!-- Fuente Outfit -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap" rel="stylesheet">
-
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
 </head>
-
-<body>
-<!-- NAVBAR -->
+<body class="bg-light">
 <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top px-3">
     <div class="container-fluid">
         <div class="d-flex w-100 justify-content-between align-items-center">
@@ -126,56 +116,58 @@
         </ul>
     </div>
 </div>
+<main style="padding-top: 100px;">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
 
-<!-- CONTENIDO PRINCIPAL -->
-<div class="restaurant-header" th:style="${'background-image: url(' + restaurante.imagen + ')'}">
-    <div class="container restaurant-header-content">
-        <h1 th:text="${restaurante.nombre}"></h1>
-        <p class="lead" th:text="${restaurante.descripcion}"></p>
-        <p><i class="bi bi-geo-alt-fill"></i> <span
-                th:text="${restaurante.calle + ' ' + restaurante.numero + ', ' + restaurante.localidad + ' - Zona ' + restaurante.zona}"></span>
-        </p>
-        <div>
-            <span class="badge mx-1" th:each="tipo : ${restaurante.tiposComida}" th:text="${tipo}"></span>
-        </div>
-    </div>
-</div>
+                <div class="card shadow-sm">
+                    <div class="row g-0">
+                        <div class="col-md-5">
+                            <img th:src="@{${plato.imagen}}" class="img-fluid rounded-start" alt="Imagen Plato">
+                        </div>
+                        <div class="col-md-7">
+                            <div class="card-body">
+                                <h2 class="card-title" th:text="${plato.nombre}">Nombre del plato</h2>
+                                <p class="card-text text-muted" th:text="${plato.descripcion}">
+                                    Descripción del plato
+                                </p>
+                                <h4 class="text-success mt-3">
+                                    $<span th:text="${plato.precio}">0.00</span>
+                                </h4>
 
-<div class="container mb-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Platos disponibles</h2>
-        <a th:href="@{/restaurantes}" class="btn btn-outline-secondary">
-            <i class="bi bi-arrow-left"></i> Volver a Restaurantes
-        </a>
-    </div>
+                                <h5 class="mt-4">Información nutricional</h5>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <strong>Calorías:</strong>
+                                        <span th:text="${plato.calorias}">0</span> kcal
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>Proteínas:</strong>
+                                        <span th:text="${plato.proteinas}">0</span> g
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>Grasas:</strong>
+                                        <span th:text="${plato.grasas}">0</span> g
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>Carbohidratos:</strong>
+                                        <span th:text="${plato.carbohidratos}">0</span> g
+                                    </li>
+                                </ul>
 
-    <p th:if="${#lists.isEmpty(platos)}">Este restaurante aún no tiene platos disponibles.</p>
-
-    <div class="row g-4">
-        <div class="col-md-4" th:each="plato : ${platos}">
-            <a th:href="@{'/pedido/plato'(id=${plato.id})}" class="text-decoration-none text-reset">
-                <div class="card plato-card">
-                    <img th:src="@{${plato.imagen}}" class="plato-img" th:alt="${plato.nombre}"/>
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${plato.nombre}"></h5>
-                        <p class="card-text" th:text="${plato.descripcion}"></p>
-                        <p class="fw-bold">$<span
-                                th:text="${#numbers.formatDecimal(plato.precio, 0, 'POINT', 2, 'COMMA')}"></span></p>
-                        <div>
-                            <span class="badge mx-1" th:each="etiqueta : ${plato.etiquetas}"
-                                  th:text="${etiqueta.nombre}"></span>
+                                <a th:href="@{/pedido/platos}" class="btn btn-green mt-4">
+                                    Volver a la lista
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </a>
+
+            </div>
         </div>
     </div>
-</div>
-
-<!-- Bootstrap 5.2.0 JS -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"
-        crossorigin="anonymous"></script>
+</main>
+<script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 </body>
 </html>

@@ -16,10 +16,14 @@ public class PlatoDto {
     private String descripcion;
     private String imagen;
     private Double precio;
+    private Double calorias;
+    private Double proteinas;
+    private Double grasas;
+    private Double carbohidratos;
     private List<Integer> etiquetasIds;
     private List<EtiquetaDto> etiquetas;
 
-    public PlatoDto(Integer id, Long idRestaurante, String nombre, String descripcion, String imagen, Double precio, List<EtiquetaDto> etiquetas) {
+    public PlatoDto(Integer id, Long idRestaurante, String nombre, String descripcion, String imagen, Double precio, List<EtiquetaDto> etiquetas, Double calorias, Double proteinas, Double grasas, Double carbohidratos) {
         this.id = id;
         this.idRestaurante = idRestaurante;
         this.nombre = nombre;
@@ -27,6 +31,10 @@ public class PlatoDto {
         this.imagen = imagen;
         this.precio = precio;
         this.etiquetas = etiquetas;
+        this.calorias = calorias;
+        this.proteinas = proteinas;
+        this.grasas = grasas;
+        this.carbohidratos = carbohidratos;
     }
 
     public PlatoDto(Plato plato) {
@@ -40,6 +48,10 @@ public class PlatoDto {
                 .stream()
                 .map(etiqueta -> new EtiquetaDto(etiqueta.getId(), etiqueta.getNombre()))
                 .collect(Collectors.toList());
+        this.calorias = plato.getCalorias();
+        this.proteinas = plato.getProteinas();
+        this.grasas = plato.getGrasas();
+        this.carbohidratos = plato.getCarbohidratos();
     }
 
     public PlatoDto() {
@@ -69,6 +81,10 @@ public class PlatoDto {
         plato.setDescripcion(this.descripcion);
         plato.setImagen(this.imagen);
         plato.setPrecio(this.precio);
+        plato.setCalorias(this.calorias);
+        plato.setProteinas(this.proteinas);
+        plato.setGrasas(this.grasas);
+        plato.setCarbohidratos(this.carbohidratos);
 
         List<Etiqueta> listaEtiquetas = new ArrayList<>();
 
@@ -91,6 +107,10 @@ public class PlatoDto {
         plato.setDescripcion(this.descripcion);
         plato.setImagen(this.imagen);
         plato.setPrecio(this.precio);
+        plato.setCalorias(this.calorias);
+        plato.setProteinas(this.proteinas);
+        plato.setGrasas(this.grasas);
+        plato.setCarbohidratos(this.carbohidratos);
 
         List<Etiqueta> etiquetasEntidad = new ArrayList<>();
         if (this.etiquetas != null) {
@@ -169,5 +189,37 @@ public class PlatoDto {
 
     public Long getIdRestaurante() {
         return idRestaurante;
+    }
+
+    public Double getCalorias() {
+        return calorias;
+    }
+
+    public void setCalorias(Double calorias) {
+        this.calorias = calorias;
+    }
+
+    public Double getProteinas() {
+        return proteinas;
+    }
+
+    public void setProteinas(Double proteinas) {
+        this.proteinas = proteinas;
+    }
+
+    public Double getGrasas() {
+        return grasas;
+    }
+
+    public void setGrasas(Double grasas) {
+        this.grasas = grasas;
+    }
+
+    public Double getCarbohidratos() {
+        return carbohidratos;
+    }
+
+    public void setCarbohidratos(Double carbohidratos) {
+        this.carbohidratos = carbohidratos;
     }
 }
