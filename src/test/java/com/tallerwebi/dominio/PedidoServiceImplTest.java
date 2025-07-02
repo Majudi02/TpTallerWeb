@@ -4,6 +4,7 @@ package com.tallerwebi.dominio;
 import com.tallerwebi.dominio.entidades.*;
 import com.tallerwebi.infraestructura.RepositorioPlatoImpl;
 import com.tallerwebi.presentacion.PedidoDto;
+import com.tallerwebi.presentacion.PedidoPlatoDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -26,13 +27,15 @@ public class PedidoServiceImplTest {
     private PedidoServiceImpl pedidoService;
     private ServicioPlato servicioPlato;
     private ServicioUsuario servicioUsuario;
+    private ServicioPedidoPlato servicioPedidoPlato;
 
     @BeforeEach
     public void setUp() {
         servicioPlato = Mockito.mock(ServicioPlato.class);
         repositorioPedido = Mockito.mock(RepositorioPedido.class);
         servicioUsuario = Mockito.mock(ServicioUsuario.class);
-        pedidoService = new PedidoServiceImpl(servicioPlato, repositorioPedido, servicioUsuario);
+        servicioPedidoPlato = Mockito.mock(ServicioPedidoPlato.class);
+        pedidoService = new PedidoServiceImpl(servicioPlato, repositorioPedido, servicioUsuario,servicioPedidoPlato);
     }
 
 /*
@@ -55,25 +58,42 @@ public class PedidoServiceImplTest {
         assertThat(restaurantesObtenidos.size(), equalTo(restaurantesEsperados.size()));
     }
 
+ */
+
 
     @Test
     public void dadoQueHayPlatosDestacadosLosQuieroMostrarEnLaPantalla() {
+        Cliente usuario = new Cliente();
+        usuario.setId(1L);
+
+        Etiqueta etiquetaProteica = new Etiqueta();
+        etiquetaProteica.setId(1);
+        etiquetaProteica.setNombre("Proteica");
+
+        Etiqueta etiquetaVegetariana = new Etiqueta();
+        etiquetaVegetariana.setId(2);
+        etiquetaVegetariana.setNombre("Vegetariana");
+
+
+        List<Etiqueta> etiquetasUsuario = List.of(etiquetaProteica, etiquetaVegetariana);
+        usuario.setEtiquetas(etiquetasUsuario);
+
         List<PlatoDto> platos = List.of(
-                new PlatoDto(1, 1L, "Milanesa con papas fritas", "Clásica milanesa de carne acompañada con papas fritas crujientes.", "/assets/imagen-plato.png", 2500.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(2, 1L, "Ravioles de ricota", "Ravioles caseros rellenos de ricota y nuez, servidos con salsa bolognesa.", "/assets/imagen-plato.png", 2800.0, List.of(new EtiquetaDto(2, "Vegetariana"))),
-                new PlatoDto(3, 1L, "Pizza napolitana", "Pizza con tomate, mozzarella, ajo, y albahaca fresca.", "/assets/imagen-plato.png", 3200.0, List.of(new EtiquetaDto(2, "Vegetariana"))),
-                new PlatoDto(4, 1L, "Hamburguesa completa", "Hamburguesa con lechuga, tomate, queso, panceta y papas fritas.", "/assets/imagen-plato.png", 2900.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(5, 1L, "Ensalada César", "Ensalada con lechuga romana, pollo, crutones, parmesano y aderezo César.", "/assets/imagen-plato.png", 2300.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(6, 1L, "Tarta de espinaca", "Tarta casera de espinaca y queso con masa hojaldrada.", "/assets/imagen-plato.png", 2000.0, List.of(new EtiquetaDto(2, "Vegetariana")))
+                new PlatoDto(1, 1L, "Milanesa con papas fritas", "Clásica milanesa...", "/assets/imagen-plato.png", 2500.0, List.of(new EtiquetaDto(1, "Proteica"))),
+                new PlatoDto(2, 1L, "Ravioles de ricota", "Ravioles caseros...", "/assets/imagen-plato.png", 2800.0, List.of(new EtiquetaDto(2, "Vegetariana"))),
+                new PlatoDto(3, 1L, "Pizza napolitana", "Pizza con tomate...", "/assets/imagen-plato.png", 3200.0, List.of(new EtiquetaDto(2, "Vegetariana"))),
+                new PlatoDto(4, 1L, "Hamburguesa completa", "Hamburguesa con lechuga...", "/assets/imagen-plato.png", 2900.0, List.of(new EtiquetaDto(1, "Proteica"))),
+                new PlatoDto(5, 1L, "Ensalada César", "Ensalada con lechuga...", "/assets/imagen-plato.png", 2300.0, List.of(new EtiquetaDto(1, "Proteica"))),
+                new PlatoDto(6, 1L, "Tarta de espinaca", "Tarta casera...", "/assets/imagen-plato.png", 2000.0, List.of(new EtiquetaDto(2, "Vegetariana")))
         );
 
-
-        List<PlatoDto> platosObtenidos = pedidoService.traerPlatosDestacados();
+        when(servicioPlato.buscarPlatosPorEtiquetasDelCliente(usuario.getId())).thenReturn(platos);
+        List<PlatoDto> platosObtenidos = pedidoService.traerPlatosDestacadosPorLaEtiquetaDelCliente(usuario.getId());
 
         assertThat(platosObtenidos.size(), equalTo(platos.size()));
     }
 
- */
+
 
     @Test
     public void DadoQueExistenDiezPlatosConLaEtiquetaProteicaObtengoSoloLosDelTipoDeComidaFiltrada(){
@@ -194,14 +214,28 @@ public class PedidoServiceImplTest {
 
         PedidoDto dto = resultado.get(0);
         assertEquals(1, dto.getId());
-        assertEquals(1L, dto.getUsuarioId());
         assertEquals("2025-06-15", dto.getFecha());
         assertEquals(1000.0, dto.getPrecio(), 0.0001);
-        assertTrue(dto.isFinalizo());
         assertEquals(EstadoPedido.PENDIENTE, dto.getEstadoPedido());
-
         assertNotNull(dto.getPedidoPlatos());
         assertTrue(dto.getPedidoPlatos().isEmpty());
+    }
+
+    @Test
+    public void guardarCalificacion_deberiaActualizarCalificacionYGuardar() {
+        Integer pedidoPlatoId = 10;
+        Integer calificacion = 5;
+        Long id = 1L;
+
+        PedidoPlatoDto dto = new PedidoPlatoDto();
+        dto.setId(pedidoPlatoId.longValue());
+        dto.setCalificacion(null);
+
+        when(servicioPedidoPlato.buscarPorId(pedidoPlatoId.longValue())).thenReturn(dto);
+
+        pedidoService.guardarCalificacion(pedidoPlatoId, calificacion, id);
+
+        assertEquals(calificacion, dto.getCalificacion());
     }
 
 

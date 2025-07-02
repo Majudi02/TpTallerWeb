@@ -1,74 +1,87 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mis Pedidos | NutriYa</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Mis Pedidos | NutriYa</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/estilo-principal.css}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap" rel="stylesheet"/>
 
-  <!-- Bootstrap y fuentes -->
-  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet"/>
-  <link rel="stylesheet" th:href="@{/css/estilo-principal.css}"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap" rel="stylesheet"/>
+    <style>
+        .star-rating {
+            font-size: 1.5rem;
+            display: inline-flex;
+            unicode-bidi: bidi-override;
+            font-family: 'Arial', 'Outfit', sans-serif;
+        }
+
+        .star-rating input[type="radio"] {
+            display: none;
+
+        }
+
+        .star-rating label.star {
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.2s;
+            unicode-bidi: bidi-override;
+        }
+
+        .star-rating input[type="radio"]:checked ~ label.star,
+        .star-rating label.star:hover,
+        .star-rating label.star:hover ~ label.star {
+            color: #FFD700;
+        }
+    </style>
 </head>
 
 <body>
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top px-3">
-  <div class="container-fluid">
-    <div class="d-flex w-100 justify-content-between align-items-center">
-      <a class="navbar-brand" th:href="@{/nutriya}">Nutri<span style="color: #38BD48;">Ya</span></a>
-      <form class="d-none d-lg-flex mx-auto" role="search" style="width: 40%;">
-        <div class="input-group">
-          <input class="form-control" type="search" placeholder="Buscá comidas, restaurantes..." aria-label="Buscar"/>
-          <button class="btn buscar" type="submit">
-            <i class="bi bi-search"></i>
-          </button>
+    <div class="container-fluid">
+        <div class="d-flex w-100 justify-content-between align-items-center">
+            <a class="navbar-brand" th:href="@{/nutriya}">Nutri<span style="color: #38BD48;">Ya</span></a>
+            <form class="d-none d-lg-flex mx-auto" role="search" style="width: 40%;">
+                <div class="input-group">
+                    <input class="form-control" type="search" placeholder="Buscá comidas, restaurantes..." aria-label="Buscar"/>
+                    <button class="btn buscar" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </form>
+            <div class="botones-nav">
+                <a class="btn btn-outline-secondary mx-1" th:href="@{/nutriya-login}">
+                    <i class="bi bi-person"></i>
+                </a>
+                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#menuLateral" aria-controls="menuLateral">
+                    <i class="bi bi-list"></i>
+                </button>
+            </div>
         </div>
-      </form>
-      <div class="botones-nav">
-        <a class="btn btn-outline-secondary mx-1" th:href="@{/nutriya-login}">
-          <i class="bi bi-person"></i>
-        </a>
-        <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
-                data-bs-target="#menuLateral" aria-controls="menuLateral">
-          <i class="bi bi-list"></i>
-        </button>
-      </div>
     </div>
-  </div>
 </nav>
 
 <!-- OFFCANVAS MENU -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="menuLateral" aria-labelledby="menuLateralLabel">
-  <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="menuLateralLabel">Opciones</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
-  </div>
-  <div class="offcanvas-body">
-    <ul class="navbar-nav gap-2">
-      <li class="nav-item">
-        <a class="nav-link" th:href="@{/nutriya}">Inicio</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" th:href="@{/pedido}">Comidas</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" th:href="@{/restaurantes}">Restaurantes</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link active" th:href="@{/mis-pedidos}">Mis pedidos</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" th:href="@{/medios-pago}">Medios de Pago</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" th:href="@{/nutriya-login}">Mi Perfil</a>
-      </li>
-    </ul>
-  </div>
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="menuLateralLabel">Opciones</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="navbar-nav gap-2">
+            <li class="nav-item"><a class="nav-link" th:href="@{/nutriya}">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/pedido}">Comidas</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/restaurantes}">Restaurantes</a></li>
+            <li class="nav-item"><a class="nav-link active" th:href="@{/mis-pedidos}">Mis pedidos</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/medios-pago}">Medios de Pago</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/nutriya-login}">Mi Perfil</a></li>
+        </ul>
+    </div>
 </div>
 
 <!-- CONTENIDO PRINCIPAL -->
@@ -88,10 +101,13 @@
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <h5 class="fw-bold mb-0">Pedido #<span th:text="${pedido.id}">123</span></h5>
                     <span class="badge text-uppercase fw-semibold px-3 py-2"
-                          th:text="${pedido.estadoPedido.name().replace('_',' ')}"
-                          th:classappend="${pedido.estadoPedido.name() == 'EN_PREPARACION' ? ' bg-warning text-dark'
-                     : (pedido.estadoPedido.name() == 'EN_CAMINO' ? ' bg-primary'
-                     : ' bg-success')}"></span>
+                          th:text="${pedido.estadoPedido != null ? pedido.estadoPedido.name().replace('_',' ') : 'SIN ESTADO'}"
+                          th:classappend="${pedido.estadoPedido == null ? ' bg-secondary'
+                                    : (pedido.estadoPedido.name() == 'EN_PREPARACION' ? ' bg-warning text-dark'
+                                    : (pedido.estadoPedido.name() == 'EN_CAMINO' ? ' bg-primary'
+                                    : (pedido.estadoPedido.name() == 'EN_PROCESO' ? ' bg-info text-dark'
+                                    : ' bg-success')))}">
+                </span>
                 </div>
                 <p class="mb-1 text-muted"><strong>Fecha:</strong> <span th:text="${pedido.fecha}">2025-06-15</span></p>
                 <p class="mb-2 text-muted"><strong>Total:</strong> $<span th:text="${pedido.precio}">999</span></p>
@@ -106,7 +122,6 @@
             </div>
         </div>
     </div>
-
 
     <h2 class="text-center fw-bold my-5" style="color: #38BD48;">Pedidos Entregados</h2>
 
@@ -125,10 +140,36 @@
                 <p class="mb-2 text-muted"><strong>Total:</strong> $<span th:text="${pedido.precio}">999</span></p>
 
                 <ul class="list-group list-group-flush mt-3 border-top pt-2">
-                    <li class="list-group-item d-flex justify-content-between px-0"
-                        th:each="pp : ${pedido.pedidoPlatos}">
-                        <span class="text-dark" th:text="${pp.plato.nombre}">Plato</span>
-                        <span class="text-muted" th:text="'$ ' + ${pp.plato.precio}">Precio</span>
+                    <li class="list-group-item px-0" th:each="pp : ${pedido.pedidoPlatos}">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-dark" th:text="${pp.plato.nombre}">Plato</span>
+                            <span class="text-muted" th:text="'$ ' + ${pp.plato.precio}">Precio</span>
+                        </div>
+
+                        <div class="star-rating"  style="font-family: Arial, sans-serif;" th:if="${pp.calificacion != null and pp.calificacion > 0}">
+                      <span class="star" th:each="i : ${#numbers.sequence(1, 5)}"
+                            th:classappend="${i <= pp.calificacion} ? 'text-warning' : 'text-secondary'">&#9733;</span>
+                        </div>
+
+                        <form th:if="${pp.calificacion == null}" th:action="@{/calificar}" method="post"
+                              class="mt-2 form-calificacion" th:attr="data-id=${pp.id}">
+                            <input type="hidden" name="pedidoPlatoId" th:value="${pp.id}" />
+
+                            <div class="star-rating d-flex align-items-center gap-1">
+                                <input type="radio" th:id="'star5-' + ${pp.id}" name="calificacion" value="5">
+                                <label th:for="'star5-' + ${pp.id}" class="star">&#9733;</label>
+                                <input type="radio" th:id="'star4-' + ${pp.id}" name="calificacion" value="4">
+                                <label th:for="'star4-' + ${pp.id}" class="star">&#9733;</label>
+                                <input type="radio" th:id="'star3-' + ${pp.id}" name="calificacion" value="3">
+                                <label th:for="'star3-' + ${pp.id}" class="star">&#9733;</label>
+                                <input type="radio" th:id="'star2-' + ${pp.id}" name="calificacion" value="2">
+                                <label th:for="'star2-' + ${pp.id}" class="star">&#9733;</label>
+                                <input type="radio" th:id="'star1-' + ${pp.id}" name="calificacion" value="1">
+                                <label th:for="'star1-' + ${pp.id}" class="star">&#9733;</label>
+                            </div>
+
+                            <button type="submit" class="btn btn-sm btn-green mt-2">Enviar Calificación</button>
+                        </form>
                     </li>
                 </ul>
             </div>
@@ -137,6 +178,44 @@
 
 </main>
 
+<script>
+
+    document.querySelectorAll('.form-calificacion').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const data = new URLSearchParams();
+            data.append("pedidoPlatoId", formData.get("pedidoPlatoId"));
+            data.append("calificacion", formData.get("calificacion"));
+
+            fetch('/calificar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: data
+            })
+                .then(response => {
+                    const calificacion = formData.get("calificacion");
+
+                    const estrellasHtml = Array.from({ length: 5 }, (_, i) => {
+                        return `<span class="star ${i < calificacion ? 'text-warning' : 'text-secondary'}">&#9733;</span>`;
+                    }).join('');
+
+                    form.outerHTML = `
+                        <div class="star-rating" style="font-family: Arial, sans-serif;">
+                            ${estrellasHtml}
+                        </div>
+                    `;
+                })
+        });
+    });
+
+
+
+</script>
 <script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

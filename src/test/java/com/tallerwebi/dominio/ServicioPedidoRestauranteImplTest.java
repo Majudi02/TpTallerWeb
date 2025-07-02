@@ -11,7 +11,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-/*
+
 public class ServicioPedidoRestauranteImplTest {
     private RepositorioPedidoRestaurante repoPedido;
     private ServicioPedidoRestaurante servicio;
@@ -38,6 +38,7 @@ public class ServicioPedidoRestauranteImplTest {
         Plato plato = new Plato();
         plato.setId(1);
         plato.setRestaurante(restaurante);
+        plato.setEtiquetas(new ArrayList<>());
 
 
         Pedido pedido = new Pedido();
@@ -51,12 +52,12 @@ public class ServicioPedidoRestauranteImplTest {
         pedidoPlato.setId(10L);
         pedidoPlato.setPedido(pedido);
         pedidoPlato.setPlato(plato);
-        pedidoPlato.setEstadoPlato(EstadoPlato.PENDIENTE);
+        pedidoPlato.setEstadoPlato(EstadoPlato.FINALIZADO);
 
         pedido.getPedidoPlatos().add(pedidoPlato);
 
 
-        when(repoPedidoPlato.buscarPorId(10L)).thenReturn(pedidoPlato);
+        when(servicioPedidoPlato.buscarPorId(10L)).thenReturn(pedidoPlato.obtenerDto());
         when(repoPedido.traerPedidosListosParaRetirar()).thenReturn(Collections.singletonList(pedido));
 
 
@@ -72,7 +73,7 @@ public class ServicioPedidoRestauranteImplTest {
         }).when(repoPedido).entregarPedido(anyInt());
 
 
-        servicio.finalizarPlatoPedido(10L);
+
         servicio.confirmarPedidoListoParaEnviar(pedido.getId());
 
 
@@ -95,6 +96,6 @@ public class ServicioPedidoRestauranteImplTest {
     }
 }
 
- */
+
 
 

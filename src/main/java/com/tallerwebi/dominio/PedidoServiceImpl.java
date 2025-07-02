@@ -23,6 +23,7 @@ public class PedidoServiceImpl implements PedidoService {
     private ServicioPlato servicioPlato;
     private RepositorioPedido repositorioPedido;
     private ServicioUsuario servicioUsuario;
+    private ServicioPedidoPlato servicioPedidoPlato;
 
 
 
@@ -30,10 +31,11 @@ public class PedidoServiceImpl implements PedidoService {
     private NotificacionPedidoController notificacionController;
 
     @Autowired
-    public PedidoServiceImpl(ServicioPlato servicioPlato, RepositorioPedido repositorioPedido, ServicioUsuario servicioUsuario) {
+    public PedidoServiceImpl(ServicioPlato servicioPlato, RepositorioPedido repositorioPedido, ServicioUsuario servicioUsuario,ServicioPedidoPlato servicioPedidoPlato) {
         this.servicioPlato = servicioPlato;
         this.repositorioPedido = repositorioPedido;
         this.servicioUsuario = servicioUsuario;
+        this.servicioPedidoPlato = servicioPedidoPlato;
     }
 
 
@@ -133,10 +135,8 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public void crearPedido(Long idUsuario) {
-        // Verificar si ya existe un pedido activo para ese usuario
         Pedido pedidoExistente = repositorioPedido.buscarPedidoActivoPorUsuario(idUsuario);
         if (pedidoExistente != null) {
-            // Ya hay un pedido activo, no crear uno nuevo
             return;
         }
 
@@ -172,6 +172,13 @@ public class PedidoServiceImpl implements PedidoService {
     @Override
     public List<PlatoDto> traerPlatosDestacadosPorLaEtiquetaDelCliente(Long idCliente) {
         return servicioPlato.buscarPlatosPorEtiquetasDelCliente(idCliente);
+    }
+
+    @Override
+    public void guardarCalificacion(Integer pedidoPlatoId, Integer calificacion, Long id) {
+        PedidoPlatoDto pedidoPlatoDto = servicioPedidoPlato.buscarPorId(Long.valueOf(pedidoPlatoId));
+        pedidoPlatoDto.setCalificacion(calificacion);
+        servicioPedidoPlato.guardar(pedidoPlatoDto);
     }
 
 }

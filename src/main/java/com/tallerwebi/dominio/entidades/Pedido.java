@@ -35,26 +35,25 @@ public class Pedido {
 
 
     public PedidoDto obtenerDto() {
-        PedidoDto pedidoDto = new PedidoDto();
-        pedidoDto.setId(this.id);
-        pedidoDto.setFecha(this.fecha);
-        pedidoDto.setUsuarioId(this.usuario.getId());
-        pedidoDto.setPrecio(this.precio);
-        pedidoDto.setFinalizo(this.finalizo);
-        pedidoDto.setEstadoPedido(this.estadoPedido);
-        pedidoDto.setPagado(this.pagado);
+        PedidoDto dto = new PedidoDto();
+        dto.setId(this.id);
+        dto.setFecha(this.fecha);
+        dto.setPrecio(this.precio);
+        dto.setEstadoPedido(this.estadoPedido);
 
-        List<PedidoPlatoDto> pedidoPlatoDtos = this.pedidoPlatos.stream().map(pp -> {
-            PedidoPlatoDto dto = new PedidoPlatoDto();
-            dto.setId(pp.getId());
-            dto.setEstadoPlato(pp.getEstadoPlato());
-            dto.setPlato(pp.getPlato().obtenerDto());
-            return dto;
-        }).collect(Collectors.toList());
+        List<PedidoPlatoDto> platosDto = new ArrayList<>();
+        for (PedidoPlato pedidoPlato : this.pedidoPlatos) {
+            PedidoPlatoDto pedidoPlatoDto = new PedidoPlatoDto();
+            pedidoPlatoDto.setId(pedidoPlato.getId());
+            pedidoPlatoDto.setPlato(pedidoPlato.getPlato().obtenerDto());
+            pedidoPlatoDto.setEstadoPlato(pedidoPlato.getEstadoPlato());
+            pedidoPlatoDto.setCalificacion(pedidoPlato.getCalificacion());
 
-        pedidoDto.setPedidoPlatos(pedidoPlatoDtos);
+            platosDto.add(pedidoPlatoDto);
+        }
 
-        return pedidoDto;
+        dto.setPedidoPlatos(platosDto);
+        return dto;
     }
 
     public Boolean todosLosPlatosFinalizados() {

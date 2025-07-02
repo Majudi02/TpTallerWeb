@@ -21,7 +21,7 @@ public class MercadoPagoServiceImpl {
 
     private final PreferenceClient preferenceClient;
 
-    private static final String BASE_URL ="https://cb26-2800-810-507-abe6-345c-1eb6-ae60-215f.ngrok-free.app";
+    private static final String BASE_URL ="https://55ee-2800-810-507-abe6-49-922e-e207-8379.ngrok-free.app";
 
     public MercadoPagoServiceImpl() {
         this.preferenceClient = new PreferenceClient();
@@ -47,6 +47,7 @@ public class MercadoPagoServiceImpl {
                                 .pending(BASE_URL+"/pago-pendiente")
                                 .build()
                 )
+                .statementDescriptor("NutriYa")
                 .build();
 
         return preferenceClient.create(preferenceRequest);
