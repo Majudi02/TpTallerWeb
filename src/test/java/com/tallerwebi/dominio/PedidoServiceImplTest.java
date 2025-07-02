@@ -78,14 +78,14 @@ public class PedidoServiceImplTest {
         List<Etiqueta> etiquetasUsuario = List.of(etiquetaProteica, etiquetaVegetariana);
         usuario.setEtiquetas(etiquetasUsuario);
 
-        List<PlatoDto> platos = List.of(
-                new PlatoDto(1, 1L, "Milanesa con papas fritas", "Clásica milanesa...", "/assets/imagen-plato.png", 2500.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(2, 1L, "Ravioles de ricota", "Ravioles caseros...", "/assets/imagen-plato.png", 2800.0, List.of(new EtiquetaDto(2, "Vegetariana"))),
-                new PlatoDto(3, 1L, "Pizza napolitana", "Pizza con tomate...", "/assets/imagen-plato.png", 3200.0, List.of(new EtiquetaDto(2, "Vegetariana"))),
-                new PlatoDto(4, 1L, "Hamburguesa completa", "Hamburguesa con lechuga...", "/assets/imagen-plato.png", 2900.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(5, 1L, "Ensalada César", "Ensalada con lechuga...", "/assets/imagen-plato.png", 2300.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(6, 1L, "Tarta de espinaca", "Tarta casera...", "/assets/imagen-plato.png", 2000.0, List.of(new EtiquetaDto(2, "Vegetariana")))
-        );
+   List<PlatoDto> platos = List.of(
+    new PlatoDto(1, 1L, "Milanesa con papas fritas", "Clásica milanesa...", "/assets/imagen-plato.png", 2500.0, List.of(new EtiquetaDto(1, "Proteica")), 0.0, 0.0, 0.0, 0.0),
+    new PlatoDto(2, 1L, "Ravioles de ricota", "Ravioles caseros...", "/assets/imagen-plato.png", 2800.0, List.of(new EtiquetaDto(2, "Vegetariana")), 0.0, 0.0, 0.0, 0.0),
+    new PlatoDto(3, 1L, "Pizza napolitana", "Pizza con tomate...", "/assets/imagen-plato.png", 3200.0, List.of(new EtiquetaDto(2, "Vegetariana")), 0.0, 0.0, 0.0, 0.0),
+    new PlatoDto(4, 1L, "Hamburguesa completa", "Hamburguesa con lechuga...", "/assets/imagen-plato.png", 2900.0, List.of(new EtiquetaDto(1, "Proteica")), 0.0, 0.0, 0.0, 0.0),
+    new PlatoDto(5, 1L, "Ensalada César", "Ensalada con lechuga...", "/assets/imagen-plato.png", 2300.0, List.of(new EtiquetaDto(1, "Proteica")), 0.0, 0.0, 0.0, 0.0),
+    new PlatoDto(6, 1L, "Tarta de espinaca", "Tarta casera...", "/assets/imagen-plato.png", 2000.0, List.of(new EtiquetaDto(2, "Vegetariana")), 0.0, 0.0, 0.0, 0.0)
+);
 
         when(servicioPlato.buscarPlatosPorEtiquetasDelCliente(usuario.getId())).thenReturn(platos);
         List<PlatoDto> platosObtenidos = pedidoService.traerPlatosDestacadosPorLaEtiquetaDelCliente(usuario.getId());
