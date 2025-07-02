@@ -123,14 +123,17 @@
                             <h5 class="card-title" th:text="${plato.getNombre()}"></h5>
                             <p th:text="${plato.getDescripcion()}"></p>
                             <strong class="card-text mt-3" th:text="'$' + ${plato.getPrecio()}"></strong>
-                            <div class="etiquetas-bottom-right">
-                               <span class="badge badge-etiqueta"
+                            <div class="mt-2">
+                               <span class="badge badge-etiqueta me-2"
                                      th:each="etiqueta : ${plato.etiquetas}"
                                      th:text="${etiqueta.nombre}">
                               </span>
                             </div>
-                            <div th:if="${usuario != null}">
-                                <form th:action="@{/pedido/agregar}" method="post" class="mt-3 agregar-plato-form"
+                            <div th:if="${usuario != null}" class="my-2">
+                                <a th:href="@{'/pedido/plato'(id=${plato.id})}" class="btn btn-success me-2">
+                                    Ver Detalle
+                                </a>
+                                <form th:action="@{/pedido/agregar}" method="post" class="d-inline agregar-plato-form"
                                       th:attr="data-plato-id=${plato.getId()}">
                                     <input type="hidden" name="platoId" th:value="${plato.getId()}"/>
                                     <button type="submit" class="btn btn-success">
@@ -139,12 +142,15 @@
                                 </form>
                             </div>
                             <div th:if="${usuario == null}" class="mt-3">
+                                <a th:href="@{'/pedido/plato'(id=${plato.id})}" class="btn btn-success">Ver Detalle</a>
                                 <a th:href="@{/nutriya-login}" class="btn btn-secondary">Iniciar sesión</a>
                             </div>
                         </div>
-                        <div>
-                            <img th:src="@{${plato.getImagen()}}" class="img-plato" alt="Imagen del plato"/>
-                        </div>
+                        <a th:href="@{'/pedido/plato'(id=${plato.id})}">
+                            <div>
+                                <img th:src="@{${plato.getImagen()}}" class="img-plato" alt="Imagen del plato"/>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </article>
@@ -159,6 +165,15 @@
             <ul id="lista-carrito" class="list-group mb-3 flex-grow-1 overflow-auto">
 
             </ul>
+            <div id="resumen-nutricional" class="mb-2" style="font-size: 0.9rem; color: #555;">
+                <strong>Valores nutricionales</strong>
+                <ul style="list-style-type: none; padding-left: 0; margin: 0;">
+                    <li>Calorías: 0</li>
+                    <li>Proteínas: 0 g</li>
+                    <li>Carbohidratos: 0 g</li>
+                    <li>Grasas: 0 g</li>
+                </ul>
+            </div>
             <div class="d-flex justify-content-between align-items-center border-top pt-3">
                 <strong>Total:</strong>
                 <span id="precioTotal" class="fs-5">$0.00</span>
@@ -196,32 +211,73 @@
     function actualizarCarrito() {
         fetch("/pedido/carrito")
             .then(response => response.json())
-            .then(platos => {
+            .then(data => {
                 const listaCarrito = document.getElementById('lista-carrito');
                 const precioTotalElemento = document.getElementById('precioTotal');
+                const resumenNutricional = document.getElementById('resumen-nutricional'); // Lo tenés que crear en el HTML
+
                 listaCarrito.innerHTML = '';
                 let total = 0;
 
+                const platos = data.platos;
+                const totales = data.totales;
+
                 if (platos.length === 0) {
                     listaCarrito.innerHTML = '<li class="list-group-item text-center text-muted">El carrito está vacío.</li>';
+                    resumenNutricional.innerHTML = ''; // o algún mensaje
+                    precioTotalElemento.textContent = `$0.00`;
                 } else {
                     platos.forEach(pedidoPlato => {
                         const item = document.createElement('li');
                         item.className = 'list-group-item d-flex justify-content-between align-items-center';
                         item.innerHTML = `
-                        <div>
-                            <span>${pedidoPlato.plato.nombre}</span>
-                        </div>
-                        <span>$${pedidoPlato.plato.precio.toFixed(2)}</span>
-                    `;
+                    <div>
+                        <span>${pedidoPlato.plato.nombre}</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="me-2">$${pedidoPlato.plato.precio.toFixed(2)}</span>
+                        <button type="button" class="btn btn-danger btn-sm eliminar-item" data-id="${pedidoPlato.plato.id}">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                `;
                         listaCarrito.appendChild(item);
                         total += pedidoPlato.plato.precio;
                     });
-                }
 
-                precioTotalElemento.textContent = `$${total.toFixed(2)}`;
+                    // Mostrar resumen nutricional arriba del precio
+                    resumenNutricional.innerHTML = `
+                    <strong>Valores nutricionales</strong>
+                    <ul style="list-style-type: none; padding-left: 0; margin: 0;">
+                      <li>Calorías: ${totales.calorias.toFixed(0)} kcal</li>
+                      <li>Proteínas: ${totales.proteinas.toFixed(1)} g</li>
+                      <li>Carbohidratos: ${totales.carbohidratos.toFixed(1)} g</li>
+                      <li>Grasas: ${totales.grasas.toFixed(1)} g</li>
+                    </ul>
+                    `;
+
+                    precioTotalElemento.textContent = `$${total.toFixed(2)}`;
+                }
             });
     }
+
+    document.addEventListener("click", function (e) {
+        if (e.target.closest(".eliminar-item")) {
+            const boton = e.target.closest(".eliminar-item");
+            const platoId = boton.getAttribute("data-id");
+
+            fetch("/pedido/eliminar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: `platoId=${platoId}`
+            })
+                .then(response => {
+                    actualizarCarrito();
+                });
+        }
+    });
 </script>
 <script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 </body>

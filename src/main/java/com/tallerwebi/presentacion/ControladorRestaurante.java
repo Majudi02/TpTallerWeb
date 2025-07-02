@@ -66,8 +66,6 @@ public class ControladorRestaurante {
     public ModelAndView mostrarPedidoPlatos() {
         ModelMap modelo = new ModelMap();
 
-        // Aquí puedes cargar la info que quieras pasar a la vista,
-        // por ejemplo una lista de platos disponibles para hacer pedido.
         List<PlatoDto> platos = servicioRestaurante.traerTodosLosPlatos();
         modelo.put("platos", platos);
 

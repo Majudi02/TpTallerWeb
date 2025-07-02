@@ -181,4 +181,17 @@ public class PedidoServiceImpl implements PedidoService {
         servicioPedidoPlato.guardar(pedidoPlatoDto);
     }
 
+    public void eliminarPlatoDelCarrito(Long usuarioId, Integer platoId) {
+        Pedido pedidoActual = repositorioPedido.buscarPedidoActivoPorUsuario(usuarioId);
+
+        if (pedidoActual != null) {
+            repositorioPedido.eliminarPlatoDelPedido(pedidoActual.getId(), platoId);
+
+            Double precioPlato = servicioPlato.buscarPlatoPorId(platoId).getPrecio();
+            pedidoActual.setPrecio(pedidoActual.getPrecio() - precioPlato);
+
+            repositorioPedido.actualizarPedido(pedidoActual);
+        }
+    }
+
 }
