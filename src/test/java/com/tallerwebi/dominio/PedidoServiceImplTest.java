@@ -76,18 +76,18 @@ public class PedidoServiceImplTest {
  */
 
     @Test
-    public void DadoQueExistenDiezPlatosConLaEtiquetaProteicaObtengoSoloLosDelTipoDeComidaFiltrada(){
+    public void DadoQueExistenDiezPlatosConLaEtiquetaProteicaObtengoSoloLosDelTipoDeComidaFiltrada() {
         List<PlatoDto> platosTotales = List.of(
-                new PlatoDto(1, 1L, "Milanesa con papas fritas", "...", "/img.png", 2500.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(2, 1L, "Ravioles de ricota", "...", "/img.png", 2800.0, List.of(new EtiquetaDto(2, "Vegetariana"))),
-                new PlatoDto(3, 1L, "Pizza napolitana", "...", "/img.png", 3200.0, List.of(new EtiquetaDto(2, "Vegetariana"))),
-                new PlatoDto(4, 1L, "Hamburguesa completa", "...", "/img.png", 2900.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(5, 1L, "Ensalada César", "...", "/img.png", 2300.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(6, 1L, "Tarta de espinaca", "...", "/img.png", 2000.0, List.of(new EtiquetaDto(2, "Vegetariana"))),
-                new PlatoDto(7, 1L, "Lasaña de carne", "...", "/img.png", 3100.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(8, 1L, "Empanadas salteñas", "...", "/img.png", 1800.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(9, 1L, "Pollo al horno con papas", "...", "/img.png", 2600.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(10, 1L, "Tacos de carne", "...", "/img.png", 3000.0, List.of(new EtiquetaDto(1, "Proteica")))
+                new PlatoDto(1, 1L, "Milanesa con papas fritas", "...", "/img.png", 2500.0, List.of(new EtiquetaDto(1, "Proteica")), 600.0, 45.0, 25.0, 50.0),
+                new PlatoDto(2, 1L, "Ravioles de ricota", "...", "/img.png", 2800.0, List.of(new EtiquetaDto(2, "Vegetariana")), 550.0, 30.0, 20.0, 60.0),
+                new PlatoDto(3, 1L, "Pizza napolitana", "...", "/img.png", 3200.0, List.of(new EtiquetaDto(2, "Vegetariana")), 700.0, 25.0, 30.0, 70.0),
+                new PlatoDto(4, 1L, "Hamburguesa completa", "...", "/img.png", 2900.0, List.of(new EtiquetaDto(1, "Proteica")), 650.0, 40.0, 35.0, 45.0),
+                new PlatoDto(5, 1L, "Ensalada César", "...", "/img.png", 2300.0, List.of(new EtiquetaDto(1, "Proteica")), 400.0, 20.0, 15.0, 30.0),
+                new PlatoDto(6, 1L, "Tarta de espinaca", "...", "/img.png", 2000.0, List.of(new EtiquetaDto(2, "Vegetariana")), 450.0, 18.0, 22.0, 40.0),
+                new PlatoDto(7, 1L, "Lasaña de carne", "...", "/img.png", 3100.0, List.of(new EtiquetaDto(1, "Proteica")), 680.0, 50.0, 28.0, 55.0),
+                new PlatoDto(8, 1L, "Empanadas salteñas", "...", "/img.png", 1800.0, List.of(new EtiquetaDto(1, "Proteica")), 520.0, 35.0, 18.0, 45.0),
+                new PlatoDto(9, 1L, "Pollo al horno con papas", "...", "/img.png", 2600.0, List.of(new EtiquetaDto(1, "Proteica")), 600.0, 42.0, 20.0, 50.0),
+                new PlatoDto(10, 1L, "Tacos de carne", "...", "/img.png", 3000.0, List.of(new EtiquetaDto(1, "Proteica")), 700.0, 48.0, 30.0, 60.0)
         );
 
         when(servicioPlato.buscarPlatosPorTipoComida("Proteica")).thenReturn(
@@ -103,59 +103,57 @@ public class PedidoServiceImplTest {
     }
 
 
-
     @Test
-    public void DadoQueExisten6PlatosLosQuierOrdenarPorElPrecioDeMayorAMenor(){
+    public void DadoQueExisten6PlatosLosQuierOrdenarPorElPrecioDeMayorAMenor() {
         List<PlatoDto> platos = List.of(
-                new PlatoDto(1, 1L, "Milanesa con papas fritas", "Clásica milanesa de carne acompañada con papas fritas crujientes.", "/assets/imagen-plato.png", 2500.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(2, 1L, "Ravioles de ricota", "Ravioles caseros rellenos de ricota y nuez, servidos con salsa bolognesa.", "/assets/imagen-plato.png", 2800.0, List.of(new EtiquetaDto(2, "Vegetariana"))),
-                new PlatoDto(3, 1L, "Pizza napolitana", "Pizza con tomate, mozzarella, ajo, y albahaca fresca.", "/assets/imagen-plato.png", 3200.0, List.of(new EtiquetaDto(2, "Vegetariana"))),
-                new PlatoDto(4, 1L, "Hamburguesa completa", "Hamburguesa con lechuga, tomate, queso, panceta y papas fritas.", "/assets/imagen-plato.png", 2900.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(5, 1L, "Ensalada César", "Ensalada con lechuga romana, pollo, crutones, parmesano y aderezo César.", "/assets/imagen-plato.png", 2300.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(6, 1L, "Tarta de espinaca", "Tarta casera de espinaca y queso con masa hojaldrada.", "/assets/imagen-plato.png", 2000.0, List.of(new EtiquetaDto(2, "Vegetariana")))
+                new PlatoDto(1, 1L, "Milanesa con papas fritas", "...", "/img.png", 2500.0, List.of(new EtiquetaDto(1, "Proteica")), 600.0, 45.0, 25.0, 50.0),
+                new PlatoDto(2, 1L, "Ravioles de ricota", "...", "/img.png", 2800.0, List.of(new EtiquetaDto(2, "Vegetariana")), 550.0, 30.0, 20.0, 60.0),
+                new PlatoDto(3, 1L, "Pizza napolitana", "...", "/img.png", 3200.0, List.of(new EtiquetaDto(2, "Vegetariana")), 700.0, 25.0, 30.0, 70.0),
+                new PlatoDto(4, 1L, "Hamburguesa completa", "...", "/img.png", 2900.0, List.of(new EtiquetaDto(1, "Proteica")), 650.0, 40.0, 35.0, 45.0),
+                new PlatoDto(5, 1L, "Ensalada César", "...", "/img.png", 2300.0, List.of(new EtiquetaDto(1, "Proteica")), 400.0, 20.0, 15.0, 30.0),
+                new PlatoDto(6, 1L, "Tarta de espinaca", "...", "/img.png", 2000.0, List.of(new EtiquetaDto(2, "Vegetariana")), 450.0, 18.0, 22.0, 40.0)
         );
         List<Double> preciosEsperados = List.of(3200.0, 2900.0, 2800.0, 2500.0, 2300.0, 2000.0);
 
 
-        List<PlatoDto> platosOrdenados = pedidoService.ordenarPlatos(platos,"mayorAMenor");
+        List<PlatoDto> platosOrdenados = pedidoService.ordenarPlatos(platos, "mayorAMenor");
 
         assertThat(platosOrdenados.get(0).getPrecio(), equalTo(preciosEsperados.get(0)));
         assertThat(platosOrdenados.get(5).getPrecio(), equalTo(preciosEsperados.get(5)));
     }
 
     @Test
-    public void DadoQueExisten6PlatosLosQuierOrdenarPorElPrecioDeMenorAMayor(){
+    public void DadoQueExisten6PlatosLosQuierOrdenarPorElPrecioDeMenorAMayor() {
         List<PlatoDto> platos = List.of(
-                new PlatoDto(1, 1L, "Milanesa con papas fritas", "Clásica milanesa de carne acompañada con papas fritas crujientes.", "/assets/imagen-plato.png", 2500.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(2, 1L, "Ravioles de ricota", "Ravioles caseros rellenos de ricota y nuez, servidos con salsa bolognesa.", "/assets/imagen-plato.png", 2800.0, List.of(new EtiquetaDto(2, "Vegetariana"))),
-                new PlatoDto(3, 1L, "Pizza napolitana", "Pizza con tomate, mozzarella, ajo, y albahaca fresca.", "/assets/imagen-plato.png", 3200.0, List.of(new EtiquetaDto(2, "Vegetariana"))),
-                new PlatoDto(4, 1L, "Hamburguesa completa", "Hamburguesa con lechuga, tomate, queso, panceta y papas fritas.", "/assets/imagen-plato.png", 2900.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(5, 1L, "Ensalada César", "Ensalada con lechuga romana, pollo, crutones, parmesano y aderezo César.", "/assets/imagen-plato.png", 2300.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(6, 1L, "Tarta de espinaca", "Tarta casera de espinaca y queso con masa hojaldrada.", "/assets/imagen-plato.png", 2000.0, List.of(new EtiquetaDto(2, "Vegetariana")))
+                new PlatoDto(1, 1L, "Milanesa con papas fritas", "...", "/img.png", 2500.0, List.of(new EtiquetaDto(1, "Proteica")), 600.0, 45.0, 25.0, 50.0),
+                new PlatoDto(2, 1L, "Ravioles de ricota", "...", "/img.png", 2800.0, List.of(new EtiquetaDto(2, "Vegetariana")), 550.0, 30.0, 20.0, 60.0),
+                new PlatoDto(3, 1L, "Pizza napolitana", "...", "/img.png", 3200.0, List.of(new EtiquetaDto(2, "Vegetariana")), 700.0, 25.0, 30.0, 70.0),
+                new PlatoDto(4, 1L, "Hamburguesa completa", "...", "/img.png", 2900.0, List.of(new EtiquetaDto(1, "Proteica")), 650.0, 40.0, 35.0, 45.0),
+                new PlatoDto(5, 1L, "Ensalada César", "...", "/img.png", 2300.0, List.of(new EtiquetaDto(1, "Proteica")), 400.0, 20.0, 15.0, 30.0),
+                new PlatoDto(6, 1L, "Tarta de espinaca", "...", "/img.png", 2000.0, List.of(new EtiquetaDto(2, "Vegetariana")), 450.0, 18.0, 22.0, 40.0)
         );
         List<Double> preciosEsperados = List.of(2000.0, 2300.0, 2500.0, 2800.0, 2900.0, 3200.0);
 
 
+        List<PlatoDto> platosOrdenados = pedidoService.ordenarPlatos(platos, "menorAMayor");
 
-              List<PlatoDto> platosOrdenados = pedidoService.ordenarPlatos(platos,"menorAMayor");
-
-              assertThat(platosOrdenados.get(0).getPrecio(), equalTo(preciosEsperados.get(0)));
-              assertThat(platosOrdenados.get(5).getPrecio(), equalTo(preciosEsperados.get(5)));
+        assertThat(platosOrdenados.get(0).getPrecio(), equalTo(preciosEsperados.get(0)));
+        assertThat(platosOrdenados.get(5).getPrecio(), equalTo(preciosEsperados.get(5)));
     }
 
     @Test
     public void DadoQueExistenDiezPlatosConLaEtiquetaProteicaLosQuieroOrdenarDeMenorAMayor() {
         List<PlatoDto> platosTotales = List.of(
-                new PlatoDto(1, 1L, "Milanesa con papas fritas", "...", "/img.png", 2500.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(4, 1L, "Hamburguesa completa", "...", "/img.png", 2900.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(5, 1L, "Ensalada César", "...", "/img.png", 2300.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(7, 1L, "Lasaña de carne", "...", "/img.png", 3100.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(8, 1L, "Empanadas salteñas", "...", "/img.png", 1800.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(9, 1L, "Pollo al horno", "...", "/img.png", 2600.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(12, 1L, "Tacos de carne", "...", "/img.png", 3000.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(13, 1L, "Milanesa napolitana", "...", "/img.png", 3200.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(16, 1L, "Churrasco", "...", "/img.png", 3500.0, List.of(new EtiquetaDto(1, "Proteica"))),
-                new PlatoDto(18, 1L, "Sándwich de lomito", "...", "/img.png", 2800.0, List.of(new EtiquetaDto(1, "Proteica")))
+                new PlatoDto(1, 1L, "Milanesa con papas fritas", "...", "/img.png", 2500.0, List.of(new EtiquetaDto(1, "Proteica")), 600.0, 45.0, 25.0, 50.0),
+                new PlatoDto(4, 1L, "Hamburguesa completa", "...", "/img.png", 2900.0, List.of(new EtiquetaDto(1, "Proteica")), 650.0, 40.0, 35.0, 45.0),
+                new PlatoDto(5, 1L, "Ensalada César", "...", "/img.png", 2300.0, List.of(new EtiquetaDto(1, "Proteica")), 400.0, 20.0, 15.0, 30.0),
+                new PlatoDto(7, 1L, "Lasaña de carne", "...", "/img.png", 3100.0, List.of(new EtiquetaDto(1, "Proteica")), 680.0, 50.0, 28.0, 55.0),
+                new PlatoDto(8, 1L, "Empanadas salteñas", "...", "/img.png", 1800.0, List.of(new EtiquetaDto(1, "Proteica")), 520.0, 35.0, 18.0, 45.0),
+                new PlatoDto(9, 1L, "Pollo al horno con papas", "...", "/img.png", 2600.0, List.of(new EtiquetaDto(1, "Proteica")), 600.0, 42.0, 20.0, 50.0),
+                new PlatoDto(10, 1L, "Tacos de carne", "...", "/img.png", 3000.0, List.of(new EtiquetaDto(1, "Proteica")), 700.0, 48.0, 30.0, 60.0),
+                new PlatoDto(13, 1L, "Milanesa napolitana", "...", "/img.png", 3200.0, List.of(new EtiquetaDto(1, "Proteica")),700.0, 48.0, 35.0, 55.0),
+                new PlatoDto(16, 1L, "Churrasco", "...", "/img.png", 3500.0, List.of(new EtiquetaDto(1, "Proteica")),650.0, 50.0, 30.0, 40.0),
+                new PlatoDto(18, 1L, "Sándwich de lomito", "...", "/img.png", 2800.0, List.of(new EtiquetaDto(1, "Proteica")),600.0, 45.0, 25.0, 50.0)
         );
 
         when(servicioPlato.buscarPlatosPorTipoComida("Proteica"))
@@ -203,10 +201,6 @@ public class PedidoServiceImplTest {
         assertNotNull(dto.getPedidoPlatos());
         assertTrue(dto.getPedidoPlatos().isEmpty());
     }
-
-
-
-
 
 
 }

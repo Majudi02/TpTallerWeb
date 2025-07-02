@@ -15,13 +15,11 @@ public interface PedidoService {
     List<PedidoPlatoDto>mostrarPlatosDelPedidoActual(Long idUsuario);
     Double mostrarPrecioTotalDelPedidoActual(Long idUsuario);
     List<PedidoDto> listarPedidosPorUsuario(Long usuarioId);
-
     List<PedidoDto> listarPedidosActivosPorUsuario(Long idUsuario);
-
     List<PedidoDto> listarPedidosEntregadosPorUsuario(Long idUsuario);
-
     void crearPedido(Long idUsuario);
     void confirmarPedido(Long idUsuario);
     PedidoDto buscarPorId(Integer idPedido);
     List<PlatoDto> traerPlatosDestacadosPorLaEtiquetaDelCliente(Long idCliente);
+    void eliminarPlatoDelCarrito(Long id, Integer platoId);
 }

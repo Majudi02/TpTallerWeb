@@ -23,6 +23,10 @@ public class Plato {
     private String descripcion;
     private String imagen;
     private Double precio;
+    private Double calorias;
+    private Double proteinas;
+    private Double grasas;
+    private Double carbohidratos;
 
     @ManyToMany()
     @JoinTable(
@@ -39,7 +43,6 @@ public class Plato {
         if (this.restaurante != null) {
             platoDto.setIdRestaurante(restaurante.getId());
         } else {
-            // Si restaurante es null, puedes setear un valor por defecto o dejarlo null
             platoDto.setIdRestaurante(null);
         }
 
@@ -47,6 +50,10 @@ public class Plato {
         platoDto.setDescripcion(this.descripcion);
         platoDto.setImagen(this.imagen);
         platoDto.setPrecio(this.precio);
+        platoDto.setCalorias(this.calorias);
+        platoDto.setProteinas(this.proteinas);
+        platoDto.setGrasas(this.grasas);
+        platoDto.setCarbohidratos(this.carbohidratos);
 
         List<EtiquetaDto> etiquetasDto = this.etiquetas.stream()
                 .map(e -> new EtiquetaDto(e.getId(), e.getNombre()))
@@ -111,5 +118,37 @@ public class Plato {
 
     public void setRestaurante(Restaurante restaurante) {
         this.restaurante = restaurante;
+    }
+
+    public Double getCarbohidratos() {
+        return carbohidratos;
+    }
+
+    public void setCarbohidratos(Double carbohidratos) {
+        this.carbohidratos = carbohidratos;
+    }
+
+    public Double getGrasas() {
+        return grasas;
+    }
+
+    public void setGrasas(Double grasas) {
+        this.grasas = grasas;
+    }
+
+    public Double getProteinas() {
+        return proteinas;
+    }
+
+    public void setProteinas(Double proteinas) {
+        this.proteinas = proteinas;
+    }
+
+    public Double getCalorias() {
+        return calorias;
+    }
+
+    public void setCalorias(Double calorias) {
+        this.calorias = calorias;
     }
 }

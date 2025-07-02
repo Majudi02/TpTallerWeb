@@ -174,6 +174,22 @@ public class RepositorioPedidoImpl implements RepositorioPedido {
         }
     }
 
+    @Override
+    public void eliminarPlatoDelPedido(Integer idPedido, Integer idPlato) {
+        String hql = "DELETE FROM PedidoPlato pp " +
+                "WHERE pp.pedido.id = :pedidoId AND pp.plato.id = :platoId";
+
+        sessionFactory.getCurrentSession()
+                .createQuery(hql)
+                .setParameter("pedidoId", idPedido)
+                .setParameter("platoId", idPlato)
+                .executeUpdate();
+    }
+
+    @Override
+    public void actualizarPedido(Pedido pedido) {
+        sessionFactory.getCurrentSession().saveOrUpdate(pedido);
+    }
 }
 
 

@@ -154,6 +154,42 @@
                             </i>
                         </div>
 
+                        <div class="card-text d-flex align-items-center mb-2">
+                            <strong class="me-2">Calorías:</strong>
+                            <input type="number" id="caloriasPlato" name="calorias" class="form-control editable ms-2" style="width: 120px;"
+                                   disabled th:value="${plato.calorias}">
+                            <i class="bi bi-pencil text-muted ms-2" role="button"
+                               onclick="document.getElementById('caloriasPlato').disabled = false; document.getElementById('caloriasPlato').focus();">
+                            </i>
+                        </div>
+
+                        <div class="card-text d-flex align-items-center mb-2">
+                            <strong class="me-2">Proteínas:</strong>
+                            <input type="number" id="proteinasPlato" name="proteinas" class="form-control editable ms-2" style="width: 120px;"
+                                   step="0.01" disabled th:value="${plato.proteinas}">
+                            <i class="bi bi-pencil text-muted ms-2" role="button"
+                               onclick="document.getElementById('proteinasPlato').disabled = false; document.getElementById('proteinasPlato').focus();">
+                            </i>
+                        </div>
+
+                        <div class="card-text d-flex align-items-center mb-2">
+                            <strong class="me-2">Grasas:</strong>
+                            <input type="number" id="grasasPlato" name="grasas" class="form-control editable ms-2" style="width: 120px;"
+                                   step="0.01" disabled th:value="${plato.grasas}">
+                            <i class="bi bi-pencil text-muted ms-2" role="button"
+                               onclick="document.getElementById('grasasPlato').disabled = false; document.getElementById('grasasPlato').focus();">
+                            </i>
+                        </div>
+
+                        <div class="card-text d-flex align-items-center mb-2">
+                            <strong class="me-2">Carbohidratos:</strong>
+                            <input type="number" id="carbohidratosPlato" name="carbohidratos" class="form-control editable ms-2" style="width: 120px;"
+                                   step="0.01" disabled th:value="${plato.carbohidratos}">
+                            <i class="bi bi-pencil text-muted ms-2" role="button"
+                               onclick="document.getElementById('carbohidratosPlato').disabled = false; document.getElementById('carbohidratosPlato').focus();">
+                            </i>
+                        </div>
+
                         <p class="card-text"><strong>ID:</strong> <span th:text="${plato.id}"></span></p>
                         <button type="submit" class="btn btn-secondary mt-3">Actualizar</button>
                     </div>
