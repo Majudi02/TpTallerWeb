@@ -1,13 +1,11 @@
 package com.tallerwebi.presentacion;
 
+import com.mercadopago.resources.preference.Preference;
+import com.tallerwebi.dominio.MercadoPagoServiceImpl;
 import com.tallerwebi.dominio.PedidoService;
 import com.tallerwebi.dominio.PlatoDto;
 import com.tallerwebi.dominio.ServicioRestaurante;
-import com.tallerwebi.dominio.entidades.Pedido;
-import com.tallerwebi.dominio.entidades.PedidoPlato;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -16,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -27,6 +26,9 @@ public class PedidoControlador {
     private PedidoService pedidoService;
     private ServicioRestaurante servicioRestaurante;
 
+    @Autowired
+    private MercadoPagoServiceImpl mercadoPagoService;
+
 
     @Autowired
     public PedidoControlador(PedidoService pedidoService, ServicioRestaurante servicioRestaurante) {
@@ -35,10 +37,15 @@ public class PedidoControlador {
     }
 
     @GetMapping("/pedido")
-    public ModelAndView irAPedido() {
+    public ModelAndView irAPedido(HttpServletRequest request, ModelMap modelMap) {
+        UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
         ModelMap modeloMap = new ModelMap();
+
+        modeloMap.put("usuario", usuario);
         modeloMap.put("restaurantes", servicioRestaurante.traerRestaurantesDestacados());
-        modeloMap.put("platos", pedidoService.traerPlatosDestacados());
+        if (usuario != null) {
+            modeloMap.put("platos", pedidoService.traerPlatosDestacadosPorLaEtiquetaDelCliente(usuario.getId()));
+        }
 
         return new ModelAndView("pedido", modeloMap);
     }
@@ -77,12 +84,28 @@ public class PedidoControlador {
         return new ModelAndView("hacer-pedido-platos", modeloMap);
     }
 
-
+/*
     @PostMapping("/pedido/confirmar")
     public String confirmarPedido(HttpServletRequest request) {
         UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
         pedidoService.confirmarPedido(usuario.getId());
         return "redirect:/pedido/platos";
+    }
+ */
+
+    @PostMapping("/pedido/confirmar")
+    public RedirectView confirmarPedido(HttpServletRequest request) {
+        UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
+        try{
+            List<PedidoPlatoDto> platosAPagar = pedidoService.mostrarPlatosDelPedidoActual(usuario.getId());
+
+            Preference preference = mercadoPagoService.crearPreferencia(platosAPagar, usuario.getId());
+
+            return new RedirectView(preference.getInitPoint());
+
+        }catch (Exception e){
+            return new RedirectView("/pedido?error=pago");
+        }
     }
 
     @GetMapping("/pedido/carrito")

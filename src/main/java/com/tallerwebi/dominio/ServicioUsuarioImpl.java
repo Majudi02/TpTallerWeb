@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -16,11 +19,13 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
 
     private final RepositorioUsuarioNutriya repositorioUsuario;
     private RepositorioDireccion repositorioDireccion;
+    private RepositorioEtiqueta repositorioEtiqueta;
 
     @Autowired
-    public ServicioUsuarioImpl(RepositorioUsuarioNutriya repositorioUsuario, RepositorioDireccion repositorioDireccion) {
+    public ServicioUsuarioImpl(RepositorioUsuarioNutriya repositorioUsuario, RepositorioDireccion repositorioDireccion, RepositorioEtiqueta repositorioEtiqueta) {
         this.repositorioUsuario = repositorioUsuario;
         this.repositorioDireccion = repositorioDireccion;
+        this.repositorioEtiqueta = repositorioEtiqueta;
     }
 
     @Override
@@ -51,6 +56,19 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
             cliente.setPesoActual(usuarioDTO.getPesoActual());
             cliente.setPesoDeseado(usuarioDTO.getPesoDeseado());
             cliente.setAltura(usuarioDTO.getAltura());
+
+
+            List<Etiqueta> etiquetas = Optional.ofNullable(usuarioDTO.getEtiquetas())
+                    .orElse(List.of()) // si es null, usamos lista vacía
+                    .stream()
+                    .map(Integer::valueOf)
+                    .map(id -> repositorioEtiqueta.buscarEtiquetaPorId(id))
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+
+            cliente.setEtiquetas(etiquetas);
+
+
             cliente.setObjetivo(usuarioDTO.getObjetivo());
 
             // Crear y asociar la única dirección
@@ -287,4 +305,21 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
 
         return dto;
     }
+
+    @Override
+    public UsuarioDTO obtenerClienteConEtiquetas(Long id) {
+        Cliente cliente = repositorioUsuario.obtenerClienteConEtiquetas(id);
+        UsuarioDTO dto = cliente.obtenerDto();
+        List<String> nombresEtiquetas = cliente.getEtiquetas().stream()
+                .map(Etiqueta::getNombre)
+                .collect(Collectors.toList());
+        dto.setEtiquetas(nombresEtiquetas);
+        return dto;
+    }
+
+    @Override
+    public UsuarioNutriya buscarPorId(Long id) {
+        return repositorioUsuario.buscarPorId(id);
+    }
+
 }

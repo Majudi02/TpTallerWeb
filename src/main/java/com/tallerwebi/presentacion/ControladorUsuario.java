@@ -81,13 +81,13 @@ public class ControladorUsuario {
             return mostrarFormularioRegistro();
         }
 
-        UsuarioDTO usuarioEncontrado = servicioUsuario.getUsuario(usuarioDTO.getEmail());
-        if (usuarioEncontrado != null) {
-            redirectAttributes.addFlashAttribute("errorEmail", "Ya existe un usuario registrado con ese email.");
-            return new ModelAndView("redirect:/resultado-registro");
-        }
-
         if ("restaurante".equals(usuarioDTO.getTipoUsuario())) {
+            UsuarioDTO usuarioEncontrado = servicioUsuario.getUsuario(usuarioDTO.getEmail());
+            if (usuarioEncontrado != null) {
+                redirectAttributes.addFlashAttribute("errorEmail", "Ya existe un usuario registrado con ese email.");
+                return new ModelAndView("redirect:/resultado-registro");
+            }
+
             if (imagen != null && !imagen.isEmpty()) {
                 try {
                     String rutaProyecto = System.getProperty("user.dir");
@@ -223,7 +223,9 @@ public class ControladorUsuario {
 
     @GetMapping("/cliente/perfil")
     public ModelAndView perfilCliente(HttpServletRequest request) {
-        UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
+        UsuarioDTO usuarioSesion = (UsuarioDTO) request.getSession().getAttribute("usuario");
+        UsuarioDTO usuario = servicioUsuario.obtenerClienteConEtiquetas(usuarioSesion.getId());
+
         if (usuario == null || !"cliente".equalsIgnoreCase(usuario.getTipoUsuario())) {
             return new ModelAndView("redirect:/nutriya-login");
         }

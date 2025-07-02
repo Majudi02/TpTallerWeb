@@ -84,7 +84,7 @@ public class RepositorioPedidoImpl implements RepositorioPedido {
     public Pedido buscarPedidoActivoPorUsuario(Long idUsuario) {
         UsuarioNutriya usuario = sessionFactory.getCurrentSession().get(UsuarioNutriya.class, idUsuario);
 
-        String hql = "FROM Pedido p WHERE p.usuario = :usuario AND p.finalizo = false";
+        String hql = "FROM Pedido p WHERE p.usuario = :usuario AND p.finalizo = false AND p.pagado = false";
         List<Pedido> pedidos = sessionFactory.getCurrentSession()
                 .createQuery(hql, Pedido.class)
                 .setParameter("usuario", usuario)
@@ -113,20 +113,6 @@ public class RepositorioPedidoImpl implements RepositorioPedido {
 
             sessionFactory.getCurrentSession().saveOrUpdate(pedidoBuscado);
         }
-    }
-
-
-    @Override
-    public Pedido finalizarPedido(Long idUsuario) {
-        Pedido pedido = this.buscarPedidoActivoPorUsuario(idUsuario);
-
-        if (pedido != null) {
-            pedido.setEstadoPedido(EstadoPedido.PENDIENTE);
-            pedido.setFinalizo(false);
-            sessionFactory.getCurrentSession().saveOrUpdate(pedido);
-        }
-
-        return pedido;
     }
 
     /*
@@ -169,7 +155,7 @@ public class RepositorioPedidoImpl implements RepositorioPedido {
     @SuppressWarnings("unchecked")
     public List<Pedido> listarPedidosPorUsuario(Long usuarioId) {
         String hql = "FROM Pedido p " +
-                "WHERE p.usuario.id = :uid " +
+                "WHERE p.usuario.id = :uid  AND p.pagado = true " +
                 "ORDER BY p.fecha DESC";
         return sessionFactory.getCurrentSession()
                 .createQuery(hql)
@@ -183,6 +169,7 @@ public class RepositorioPedidoImpl implements RepositorioPedido {
         if (pedido != null) {
             pedido.setEstadoPedido(EstadoPedido.EN_PROCESO);
             pedido.setFinalizo(false);
+            pedido.setPagado(true);
             sessionFactory.getCurrentSession().saveOrUpdate(pedido);
         }
     }

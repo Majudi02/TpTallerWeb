@@ -32,12 +32,13 @@ public class ControladorUsuarioTest {
     private RepositorioUsuarioNutriya repositorioUsuario;
     private HttpServletRequest httpServletRequest;
     private RepositorioDireccion repositorioDireccion;
+    private RepositorioEtiqueta repositorioEtiqueta;
 
     @BeforeEach
     public void init() {
         repositorioUsuario = mock(RepositorioUsuarioNutriya.class);
         repositorioDireccion = mock(RepositorioDireccion.class);
-        servicioUsuario = new ServicioUsuarioImpl(repositorioUsuario, repositorioDireccion);
+        servicioUsuario = new ServicioUsuarioImpl(repositorioUsuario, repositorioDireccion, repositorioEtiqueta);
         servicioRestaurante = mock(ServicioRestaurante.class);
         servicioEmail = mock(ServicioEmail.class);
         controlador = new ControladorUsuario(servicioUsuario, servicioRestaurante, servicioEmail);

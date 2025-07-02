@@ -20,39 +20,33 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class PedidoServiceImpl implements PedidoService {
-    private final RepositorioPlatoImpl repositorioPlatoImpl;
+    private ServicioPlato servicioPlato;
     private RepositorioPedido repositorioPedido;
-    private RepositorioUsuarioNutriya repositorioUsuario;
+    private ServicioUsuario servicioUsuario;
+
 
 
     @Autowired
     private NotificacionPedidoController notificacionController;
 
     @Autowired
-    public PedidoServiceImpl(RepositorioPlatoImpl repositorioPlatoImpl, RepositorioPedido repositorioPedido, RepositorioUsuarioNutriya repositorioUsuario) {
-        this.repositorioPlatoImpl = repositorioPlatoImpl;
+    public PedidoServiceImpl(ServicioPlato servicioPlato, RepositorioPedido repositorioPedido, ServicioUsuario servicioUsuario) {
+        this.servicioPlato = servicioPlato;
         this.repositorioPedido = repositorioPedido;
-        this.repositorioUsuario = repositorioUsuario;
+        this.servicioUsuario = servicioUsuario;
     }
 
-
-    @Override
-    public List<PlatoDto> traerPlatosDestacados() {
-        return null;
-    }
 
     @Override
     @Transactional
     public List<PlatoDto> traerTodosLosPlatos() {
-        List<Plato> platos = this.repositorioPlatoImpl.traerTodosLosPlatos();
-        return platos.stream().map(Plato::obtenerDto).collect(Collectors.toList());
+        return servicioPlato.traerTodosLosPlatos();
     }
 
     @Override
 
     public List<PlatoDto> buscarPlatosPorTipoComida(String tipoComida) {
-        List<Plato> platos = this.repositorioPlatoImpl.buscarPlatosPorTipoComida(tipoComida);
-        return platos.stream().map(Plato::obtenerDto).collect(Collectors.toList());
+        return servicioPlato.buscarPlatosPorTipoComida(tipoComida);
     }
 
     public List<PlatoDto> ordenarPlatos(List<PlatoDto> platos, String tipoOrdenar) {
@@ -100,13 +94,6 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
 
-    @Override
-    public void finalizarPedido(Long id) {
-        Pedido pedidoFinalizado = this.repositorioPedido.finalizarPedido(id);
-        if (pedidoFinalizado != null) {
-            notificacionController.notificarMensaje("**Nuevo pedido disponible**");
-        }
-    }
 
     @Override
     public List<PedidoDto> listarPedidosPorUsuario(Long usuarioId) {
@@ -153,9 +140,10 @@ public class PedidoServiceImpl implements PedidoService {
             return;
         }
 
-        UsuarioNutriya usuario = repositorioUsuario.buscarPorId(idUsuario);
+      //  UsuarioNutriya usuario = repositorioUsuario.buscarPorId(idUsuario);
+        UsuarioNutriya usuario =servicioUsuario.buscarPorId(idUsuario);
 
-        Pedido nuevoPedido = new Pedido();
+                Pedido nuevoPedido = new Pedido();
         nuevoPedido.setUsuario(usuario);
         nuevoPedido.setEstadoPedido(EstadoPedido.PENDIENTE);
         nuevoPedido.setFecha(LocalDateTime.now().toString());
@@ -175,5 +163,15 @@ public class PedidoServiceImpl implements PedidoService {
         }
     }
 
+    @Override
+    public PedidoDto buscarPorId(Integer idPedido) {
+        Pedido pedido= repositorioPedido.buscarPorId(idPedido);
+        return pedido.obtenerDto();
+    }
+
+    @Override
+    public List<PlatoDto> traerPlatosDestacadosPorLaEtiquetaDelCliente(Long idCliente) {
+        return servicioPlato.buscarPlatosPorEtiquetasDelCliente(idCliente);
+    }
 
 }

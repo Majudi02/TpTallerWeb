@@ -1,3 +1,4 @@
+/*
 INSERT
 IGNORE INTO Etiqueta (id, nombre) VALUES
 (1, 'Vegana'),
@@ -64,6 +65,22 @@ IGNORE INTO UsuarioRestaurante (id, restaurante_id) VALUES
 (107, 118),
 (108, 119),
 (109, 120);
+
+
+
+
+-- Insertar en la tabla padre (UsuarioNutriya)
+INSERT IGNORE INTO UsuarioNutriya (id, email, password, tokenConfirmacion, confirmado)
+VALUES (200, 'cliente@nutriya.com', '$2a$10$T1U4R6S.z0O2z5Q8.2Y.J.Z0J9L.J.J.Z0J9L', null, true);
+
+-- Insertar en la tabla hija (Cliente)
+INSERT IGNORE INTO Cliente (id, nombre, edad, pesoActual, pesoDeseado, altura, objetivo)
+VALUES (200, 'Juan Pérez', 30, 80, 70, 1.75, 'Bajar de peso');
+
+
+INSERT IGNORE INTO Cliente_Etiqueta (cliente_id, etiqueta_id)
+VALUES
+(200, 1);
 
 
 INSERT
@@ -198,8 +215,10 @@ INSERT
 IGNORE INTO Plato (id, restaurante_id, nombre, descripcion, imagen, precio) VALUES
 (28, 120, 'Pan de Masa Madre', 'Hogaza de pan artesanal con masa madre, de corteza crujiente.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 7.00),
 (29, 120, 'Facturas Mixtas (6u)', 'Surtido de facturas frescas para el desayuno o la merienda.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 9.00),
-(30, 120, 'Budín de Limón', 'Suave budín de limón con glaseado cítrico.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpgg', 8.50);
+(30, 120, 'Budín de Limón', 'Suave budín de limón con glaseado cítrico.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 8.50);
 INSERT
 IGNORE INTO Plato_Etiqueta (plato_id, etiqueta_id) VALUES (28, 2);
 INSERT
 IGNORE INTO Plato_Etiqueta (plato_id, etiqueta_id) VALUES (30, 2);
+
+ */
