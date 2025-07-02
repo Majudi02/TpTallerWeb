@@ -49,7 +49,8 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
                         pedido.getPrecio(),
                         pedido.isFinalizo(),
                         pedidoPlatosDelRestaurante,
-                        pedido.getEstadoPedido()
+                        pedido.getEstadoPedido(),
+                        pedido.isPagado()
                 );
 
                 pedidosFiltrados.add(pedidoFiltrado);

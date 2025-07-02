@@ -94,13 +94,6 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
 
-    @Override
-    public void finalizarPedido(Long id) {
-        Pedido pedidoFinalizado = this.repositorioPedido.finalizarPedido(id);
-        if (pedidoFinalizado != null) {
-            notificacionController.notificarMensaje("**Nuevo pedido disponible**");
-        }
-    }
 
     @Override
     public List<PedidoDto> listarPedidosPorUsuario(Long usuarioId) {

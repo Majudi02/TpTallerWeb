@@ -17,12 +17,13 @@ public class PedidoDto {
     private List<PedidoPlatoDto> pedidoPlatos;
     private EstadoPedido estadoPedido;
     private boolean platosFinalizados;
+    private boolean pagado;
 
 
     public PedidoDto() {
     }
 
-    public PedidoDto(Integer id, String fecha, Long usuarioId, Double precio, boolean finalizo, List<PedidoPlatoDto> pedidoPlatos, EstadoPedido estadoPedido) {
+    public PedidoDto(Integer id, String fecha, Long usuarioId, Double precio, boolean finalizo, List<PedidoPlatoDto> pedidoPlatos, EstadoPedido estadoPedido, boolean pagado) {
         this.id = id;
         this.fecha = fecha;
         this.usuarioId = usuarioId;
@@ -30,6 +31,7 @@ public class PedidoDto {
         this.finalizo = finalizo;
         this.pedidoPlatos = pedidoPlatos;
         this.estadoPedido = estadoPedido;
+        this.pagado=pagado;
     }
 
     public PedidoDto(Pedido pedido) {
@@ -39,6 +41,7 @@ public class PedidoDto {
         this.precio = pedido.getPrecio();
         this.finalizo = pedido.isFinalizo();
         this.estadoPedido = pedido.getEstadoPedido();
+        this.pagado=pedido.isPagado();
 
         this.pedidoPlatos = pedido.getPedidoPlatos()
                 .stream()
@@ -72,6 +75,7 @@ public class PedidoDto {
         pedido.setPrecio(this.precio);
         pedido.setFinalizo(this.finalizo);
         pedido.setEstadoPedido(this.estadoPedido);
+        pedido.setPagado(this.pagado);
 
 
         List<PedidoPlato> pedidoPlatosEntidad = this.pedidoPlatos.stream().map(ppDto -> {
@@ -93,6 +97,14 @@ public class PedidoDto {
                 .collect(Collectors.toList());
     }
 
+
+    public boolean isPagado() {
+        return pagado;
+    }
+
+    public void setPagado(boolean pagado) {
+        this.pagado = pagado;
+    }
 
     public boolean isPlatosFinalizados() {
         return platosFinalizados;
