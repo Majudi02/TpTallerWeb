@@ -21,5 +21,6 @@ public interface PedidoService {
     void confirmarPedido(Long idUsuario);
     PedidoDto buscarPorId(Integer idPedido);
     List<PlatoDto> traerPlatosDestacadosPorLaEtiquetaDelCliente(Long idCliente);
+    void guardarCalificacion(Integer pedidoPlatoId, Integer calificacion, Long id);
     void eliminarPlatoDelCarrito(Long id, Integer platoId);
 }

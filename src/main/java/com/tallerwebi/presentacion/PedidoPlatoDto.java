@@ -11,7 +11,9 @@ public class PedidoPlatoDto {
     private PlatoDto plato;
     private EstadoPlato estadoPlato;
 
-    // Getters y Setters
+    private Integer calificacion;
+
+
     public Long getId() {
         return id;
     }
@@ -36,11 +38,19 @@ public class PedidoPlatoDto {
         this.estadoPlato = estadoPlato;
     }
 
+    public Integer getCalificacion() {
+        return calificacion;
+    }
+
+    public void setCalificacion(Integer calificacion) {
+        this.calificacion = calificacion;
+    }
 
     public PedidoPlato obtenerEntidad() {
         PedidoPlato entidad = new PedidoPlato();
         entidad.setId(this.id);
         entidad.setEstadoPlato(this.estadoPlato);
+        entidad.setCalificacion(this.calificacion);
 
         if (this.plato != null) {
             entidad.setPlato(this.plato.obtenerEntidad());
@@ -48,7 +58,6 @@ public class PedidoPlatoDto {
 
         return entidad;
     }
-
 
     public PedidoPlato obtenerEntidad(Pedido pedido) {
         PedidoPlato entidad = obtenerEntidad();

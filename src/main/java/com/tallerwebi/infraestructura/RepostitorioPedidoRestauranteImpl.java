@@ -56,7 +56,7 @@ public class RepostitorioPedidoRestauranteImpl implements RepositorioPedidoResta
 
         List<Pedido> pedidos = sessionFactory.getCurrentSession()
                 .createQuery(hql, Pedido.class)
-                .setParameter("estado", EstadoPedido.EN_PROCESO)
+                .setParameter("estado", EstadoPedido.LISTO_PARA_ENVIAR)
                 .getResultList();
 
 

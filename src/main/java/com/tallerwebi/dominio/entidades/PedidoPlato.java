@@ -23,12 +23,24 @@ public class PedidoPlato {
     @Enumerated(EnumType.STRING)
     private EstadoPlato estadoPlato;
 
+    @Column(name = "calificacion")
+    private Integer calificacion;
+
     public PedidoPlatoDto obtenerDto() {
         PedidoPlatoDto dto = new PedidoPlatoDto();
         dto.setId(this.id);
         dto.setPlato(this.plato != null ? this.plato.obtenerDto() : null);
         dto.setEstadoPlato(this.estadoPlato);
+        dto.setCalificacion(this.calificacion);
         return dto;
+    }
+
+    public Integer getCalificacion() {
+        return calificacion;
+    }
+
+    public void setCalificacion(Integer calificacion) {
+        this.calificacion = calificacion;
     }
 
     public Long getId() {

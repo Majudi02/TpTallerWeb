@@ -6,6 +6,7 @@ import com.tallerwebi.dominio.PedidoService;
 import com.tallerwebi.dominio.PlatoDto;
 import com.tallerwebi.dominio.ServicioRestaurante;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -193,6 +194,19 @@ public class PedidoControlador {
         return "mis-pedidos";
     }
 
+    @PostMapping("/calificar")
+    @ResponseBody
+    public ResponseEntity<String> calificarPlatoAjax(@RequestParam("pedidoPlatoId") Integer pedidoPlatoId,
+                                                     @RequestParam("calificacion") Integer calificacion,
+                                                     HttpServletRequest request) {
+
+        UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
+
+        pedidoService.guardarCalificacion(pedidoPlatoId, calificacion, usuario.getId());
+
+        return ResponseEntity.ok("Calificación enviada");
+
+    }
     @GetMapping("/pedido/plato")
     public ModelAndView verDetallePlato(@RequestParam("id") Integer platoId,
                                         HttpServletRequest request) {
@@ -207,6 +221,5 @@ public class PedidoControlador {
 
         return new ModelAndView("detalle-plato", model);
     }
-
 
 }

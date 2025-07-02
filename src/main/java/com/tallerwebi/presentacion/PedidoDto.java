@@ -50,6 +50,7 @@ public class PedidoDto {
                     dto.setId(pedidoPlato.getId());
                     dto.setEstadoPlato(pedidoPlato.getEstadoPlato());
                     dto.setPlato(new PlatoDto(pedidoPlato.getPlato()));
+                    dto.setCalificacion(pedidoPlato.getCalificacion());
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -76,7 +77,6 @@ public class PedidoDto {
         pedido.setFinalizo(this.finalizo);
         pedido.setEstadoPedido(this.estadoPedido);
         pedido.setPagado(this.pagado);
-
 
         List<PedidoPlato> pedidoPlatosEntidad = this.pedidoPlatos.stream().map(ppDto -> {
             PedidoPlato pedidoPlato = new PedidoPlato();

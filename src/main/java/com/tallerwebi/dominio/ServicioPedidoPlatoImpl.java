@@ -32,6 +32,7 @@ public class ServicioPedidoPlatoImpl implements ServicioPedidoPlato{
         PedidoPlato entidad = repositorioPedidoPlato.buscarPorId(pedidoPlato.getId());
         if (entidad != null) {
             entidad.setEstadoPlato(pedidoPlato.getEstadoPlato());
+            entidad.setCalificacion(pedidoPlato.getCalificacion());
             repositorioPedidoPlato.guardar(entidad);
         }
     }
