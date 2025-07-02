@@ -238,11 +238,13 @@ public class RepositorioPedidoImplTest {
         Pedido pedido1 = new Pedido();
         pedido1.setUsuario(usuario);
         pedido1.setFecha("2025-06-01");
+        pedido1.setPagado(true);
         sessionFactory.getCurrentSession().save(pedido1);
 
         Pedido pedido2 = new Pedido();
         pedido2.setUsuario(usuario);
         pedido2.setFecha("2025-06-10");
+        pedido2.setPagado(true);
         sessionFactory.getCurrentSession().save(pedido2);
 
         List<Pedido> pedidos = repositorioPedido.listarPedidosPorUsuario(usuario.getId());
