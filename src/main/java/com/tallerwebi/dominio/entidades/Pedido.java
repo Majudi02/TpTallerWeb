@@ -31,6 +31,7 @@ public class Pedido {
     private boolean finalizo;
     @Enumerated(EnumType.STRING)
     private EstadoPedido estadoPedido;
+    private boolean pagado;
 
 
     public PedidoDto obtenerDto() {
@@ -41,6 +42,7 @@ public class Pedido {
         pedidoDto.setPrecio(this.precio);
         pedidoDto.setFinalizo(this.finalizo);
         pedidoDto.setEstadoPedido(this.estadoPedido);
+        pedidoDto.setPagado(this.pagado);
 
         List<PedidoPlatoDto> pedidoPlatoDtos = this.pedidoPlatos.stream().map(pp -> {
             PedidoPlatoDto dto = new PedidoPlatoDto();
@@ -65,6 +67,14 @@ public class Pedido {
             }
         }
         return true;
+    }
+
+    public boolean isPagado() {
+        return pagado;
+    }
+
+    public void setPagado(boolean pagado) {
+        this.pagado = pagado;
     }
 
     public EstadoPedido getEstadoPedido() {
