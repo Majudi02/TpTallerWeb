@@ -201,6 +201,21 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
             platoExistente.setEtiquetas(etiquetas);
 
         }
+        if (platoDto.getCalorias() != null) {
+            platoExistente.setCalorias(platoDto.getCalorias());
+        }
+
+        if (platoDto.getProteinas() != null) {
+            platoExistente.setProteinas(platoDto.getProteinas());
+        }
+
+        if (platoDto.getGrasas() != null) {
+            platoExistente.setGrasas(platoDto.getGrasas());
+        }
+
+        if (platoDto.getCarbohidratos() != null) {
+            platoExistente.setCarbohidratos(platoDto.getCarbohidratos());
+        }
 
         if (platoDto.getImagen() != null && !platoDto.getImagen().trim().isEmpty()) {
             platoExistente.setImagen(platoDto.getImagen());

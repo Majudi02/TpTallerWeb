@@ -15,6 +15,9 @@ public class RepositorioPedidoPlatoImpl implements RepositorioPedidoPlato {
     @Autowired
     private SessionFactory sessionFactory;
 
+    public RepositorioPedidoPlatoImpl(SessionFactory sessionFactory) {this.sessionFactory = sessionFactory;}
+
+
     @Override
     public PedidoPlato buscarPorId(Long id) {
         return sessionFactory.getCurrentSession().get(PedidoPlato.class, id);
@@ -36,6 +39,19 @@ public class RepositorioPedidoPlatoImpl implements RepositorioPedidoPlato {
             pedido.setFinalizo(true);
         }
         sessionFactory.getCurrentSession().saveOrUpdate(pedidoPlato);
+    }
+
+    @Override
+    public Double obtenerPromedioCalificacionPorPlato(Integer id) {
+        String hql = "SELECT AVG(pp.calificacion) FROM PedidoPlato pp " +
+                "WHERE pp.plato.id = :id AND pp.calificacion IS NOT NULL";
+
+        Double promedio = (Double) sessionFactory.getCurrentSession()
+                .createQuery(hql)
+                .setParameter("id", id)
+                .uniqueResult();
+
+        return promedio != null ? promedio : 0.0;
     }
 
 }

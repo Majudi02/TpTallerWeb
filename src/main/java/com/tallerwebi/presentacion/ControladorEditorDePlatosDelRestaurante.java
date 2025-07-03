@@ -20,10 +20,12 @@ public class ControladorEditorDePlatosDelRestaurante {
 
     private ServicioRestaurante servicioRestaurante;
     private EtiquetaService etiquetaSevice;
+    private ServicioPedidoPlato servicioPedidoPlato;
 
 
     @Autowired
-    public ControladorEditorDePlatosDelRestaurante(ServicioRestaurante servicioRestaurante, EtiquetaService etiquetaSevice){
+    public ControladorEditorDePlatosDelRestaurante(ServicioRestaurante servicioRestaurante, EtiquetaService etiquetaSevice,ServicioPedidoPlato servicioPedidoPlato) {
+        this.servicioPedidoPlato=servicioPedidoPlato;
         this.etiquetaSevice=etiquetaSevice;
         this.servicioRestaurante=servicioRestaurante;
     }
@@ -82,6 +84,12 @@ public class ControladorEditorDePlatosDelRestaurante {
         List<PlatoDto> platos = new ArrayList<>();
         if(restaurante != null) {
             platos = servicioRestaurante.obtenerPlatosDelRestaurante(restaurante.getId());
+        }
+
+        for (PlatoDto plato : platos) {
+            Double promedio = servicioPedidoPlato.obtenerPromedioCalificacionPorPlato(plato.getId());
+            promedio = Math.round(promedio * 10.0) / 10.0;
+            plato.setCalificacionPromedio(promedio);
         }
 
         modelo.put("platos", platos);

@@ -22,6 +22,7 @@ public class PlatoDto {
     private Double carbohidratos;
     private List<Integer> etiquetasIds;
     private List<EtiquetaDto> etiquetas;
+    private Double calificacionPromedio;
 
     public PlatoDto(Integer id, Long idRestaurante, String nombre, String descripcion, String imagen, Double precio, List<EtiquetaDto> etiquetas, Double calorias, Double proteinas, Double grasas, Double carbohidratos) {
         this.id = id;
@@ -124,6 +125,14 @@ public class PlatoDto {
 
         plato.setEtiquetas(etiquetasEntidad);
         return plato;
+    }
+
+    public Double getCalificacionPromedio() {
+        return calificacionPromedio;
+    }
+
+    public void setCalificacionPromedio(Double calificacionPromedio) {
+        this.calificacionPromedio = calificacionPromedio;
     }
 
     public List<Integer> getEtiquetasIds() {
