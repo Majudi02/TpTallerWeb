@@ -81,7 +81,6 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public List<PedidoPlatoDto> mostrarPlatosDelPedidoActual(Long idUsuario) {
-        System.out.println("Buscando platos del pedido actual del usuario ID: " + idUsuario);
         return this.repositorioPedido
                 .mostrarPlatosDelPedidoActual(idUsuario)
                 .stream()
