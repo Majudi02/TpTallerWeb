@@ -84,9 +84,9 @@ VALUES
 
 
 INSERT IGNORE INTO Plato (id, restaurante_id, nombre, descripcion, imagen, precio, calorias, proteinas, grasas, carbohidratos) VALUES
-(1, 111, 'Pizza Margherita', 'La clásica pizza con tomate, mozzarella y albahaca.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 9.50, 800, 30, 25, 90),
-(2, 111, 'Pizza de Pepperoni', 'Pizza con salsa de tomate, mozzarella y abundante pepperoni.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 11.00, 900, 35, 30, 95),
-(3, 111, 'Fugazzetta con Queso', 'Pizza blanca con mucha cebolla y mozzarella.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 10.50, 850, 28, 27, 85);
+(1, 111, 'Pizza Margherita', 'La clásica pizza con tomate, mozzarella y albahaca.', '/assets/imagenesPlatos/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg', 9.50, 800, 30, 25, 90),
+(2, 111, 'Pizza de Pepperoni', 'Pizza con salsa de tomate, mozzarella y abundante pepperoni.', '/assets/imagenesPlatos/8c5a3d9f-1e2b-4c77-91c4-827ad8fca581.jpg', 11.00, 900, 35, 30, 95),
+(3, 111, 'Fugazzetta con Queso', 'Pizza blanca con mucha cebolla y mozzarella.', '/assets/imagenesPlatos/f3d90127-5b63-4b77-a26e-22c0737ab497.jpg', 10.50, 850, 28, 27, 85);
 INSERT
 IGNORE INTO Plato_Etiqueta (plato_id, etiqueta_id) VALUES (1, 2);
 INSERT
@@ -94,9 +94,9 @@ IGNORE INTO Plato_Etiqueta (plato_id, etiqueta_id) VALUES (3, 2);
 
 
 INSERT IGNORE INTO Plato (id, restaurante_id, nombre, descripcion, imagen, precio, calorias, proteinas, grasas, carbohidratos) VALUES
-(4, 112, 'Spaghetti Carbonara', 'Pasta al huevo con guanciale, yema de huevo y pecorino.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 14.00, 700, 25, 28, 80),
-(5, 112, 'Lasagna Bolognesa', 'Capas de pasta, ragú de carne, bechamel y queso.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 16.50, 850, 35, 30, 90),
-(6, 112, 'Risotto de Hongos', 'Arroz Arborio cremoso con variedad de hongos silvestres.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 15.00, 600, 20, 25, 75);
+(4, 112, 'Spaghetti Carbonara', 'Pasta al huevo con guanciale, yema de huevo y pecorino.', '/assets/imagenesPlatos/b2487be9-d67b-4b19-bf74-871edf0309d2.jpg', 14.00, 700, 25, 28, 80),
+(5, 112, 'Lasagna Bolognesa', 'Capas de pasta, ragú de carne, bechamel y queso.', '/assets/imagenesPlatos/ca0fbc67-3f1b-40db-93f2-cfb2196b24fd.jpg', 16.50, 850, 35, 30, 90),
+(6, 112, 'Risotto de Hongos', 'Arroz Arborio cremoso con variedad de hongos silvestres.', '/assets/imagenesPlatos/e9af5c3c-787b-4aa0-8e3c-ae4ec0b97195.jpg', 15.00, 600, 20, 25, 75);
 INSERT
 IGNORE INTO Plato_Etiqueta (plato_id, etiqueta_id) VALUES (6, 3);
 INSERT
@@ -105,9 +105,9 @@ IGNORE INTO Plato_Etiqueta (plato_id, etiqueta_id) VALUES (6, 2);
 
 
 INSERT IGNORE INTO Plato (id, restaurante_id, nombre, descripcion, imagen, precio, calorias, proteinas, grasas, carbohidratos) VALUES
-(7, 113, 'Nigiri Salmón (2u)', 'Delicado nigiri con salmón fresco.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 8.00, 300, 18, 12, 30),
-(8, 113, 'Roll California (8u)', 'Roll con kanikama, palta y pepino.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 12.00, 400, 20, 15, 50),
-(9, 113, 'Sashimi Mixto (6u)', 'Variedad de cortes de pescado fresco.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 18.00, 350, 25, 10, 20);
+(7, 113, 'Nigiri Salmón (2u)', 'Delicado nigiri con salmón fresco.', '/assets/imagenesPlatos/43ab1298-97c4-4283-8059-f21b5c5b0941.jpg', 8.00, 300, 18, 12, 30),
+(8, 113, 'Roll California (8u)', 'Roll con kanikama, palta y pepino.', '/assets/imagenesPlatos/d5f16cf9-212e-4cd3-90ff-38c9244dfc85.jpg', 12.00, 400, 20, 15, 50),
+(9, 113, 'Sashimi Mixto (6u)', 'Variedad de cortes de pescado fresco.', '/assets/imagenesPlatos/9e2b715a-51d8-426a-80e0-b9607f27256c.jpg', 18.00, 350, 25, 10, 20);
 INSERT
 IGNORE INTO Plato_Etiqueta (plato_id, etiqueta_id) VALUES (7, 3);
 INSERT
@@ -120,9 +120,9 @@ IGNORE INTO Plato_Etiqueta (plato_id, etiqueta_id) VALUES (9, 4);
 
 
 INSERT IGNORE INTO Plato (id, restaurante_id, nombre, descripcion, imagen, precio, calorias, proteinas, grasas, carbohidratos) VALUES
-(10, 114, 'Tacos al Pastor (3u)', 'Tortillas de maíz con carne de cerdo adobada, piña y cilantro.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 13.50, 600, 30, 20, 50),
-(11, 114, 'Enchiladas de Pollo', 'Tortillas rellenas de pollo, bañadas en salsa roja y queso.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 14.00, 650, 35, 22, 45),
-(12, 114, 'Guacamole con Totopos', 'Aguacate fresco machacado con tomate, cebolla, cilantro y limón, servido con totopos.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 8.50, 400, 8, 35, 25);
+(10, 114, 'Tacos al Pastor (3u)', 'Tortillas de maíz con carne de cerdo adobada, piña y cilantro.', '/assets/imagenesPlatos/17cc3094-e56d-4d87-ae44-02f603473d3e.jpg', 13.50, 600, 30, 20, 50),
+(11, 114, 'Enchiladas de Pollo', 'Tortillas rellenas de pollo, bañadas en salsa roja y queso.', '/assets/imagenesPlatos/a1fdb129-b8fc-4a6a-b1fd-64bb8c5369f0.jpg', 14.00, 650, 35, 22, 45),
+(12, 114, 'Guacamole con Totopos', 'Aguacate fresco machacado con tomate, cebolla, cilantro y limón, servido con totopos.', '/assets/imagenesPlatos/3e79c0d4-b871-4e1a-9661-998a3e6e9cf9.jpg', 8.50, 400, 8, 35, 25);
 INSERT
 IGNORE INTO Plato_Etiqueta (plato_id, etiqueta_id) VALUES (12, 1);
 INSERT
@@ -131,18 +131,18 @@ IGNORE INTO Plato_Etiqueta (plato_id, etiqueta_id) VALUES (12, 4);
 
 
 INSERT IGNORE INTO Plato (id, restaurante_id, nombre, descripcion, imagen, precio, calorias, proteinas, grasas, carbohidratos) VALUES
-(13, 115, 'Sopa de Cebolla', 'Clásica sopa francesa gratinada con queso.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 9.00, 300, 12, 10, 20),
-(14, 115, 'Coq au Vin', 'Pollo cocido lentamente en vino tinto con champiñones.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 22.00, 550, 40, 30, 15),
-(15, 115, 'Crème brûlée', 'Postre cremoso de vainilla con una capa de azúcar caramelizado.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 7.00, 450, 6, 35, 40);
+(13, 115, 'Sopa de Cebolla', 'Clásica sopa francesa gratinada con queso.', '/assets/imagenesPlatos/fd904de0-66a4-4a12-9c02-cfa7b5f53764.jpg', 9.00, 300, 12, 10, 20),
+(14, 115, 'Coq au Vin', 'Pollo cocido lentamente en vino tinto con champiñones.', '/assets/imagenesPlatos/58f340c7-c225-43d1-a8a5-838ae6b21f07.jpg', 22.00, 550, 40, 30, 15),
+(15, 115, 'Crème brûlée', 'Postre cremoso de vainilla con una capa de azúcar caramelizado.', '/assets/imagenesPlatos/19b20287-c6b1-4dd7-9426-2a7fa6876aa5.jpg', 7.00, 450, 6, 35, 40);
 INSERT
 IGNORE INTO Plato_Etiqueta (plato_id, etiqueta_id) VALUES (14, 3);
 
 
 
 INSERT IGNORE INTO Plato (id, restaurante_id, nombre, descripcion, imagen, precio, calorias, proteinas, grasas, carbohidratos) VALUES
-(16, 116, 'Hamburguesa Clásica', 'Carne 180gr, lechuga, tomate, cebolla, pepinillos y aderezo especial.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 12.00, 700, 45, 35, 40),
-(17, 116, 'Hamburguesa Doble Queso', 'Doble carne, doble queso cheddar, panceta y cebolla caramelizada.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 15.00, 900, 55, 40, 45),
-(18, 116, 'Hamburguesa Veggie', 'Medallón de lentejas, espinaca, lechuga, tomate y aderezo vegano.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 11.50, 600, 25, 20, 50);
+(16, 116, 'Hamburguesa Clásica', 'Carne 180gr, lechuga, tomate, cebolla, pepinillos y aderezo especial.', '/assets/imagenesPlatos/c3bd4b57-079a-4232-8d61-9b8e39c9ebf2.jpg', 12.00, 700, 45, 35, 40),
+(17, 116, 'Hamburguesa Doble Queso', 'Doble carne, doble queso cheddar, panceta y cebolla caramelizada.', '/assets/imagenesPlatos/44e713a1-cc82-4374-a239-a5d1347e5bb1.jpg', 15.00, 900, 55, 40, 45),
+(18, 116, 'Hamburguesa Veggie', 'Medallón de lentejas, espinaca, lechuga, tomate y aderezo vegano.', '/assets/imagenesPlatos/b76de70e-8102-4bfa-9a1c-408df1280646.jpg', 11.50, 600, 25, 20, 50);
 INSERT
 IGNORE INTO Plato_Etiqueta (plato_id, etiqueta_id) VALUES (16, 3);
 INSERT
@@ -156,9 +156,9 @@ IGNORE INTO Plato_Etiqueta (plato_id, etiqueta_id) VALUES (18, 3);
 
 
 INSERT IGNORE INTO Plato (id, restaurante_id, nombre, descripcion, imagen, precio, calorias, proteinas, grasas, carbohidratos) VALUES
-(19, 117, 'Ensalada de Quinoa Proteica', 'Quinoa, garbanzos, vegetales de estación, tofu marinado y semillas.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 13.00, 450, 35, 15, 40),
-(20, 117, 'Wrap de Vegetales Asados', 'Tortilla integral con vegetales asados, hummus y espinaca fresca.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 11.00, 400, 10, 10, 45),
-(21, 117, 'Sopa de Lentejas Casera', 'Sopa reconfortante con lentejas, zanahorias, apio y especias.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 9.50, 350, 18, 12, 40);
+(19, 117, 'Ensalada de Quinoa Proteica', 'Quinoa, garbanzos, vegetales de estación, tofu marinado y semillas.', '/assets/imagenesPlatos/d13a84c2-7fbd-4cb1-90fe-9821fae467a0.jpg', 13.00, 450, 35, 15, 40),
+(20, 117, 'Wrap de Vegetales Asados', 'Tortilla integral con vegetales asados, hummus y espinaca fresca.', '/assets/imagenesPlatos/4f5ed7d3-8a16-4a9b-bb93-2227683a6899.jpg', 11.00, 400, 10, 10, 45),
+(21, 117, 'Sopa de Lentejas Casera', 'Sopa reconfortante con lentejas, zanahorias, apio y especias.', '/assets/imagenesPlatos/7754ea21-9010-42a8-a09b-a71b23d6636a.jpg', 9.50, 350, 18, 12, 40);
 INSERT
 IGNORE INTO Plato_Etiqueta (plato_id, etiqueta_id) VALUES (19, 1);
 INSERT
@@ -183,9 +183,9 @@ IGNORE INTO Plato_Etiqueta (plato_id, etiqueta_id) VALUES (21, 4);
 
 
 INSERT IGNORE INTO Plato (id, restaurante_id, nombre, descripcion, imagen, precio, calorias, proteinas, grasas, carbohidratos) VALUES
-(22, 118, 'Paella de Mariscos', 'Arroz con azafrán, camarones, mejillones, calamares y almejas.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 28.00, 700, 40, 25, 50),
-(23, 118, 'Rabas a la Romana', 'Anillos de calamar fritos, tiernos por dentro y crocantes por fuera.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 17.50, 550, 25, 30, 20),
-(24, 118, 'Pescado del Día al Horno', 'Pescado fresco del día, acompañado de vegetales al vapor.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 24.00, 600, 35, 20, 15);
+(22, 118, 'Paella de Mariscos', 'Arroz con azafrán, camarones, mejillones, calamares y almejas.', '/assets/imagenesPlatos/baedbfcc-013b-41c6-8109-a9f7d6468ce4.jpg', 28.00, 700, 40, 25, 50),
+(23, 118, 'Rabas a la Romana', 'Anillos de calamar fritos, tiernos por dentro y crocantes por fuera.', '/assets/imagenesPlatos/e3deffcf-6c8d-4df3-87f2-a34bb8049382.jpg', 17.50, 550, 25, 30, 20),
+(24, 118, 'Pescado del Día al Horno', 'Pescado fresco del día, acompañado de vegetales al vapor.', '/assets/imagenesPlatos/aad91ae7-b0a9-417f-85ee-f41109170a7f.jpg', 24.00, 600, 35, 20, 15);
 INSERT
 IGNORE INTO Plato_Etiqueta (plato_id, etiqueta_id) VALUES (22, 3);
 INSERT
@@ -195,17 +195,17 @@ IGNORE INTO Plato_Etiqueta (plato_id, etiqueta_id) VALUES (24, 4);
 
 
 INSERT IGNORE INTO Plato (id, restaurante_id, nombre, descripcion, imagen, precio, calorias, proteinas, grasas, carbohidratos) VALUES
-(25, 119, 'Tostado de Jamón y Queso', 'Clásico tostado con jamón y queso, en pan de molde.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 6.00, 350, 20, 15, 30),
-(26, 119, 'Medialunas (3u)', 'Crujientes medialunas de manteca, ideales para el desayuno.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 4.50, 300, 8, 12, 25),
-(27, 119, 'Torta Oreo', 'Porción de torta con base de galletas Oreo, crema y trozos de chocolate.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 8.00, 450, 6, 30, 50);
+(25, 119, 'Tostado de Jamón y Queso', 'Clásico tostado con jamón y queso, en pan de molde.', '/assets/imagenesPlatos/df5b5908-2806-4fbb-af67-bf54cb84d6bc.jpg', 6.00, 350, 20, 15, 30),
+(26, 119, 'Medialunas (3u)', 'Crujientes medialunas de manteca, ideales para el desayuno.', '/assets/imagenesPlatos/355f4145-8509-49b2-9159-2adce711b4f3.jpg', 4.50, 300, 8, 12, 25),
+(27, 119, 'Torta Oreo', 'Porción de torta con base de galletas Oreo, crema y trozos de chocolate.', '/assets/imagenesPlatos/ea57d58f-e424-4eb5-8a65-4c2a5191a19e.jpg', 8.00, 450, 6, 30, 50);
 INSERT
 IGNORE INTO Plato_Etiqueta (plato_id, etiqueta_id) VALUES (27, 2);
 
 
 INSERT IGNORE INTO Plato (id, restaurante_id, nombre, descripcion, imagen, precio, calorias, proteinas, grasas, carbohidratos) VALUES
-(28, 120, 'Pan de Masa Madre', 'Hogaza de pan artesanal con masa madre, de corteza crujiente.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 7.00, 400, 12, 15, 55),
-(29, 120, 'Facturas Mixtas (6u)', 'Surtido de facturas frescas para el desayuno o la merienda.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 9.00, 500, 10, 18, 65),
-(30, 120, 'Budín de Limón', 'Suave budín de limón con glaseado cítrico.', '/assets/imagenesPlatos/883bd26e-9967-49dc-8201-b571a0c52d53.jpg', 8.50, 450, 8, 20, 50);
+(28, 120, 'Pan de Masa Madre', 'Hogaza de pan artesanal con masa madre, de corteza crujiente.', '/assets/imagenesPlatos/02fd6620-9929-4a87-865f-efc9832c232d.jpg', 7.00, 400, 12, 15, 55),
+(29, 120, 'Facturas Mixtas (6u)', 'Surtido de facturas frescas para el desayuno o la merienda.', '/assets/imagenesPlatos/4e5cda47-8676-4c3c-8c9a-fcad30fdfe57.jpg', 9.00, 500, 10, 18, 65),
+(30, 120, 'Budín de Limón', 'Suave budín de limón con glaseado cítrico.', '/assets/imagenesPlatos/b09aa9e4-9735-45de-b0c4-c5767b8769a8.jpg', 8.50, 450, 8, 20, 50);
 INSERT
 IGNORE INTO Plato_Etiqueta (plato_id, etiqueta_id) VALUES (28, 2);
 INSERT
