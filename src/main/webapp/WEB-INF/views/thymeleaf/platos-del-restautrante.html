@@ -12,7 +12,28 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
+    <style>
+        .star-rating {
+            font-size: 1.2rem;
+            color: #ccc;
+        }
+        .star-rating .fa {
+            margin-right: 2px;
+        }
+
+        .star-rating .checked {
+            color: gold;
+        }
+        .star-rating .half-checked::before {
+            content: '\f089';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: gold;
+        }
+
+    </style>
 </head>
 <body>
 
@@ -76,7 +97,6 @@
 
                 <div class="card pt-2" th:each="plato :${platos}">
                     <a th:href="@{'/plato/' + ${plato.id}}" class="text-decoration-none text-reset">
-
                         <div class="d-flex flex-row gap-3 plato p-3">
                             <div class="d-flex flex-column w-100">
                                 <h5 class="card-title" th:text="${plato.getNombre()}"></h5>
@@ -84,8 +104,17 @@
                                 <p th:text="${plato.getId()}"></p>
                                 <strong class="card-text mt-3" th:text="'$' + ${plato.getPrecio()}"></strong>
                             </div>
+                            <div class="d-flex flex-column" style="width: 200px;">
                             <div class="position-relative">
                                 <img th:src="@{${plato.getImagen()}}" class="img-plato" alt="imagen del plato">
+                            </div>
+                            <div class="star-rating mt-2" th:with="promedio=${plato.calificacionPromedio != null ? plato.calificacionPromedio : 0}">
+                            <span th:each="i : ${#numbers.sequence(1,5)}">
+                                <i class="fa-star fa" th:classappend="${i <= promedio ? ' checked' : (i - promedio < 1 ? ' half-checked' : '')}"></i>
+                            </span>
+                                <span th:text="'(' + ${#numbers.formatDecimal(promedio, 1, 1)} + ')'"></span>
+                            </div>
+
                             </div>
                         </div>
                     </a>

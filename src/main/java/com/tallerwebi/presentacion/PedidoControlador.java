@@ -1,10 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.mercadopago.resources.preference.Preference;
-import com.tallerwebi.dominio.MercadoPagoServiceImpl;
-import com.tallerwebi.dominio.PedidoService;
-import com.tallerwebi.dominio.PlatoDto;
-import com.tallerwebi.dominio.ServicioRestaurante;
+import com.tallerwebi.dominio.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -28,15 +25,17 @@ public class PedidoControlador {
 
     private PedidoService pedidoService;
     private ServicioRestaurante servicioRestaurante;
+    private ServicioPedidoPlato servicioPedidoPlato;
 
     @Autowired
     private MercadoPagoServiceImpl mercadoPagoService;
 
 
     @Autowired
-    public PedidoControlador(PedidoService pedidoService, ServicioRestaurante servicioRestaurante) {
+    public PedidoControlador(PedidoService pedidoService, ServicioRestaurante servicioRestaurante,ServicioPedidoPlato servicioPedidoPlato) {
         this.pedidoService = pedidoService;
         this.servicioRestaurante = servicioRestaurante;
+        this.servicioPedidoPlato=servicioPedidoPlato;
     }
 
     @GetMapping("/pedido")
@@ -65,6 +64,13 @@ public class PedidoControlador {
             platosMostrados = pedidoService.buscarPlatosPorTipoComida(tipo);
         } else {
             platosMostrados = pedidoService.traerTodosLosPlatos();
+        }
+
+
+        for (PlatoDto plato : platosMostrados) {
+            Double promedio = servicioPedidoPlato.obtenerPromedioCalificacionPorPlato(plato.getId());
+            promedio = Math.round(promedio * 10.0) / 10.0;
+            plato.setCalificacionPromedio(promedio);
         }
 
         if (ordenar != null && !ordenar.isEmpty()) {

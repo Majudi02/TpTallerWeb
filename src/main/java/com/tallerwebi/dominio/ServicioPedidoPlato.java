@@ -8,4 +8,5 @@ public interface ServicioPedidoPlato {
     PedidoPlatoDto buscarPorId(Long id);
     void guardar(PedidoPlatoDto pedidoPlato);
     void finalizarPedido(Long id);
+    Double obtenerPromedioCalificacionPorPlato(Integer id);
 }

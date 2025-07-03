@@ -41,4 +41,9 @@ public class ServicioPedidoPlatoImpl implements ServicioPedidoPlato{
     public void finalizarPedido(Long id) {
         repositorioPedidoPlato.finalizarPedido(id);
     }
+
+    @Override
+    public Double obtenerPromedioCalificacionPorPlato(Integer id) {
+        return repositorioPedidoPlato.obtenerPromedioCalificacionPorPlato(id);
+    }
 }

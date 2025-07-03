@@ -21,8 +21,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {HibernateInfraestructuraTestConfig.class})
-@Transactional
+    @ContextConfiguration(classes = {HibernateInfraestructuraTestConfig.class})
+    @Transactional
 public class RepositorioPedidoRestauranteImplTest {
 
 
