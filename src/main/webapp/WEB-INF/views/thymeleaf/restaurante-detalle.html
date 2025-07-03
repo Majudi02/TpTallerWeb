@@ -187,8 +187,16 @@
                 <div class="card-body">
                     <h5 class="card-title text-success fw-bold" th:text="${resena.cliente.nombre}">Nombre</h5>
                     <p class="card-text" th:text="${resena.comentario}">Comentario</p>
-                    <p class="text-muted small" th:text="${resena.fecha}"></p>
+
+                    <div th:if="${resena.calificacion != null}">
+        <span th:each="i : ${#numbers.sequence(1, resena.calificacion)}">
+            <i class="bi bi-star-fill text-warning"></i>
+        </span>
+                    </div>
+                    <p th:if="${resena.calificacion == null}" class="text-muted small">Sin calificación</p>
+                    <p class="text-muted small" th:if="${resena.fecha != null}" th:text="${resena.fecha}"></p>
                 </div>
+
             </div>
         </div>
     </div>
@@ -201,8 +209,24 @@
                     <form th:action="@{/restaurantes/{id}/resena(id=${restaurante.id})}" method="post">
                         <div class="mb-3">
                             <label for="comentario" class="form-label">Comentario</label>
-                            <textarea class="form-control" id="comentario" name="comentario" rows="3" required></textarea>
+                            <textarea class="form-control" id="comentario" name="comentario" rows="3"
+                                      required></textarea>
                         </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Calificación</label>
+                            <div class="d-flex gap-4">
+                                <label th:each="i : ${#numbers.sequence(1,5)}" class="form-check-label">
+                                    <input type="radio" name="calificacion" th:value="${i}"
+                                           class="form-check-input me-1"/>
+                                     <span th:each="j : ${#numbers.sequence(1,i)}">
+                                       <i class="bi bi-star-fill text-warning"></i>
+                                     </span>
+                                </label>
+                            </div>
+                        </div>
+
+
                         <button type="submit" class="btn btn-success">Enviar Reseña</button>
                     </form>
                 </div>
