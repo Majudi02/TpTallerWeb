@@ -42,6 +42,7 @@ public class ServicioResenaImplTest {
         Long clienteId = 1L;
         Long restauranteId = 2L;
         String comentario = "Muy sabroso";
+        Integer calificacion = 5;
 
         Cliente cliente = new Cliente();
         cliente.setId(clienteId);
@@ -52,7 +53,7 @@ public class ServicioResenaImplTest {
         when(repositorioUsuarioNutriyaMock.buscarPorId(clienteId)).thenReturn(cliente);
         when(repositorioUsuarioRestauranteMock.buscarRestaurantePorId(restauranteId)).thenReturn(restaurante);
 
-        servicioResena.guardarResena(restauranteId, clienteId, comentario);
+        servicioResena.guardarResena(restauranteId, clienteId, comentario, calificacion);
 
         verify(repositorioResenaMock).guardar(argThat(resena ->
                 resena.getRestaurante().getId().equals(restauranteId) &&

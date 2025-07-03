@@ -28,18 +28,20 @@ public class ServicioResenaImpl implements ServicioResena {
     }
 
     @Override
-    public void guardarResena(Long restauranteId, Long clienteId, String comentario) {
+    public void guardarResena(Long restauranteId, Long clienteId, String comentario, Integer calificacion) {
         Cliente cliente = (Cliente) repositorioUsuarioNutriya.buscarPorId(clienteId);
         Restaurante restaurante = repositorioUsuarioRestaurante.buscarRestaurantePorId(restauranteId);
 
         Resena resena = new Resena();
         resena.setComentario(comentario);
+        resena.setCalificacion(calificacion);
         resena.setCliente(cliente);
         resena.setRestaurante(restaurante);
         resena.setFecha(LocalDateTime.now());
 
         repositorioResena.guardar(resena);
     }
+
 
     @Override
     public List<Resena> obtenerUltimasResenas(Long restauranteId, int cantidad) {

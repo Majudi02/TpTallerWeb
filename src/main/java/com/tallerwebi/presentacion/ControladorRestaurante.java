@@ -78,14 +78,16 @@ public class ControladorRestaurante {
     @PostMapping("/restaurantes/{id}/resena")
     public String agregarResena(@PathVariable Long id,
                                 @RequestParam String comentario,
+                                @RequestParam Integer calificacion,
                                 HttpServletRequest request) {
+
         UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
 
         if (usuario == null || !"cliente".equalsIgnoreCase(usuario.getTipoUsuario())) {
             return "redirect:/nutriya-login";
         }
 
-        servicioResena.guardarResena(id, usuario.getId(), comentario);
+        servicioResena.guardarResena(id, usuario.getId(), comentario, calificacion);
         return "redirect:/restaurantes/" + id;
     }
 
