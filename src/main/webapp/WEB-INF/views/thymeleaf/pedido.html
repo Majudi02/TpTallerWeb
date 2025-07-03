@@ -12,6 +12,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+
+    <style>
+        .img-plato {
+            width: 190px;
+            height: 135px;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+    </style>
 </head>
 <body>
 
@@ -192,7 +201,6 @@
                                 </div>
                             </div>
                             <div class="d-flex flex-column ">
-
                                 <a th:href="@{'/pedido/plato'(id=${plato.id})}">
                                     <div>
                                         <img th:src="@{${plato.getImagen()}}" class="img-plato" alt="Imagen del plato"/>

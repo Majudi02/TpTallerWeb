@@ -98,16 +98,16 @@ public class PedidoServiceImplTest {
     @Test
     public void DadoQueExistenDiezPlatosConLaEtiquetaProteicaObtengoSoloLosDelTipoDeComidaFiltrada() {
         List<PlatoDto> platosTotales = List.of(
-                new PlatoDto(1, 1L, "Milanesa con papas fritas", "...", "/img.png", 2500.0, List.of(new EtiquetaDto(1, "Proteica")), 600.0, 45.0, 25.0, 50.0),
-                new PlatoDto(2, 1L, "Ravioles de ricota", "...", "/img.png", 2800.0, List.of(new EtiquetaDto(2, "Vegetariana")), 550.0, 30.0, 20.0, 60.0),
-                new PlatoDto(3, 1L, "Pizza napolitana", "...", "/img.png", 3200.0, List.of(new EtiquetaDto(2, "Vegetariana")), 700.0, 25.0, 30.0, 70.0),
-                new PlatoDto(4, 1L, "Hamburguesa completa", "...", "/img.png", 2900.0, List.of(new EtiquetaDto(1, "Proteica")), 650.0, 40.0, 35.0, 45.0),
-                new PlatoDto(5, 1L, "Ensalada César", "...", "/img.png", 2300.0, List.of(new EtiquetaDto(1, "Proteica")), 400.0, 20.0, 15.0, 30.0),
-                new PlatoDto(6, 1L, "Tarta de espinaca", "...", "/img.png", 2000.0, List.of(new EtiquetaDto(2, "Vegetariana")), 450.0, 18.0, 22.0, 40.0),
-                new PlatoDto(7, 1L, "Lasaña de carne", "...", "/img.png", 3100.0, List.of(new EtiquetaDto(1, "Proteica")), 680.0, 50.0, 28.0, 55.0),
-                new PlatoDto(8, 1L, "Empanadas salteñas", "...", "/img.png", 1800.0, List.of(new EtiquetaDto(1, "Proteica")), 520.0, 35.0, 18.0, 45.0),
-                new PlatoDto(9, 1L, "Pollo al horno con papas", "...", "/img.png", 2600.0, List.of(new EtiquetaDto(1, "Proteica")), 600.0, 42.0, 20.0, 50.0),
-                new PlatoDto(10, 1L, "Tacos de carne", "...", "/img.png", 3000.0, List.of(new EtiquetaDto(1, "Proteica")), 700.0, 48.0, 30.0, 60.0)
+                new PlatoDto(1, 1L, "Milanesa con papas fritas", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 2500.0, List.of(new EtiquetaDto(1, "Proteica")), 600.0, 45.0, 25.0, 50.0),
+                new PlatoDto(2, 1L, "Ravioles de ricota", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 2800.0, List.of(new EtiquetaDto(2, "Vegetariana")), 550.0, 30.0, 20.0, 60.0),
+                new PlatoDto(3, 1L, "Pizza napolitana", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 3200.0, List.of(new EtiquetaDto(2, "Vegetariana")), 700.0, 25.0, 30.0, 70.0),
+                new PlatoDto(4, 1L, "Hamburguesa completa", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 2900.0, List.of(new EtiquetaDto(1, "Proteica")), 650.0, 40.0, 35.0, 45.0),
+                new PlatoDto(5, 1L, "Ensalada César", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 2300.0, List.of(new EtiquetaDto(1, "Proteica")), 400.0, 20.0, 15.0, 30.0),
+                new PlatoDto(6, 1L, "Tarta de espinaca", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 2000.0, List.of(new EtiquetaDto(2, "Vegetariana")), 450.0, 18.0, 22.0, 40.0),
+                new PlatoDto(7, 1L, "Lasaña de carne", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 3100.0, List.of(new EtiquetaDto(1, "Proteica")), 680.0, 50.0, 28.0, 55.0),
+                new PlatoDto(8, 1L, "Empanadas salteñas", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 1800.0, List.of(new EtiquetaDto(1, "Proteica")), 520.0, 35.0, 18.0, 45.0),
+                new PlatoDto(9, 1L, "Pollo al horno con papas", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 2600.0, List.of(new EtiquetaDto(1, "Proteica")), 600.0, 42.0, 20.0, 50.0),
+                new PlatoDto(10, 1L, "Tacos de carne", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 3000.0, List.of(new EtiquetaDto(1, "Proteica")), 700.0, 48.0, 30.0, 60.0)
         );
 
         when(servicioPlato.buscarPlatosPorTipoComida("Proteica")).thenReturn(
@@ -126,12 +126,12 @@ public class PedidoServiceImplTest {
     @Test
     public void DadoQueExisten6PlatosLosQuierOrdenarPorElPrecioDeMayorAMenor() {
         List<PlatoDto> platos = List.of(
-                new PlatoDto(1, 1L, "Milanesa con papas fritas", "...", "/img.png", 2500.0, List.of(new EtiquetaDto(1, "Proteica")), 600.0, 45.0, 25.0, 50.0),
-                new PlatoDto(2, 1L, "Ravioles de ricota", "...", "/img.png", 2800.0, List.of(new EtiquetaDto(2, "Vegetariana")), 550.0, 30.0, 20.0, 60.0),
-                new PlatoDto(3, 1L, "Pizza napolitana", "...", "/img.png", 3200.0, List.of(new EtiquetaDto(2, "Vegetariana")), 700.0, 25.0, 30.0, 70.0),
-                new PlatoDto(4, 1L, "Hamburguesa completa", "...", "/img.png", 2900.0, List.of(new EtiquetaDto(1, "Proteica")), 650.0, 40.0, 35.0, 45.0),
-                new PlatoDto(5, 1L, "Ensalada César", "...", "/img.png", 2300.0, List.of(new EtiquetaDto(1, "Proteica")), 400.0, 20.0, 15.0, 30.0),
-                new PlatoDto(6, 1L, "Tarta de espinaca", "...", "/img.png", 2000.0, List.of(new EtiquetaDto(2, "Vegetariana")), 450.0, 18.0, 22.0, 40.0)
+                new PlatoDto(1, 1L, "Milanesa con papas fritas", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 2500.0, List.of(new EtiquetaDto(1, "Proteica")), 600.0, 45.0, 25.0, 50.0),
+                new PlatoDto(2, 1L, "Ravioles de ricota", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 2800.0, List.of(new EtiquetaDto(2, "Vegetariana")), 550.0, 30.0, 20.0, 60.0),
+                new PlatoDto(3, 1L, "Pizza napolitana", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 3200.0, List.of(new EtiquetaDto(2, "Vegetariana")), 700.0, 25.0, 30.0, 70.0),
+                new PlatoDto(4, 1L, "Hamburguesa completa", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 2900.0, List.of(new EtiquetaDto(1, "Proteica")), 650.0, 40.0, 35.0, 45.0),
+                new PlatoDto(5, 1L, "Ensalada César", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 2300.0, List.of(new EtiquetaDto(1, "Proteica")), 400.0, 20.0, 15.0, 30.0),
+                new PlatoDto(6, 1L, "Tarta de espinaca", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 2000.0, List.of(new EtiquetaDto(2, "Vegetariana")), 450.0, 18.0, 22.0, 40.0)
         );
         List<Double> preciosEsperados = List.of(3200.0, 2900.0, 2800.0, 2500.0, 2300.0, 2000.0);
 
@@ -145,12 +145,12 @@ public class PedidoServiceImplTest {
     @Test
     public void DadoQueExisten6PlatosLosQuierOrdenarPorElPrecioDeMenorAMayor() {
         List<PlatoDto> platos = List.of(
-                new PlatoDto(1, 1L, "Milanesa con papas fritas", "...", "/img.png", 2500.0, List.of(new EtiquetaDto(1, "Proteica")), 600.0, 45.0, 25.0, 50.0),
-                new PlatoDto(2, 1L, "Ravioles de ricota", "...", "/img.png", 2800.0, List.of(new EtiquetaDto(2, "Vegetariana")), 550.0, 30.0, 20.0, 60.0),
-                new PlatoDto(3, 1L, "Pizza napolitana", "...", "/img.png", 3200.0, List.of(new EtiquetaDto(2, "Vegetariana")), 700.0, 25.0, 30.0, 70.0),
-                new PlatoDto(4, 1L, "Hamburguesa completa", "...", "/img.png", 2900.0, List.of(new EtiquetaDto(1, "Proteica")), 650.0, 40.0, 35.0, 45.0),
-                new PlatoDto(5, 1L, "Ensalada César", "...", "/img.png", 2300.0, List.of(new EtiquetaDto(1, "Proteica")), 400.0, 20.0, 15.0, 30.0),
-                new PlatoDto(6, 1L, "Tarta de espinaca", "...", "/img.png", 2000.0, List.of(new EtiquetaDto(2, "Vegetariana")), 450.0, 18.0, 22.0, 40.0)
+                new PlatoDto(1, 1L, "Milanesa con papas fritas", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 2500.0, List.of(new EtiquetaDto(1, "Proteica")), 600.0, 45.0, 25.0, 50.0),
+                new PlatoDto(2, 1L, "Ravioles de ricota", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 2800.0, List.of(new EtiquetaDto(2, "Vegetariana")), 550.0, 30.0, 20.0, 60.0),
+                new PlatoDto(3, 1L, "Pizza napolitana", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 3200.0, List.of(new EtiquetaDto(2, "Vegetariana")), 700.0, 25.0, 30.0, 70.0),
+                new PlatoDto(4, 1L, "Hamburguesa completa", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 2900.0, List.of(new EtiquetaDto(1, "Proteica")), 650.0, 40.0, 35.0, 45.0),
+                new PlatoDto(5, 1L, "Ensalada César", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 2300.0, List.of(new EtiquetaDto(1, "Proteica")), 400.0, 20.0, 15.0, 30.0),
+                new PlatoDto(6, 1L, "Tarta de espinaca", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 2000.0, List.of(new EtiquetaDto(2, "Vegetariana")), 450.0, 18.0, 22.0, 40.0)
         );
         List<Double> preciosEsperados = List.of(2000.0, 2300.0, 2500.0, 2800.0, 2900.0, 3200.0);
 
@@ -164,16 +164,16 @@ public class PedidoServiceImplTest {
     @Test
     public void DadoQueExistenDiezPlatosConLaEtiquetaProteicaLosQuieroOrdenarDeMenorAMayor() {
         List<PlatoDto> platosTotales = List.of(
-                new PlatoDto(1, 1L, "Milanesa con papas fritas", "...", "/img.png", 2500.0, List.of(new EtiquetaDto(1, "Proteica")), 600.0, 45.0, 25.0, 50.0),
-                new PlatoDto(4, 1L, "Hamburguesa completa", "...", "/img.png", 2900.0, List.of(new EtiquetaDto(1, "Proteica")), 650.0, 40.0, 35.0, 45.0),
-                new PlatoDto(5, 1L, "Ensalada César", "...", "/img.png", 2300.0, List.of(new EtiquetaDto(1, "Proteica")), 400.0, 20.0, 15.0, 30.0),
-                new PlatoDto(7, 1L, "Lasaña de carne", "...", "/img.png", 3100.0, List.of(new EtiquetaDto(1, "Proteica")), 680.0, 50.0, 28.0, 55.0),
-                new PlatoDto(8, 1L, "Empanadas salteñas", "...", "/img.png", 1800.0, List.of(new EtiquetaDto(1, "Proteica")), 520.0, 35.0, 18.0, 45.0),
-                new PlatoDto(9, 1L, "Pollo al horno con papas", "...", "/img.png", 2600.0, List.of(new EtiquetaDto(1, "Proteica")), 600.0, 42.0, 20.0, 50.0),
-                new PlatoDto(10, 1L, "Tacos de carne", "...", "/img.png", 3000.0, List.of(new EtiquetaDto(1, "Proteica")), 700.0, 48.0, 30.0, 60.0),
-                new PlatoDto(13, 1L, "Milanesa napolitana", "...", "/img.png", 3200.0, List.of(new EtiquetaDto(1, "Proteica")),700.0, 48.0, 35.0, 55.0),
-                new PlatoDto(16, 1L, "Churrasco", "...", "/img.png", 3500.0, List.of(new EtiquetaDto(1, "Proteica")),650.0, 50.0, 30.0, 40.0),
-                new PlatoDto(18, 1L, "Sándwich de lomito", "...", "/img.png", 2800.0, List.of(new EtiquetaDto(1, "Proteica")),600.0, 45.0, 25.0, 50.0)
+                new PlatoDto(1, 1L, "Milanesa con papas fritas", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 2500.0, List.of(new EtiquetaDto(1, "Proteica")), 600.0, 45.0, 25.0, 50.0),
+                new PlatoDto(4, 1L, "Hamburguesa completa", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 2900.0, List.of(new EtiquetaDto(1, "Proteica")), 650.0, 40.0, 35.0, 45.0),
+                new PlatoDto(5, 1L, "Ensalada César", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 2300.0, List.of(new EtiquetaDto(1, "Proteica")), 400.0, 20.0, 15.0, 30.0),
+                new PlatoDto(7, 1L, "Lasaña de carne", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 3100.0, List.of(new EtiquetaDto(1, "Proteica")), 680.0, 50.0, 28.0, 55.0),
+                new PlatoDto(8, 1L, "Empanadas salteñas", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 1800.0, List.of(new EtiquetaDto(1, "Proteica")), 520.0, 35.0, 18.0, 45.0),
+                new PlatoDto(9, 1L, "Pollo al horno con papas", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 2600.0, List.of(new EtiquetaDto(1, "Proteica")), 600.0, 42.0, 20.0, 50.0),
+                new PlatoDto(10, 1L, "Tacos de carne", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 3000.0, List.of(new EtiquetaDto(1, "Proteica")), 700.0, 48.0, 30.0, 60.0),
+                new PlatoDto(13, 1L, "Milanesa napolitana", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 3200.0, List.of(new EtiquetaDto(1, "Proteica")),700.0, 48.0, 35.0, 55.0),
+                new PlatoDto(16, 1L, "Churrasco", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 3500.0, List.of(new EtiquetaDto(1, "Proteica")),650.0, 50.0, 30.0, 40.0),
+                new PlatoDto(18, 1L, "Sándwich de lomito", "...", "/d2f8a6e1-a7c3-4f09-8f7b-2cd1c3b63a88.jpg", 2800.0, List.of(new EtiquetaDto(1, "Proteica")),600.0, 45.0, 25.0, 50.0)
         );
 
         when(servicioPlato.buscarPlatosPorTipoComida("Proteica"))
