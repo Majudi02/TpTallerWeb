@@ -23,6 +23,10 @@ public class Restaurante {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> tiposComida;
 
+    @OneToMany(mappedBy = "restaurante", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Resena> resenas;
+
+
     public Restaurante(String nombre, String descripcion, String rutaImagen, String calle, Integer numero, String localidad, String zona, List<String> tiposComida) {
         this.nombre = nombre;
         this.descripcion = descripcion;

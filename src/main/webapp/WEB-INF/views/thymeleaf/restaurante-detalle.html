@@ -172,6 +172,46 @@
     </div>
 </div>
 
+<!-- RESEÑAS -->
+
+<div class="mt-5">
+    <h3 class="mb-4 text-center">Reseñas</h3>
+
+    <div th:if="${#lists.isEmpty(resenas)}" class="text-center text-muted mb-5">
+        Este restaurante aún no tiene reseñas.
+    </div>
+
+    <div class="row justify-content-center g-4" th:if="${!#lists.isEmpty(resenas)}">
+        <div class="col-md-6 col-lg-4" th:each="resena, iter : ${resenas}" th:if="${iter.index < 3}">
+            <div class="card shadow-sm p-3 rounded-4 h-100">
+                <div class="card-body">
+                    <h5 class="card-title text-success fw-bold" th:text="${resena.cliente.nombre}">Nombre</h5>
+                    <p class="card-text" th:text="${resena.comentario}">Comentario</p>
+                    <p class="text-muted small" th:text="${resena.fecha}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${usuario != null and tipoUsuario == 'cliente'}" class="row justify-content-center mt-4">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm p-3 rounded-4 h-100">
+                <div class="card-body">
+                    <h5 class="card-title text-success fw-bold">Dejá tu reseña</h5>
+                    <form th:action="@{/restaurantes/{id}/resena(id=${restaurante.id})}" method="post">
+                        <div class="mb-3">
+                            <label for="comentario" class="form-label">Comentario</label>
+                            <textarea class="form-control" id="comentario" name="comentario" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success">Enviar Reseña</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- Bootstrap 5.2.0 JS -->
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         crossorigin="anonymous"></script>
