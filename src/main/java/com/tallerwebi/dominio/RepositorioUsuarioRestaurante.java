@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface RepositorioUsuarioRestaurante {
     UsuarioRestaurante buscarPorUsuarioId(Long id);
+    Restaurante buscarRestaurantePorId(Long restauranteId);
     List<UsuarioRestaurante> buscarTodos();
     List<Restaurante> buscarTodosLosRestaurantes();
     void guardar(UsuarioRestaurante usuarioRestaurante);

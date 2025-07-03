@@ -9,8 +9,6 @@ public interface RepositorioUsuarioNutriya {
     UsuarioNutriya buscarPorEmail(String email);
     void modificar(UsuarioNutriya usuario);
     UsuarioNutriya buscarPorTokenConfirmacion(String token);
-
     UsuarioNutriya buscarPorId(Long id);
-
     Cliente obtenerClienteConEtiquetas(Long id);
 }
