@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Detalle Pedido</title>
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}" />
+</head>
+<body>
+<div class="container mt-5">
+  <h2>Detalle del Pedido #<span th:text="${pedido.id}"></span></h2>
+  <p><strong>Fecha:</strong> <span th:text="${pedido.fecha}"></span></p>
+  <p><strong>Total:</strong> $<span th:text="${pedido.precio}"></span></p>
+  <p><strong>Estado:</strong> <span th:text="${pedido.estadoPedido}"></span></p>
+
+  <h4 class="mt-4">Platos</h4>
+  <ul class="list-group">
+    <li class="list-group-item" th:each="pp : ${pedido.pedidoPlatos}">
+      <div class="d-flex justify-content-between">
+        <span th:text="${pp.plato.nombre}"></span>
+        <span>$ <span th:text="${pp.plato.precio}"></span></span>
+      </div>
+
+      <div class="star-rating mt-2" th:if="${pp.calificacion != null}">
+                <span class="star" th:each="i : ${#numbers.sequence(1, 5)}"
+                      th:classappend="${i <= pp.calificacion} ? 'text-warning' : 'text-secondary'">&#9733;</span>
+      </div>
+    </li>
+  </ul>
+
+  <h4 class="mt-4">Información de Pago</h4>
+  <div th:if="${pago != null}">
+    <p><strong>Correo del Pagador:</strong> <span th:text="${pago.correoPagador}"></span></p>
+    <p><strong>Estado del Pago:</strong> <span th:text="${pago.estado}"></span></p>
+    <p><strong>Fecha de Aprobación:</strong> <span th:text="${pago.fechaAprobacion}"></span></p>
+    <p><strong>Fecha de Creación:</strong> <span th:text="${pago.fechaCreacion}"></span></p>
+    <p><strong>Método de Pago:</strong> <span th:text="${pago.metodoPago}"></span></p>
+    <p><strong>Tipo de Pago:</strong> <span th:text="${pago.tipoPago}"></span></p>
+    <p><strong>Moneda:</strong> <span th:text="${pago.moneda}"></span></p>
+    <p><strong>Monto:</strong> $<span th:text="${pago.monto}"></span></p>
+  </div>
+  <div th:if="${pago == null}">
+    <p>Este pedido aún no tiene un pago registrado.</p>
+  </div>
+
+  <a th:href="@{/mis-pedidos}" class="btn btn-secondary mt-4">Volver</a>
+</div>
+</body>
+</html>

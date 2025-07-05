@@ -193,4 +193,19 @@ public class PedidoServiceImpl implements PedidoService {
         }
     }
 
+    @Override
+    public PedidoDto buscarPedidoPendientePorUsuario(Long idUsuario) {
+        Pedido pedido = repositorioPedido.buscarPedidoPendientePorUsuario(idUsuario);
+        if (pedido == null) {
+            return null;
+        }
+        return pedido.obtenerDto();
+    }
+
+    @Override
+    public PedidoDto obtenerPedidoPorId(Integer pedidoId, Long idUsuario) {
+        Pedido pedido = repositorioPedido.buscarPorIdYUsuario(pedidoId, idUsuario);
+        return pedido.obtenerDto();
+    }
+
 }

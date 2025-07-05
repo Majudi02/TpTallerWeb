@@ -2,15 +2,13 @@ package com.tallerwebi.presentacion;
 
 import com.mercadopago.resources.preference.Preference;
 import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.entidades.Pago;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -26,13 +24,15 @@ public class PedidoControlador {
     private PedidoService pedidoService;
     private ServicioRestaurante servicioRestaurante;
     private ServicioPedidoPlato servicioPedidoPlato;
+    private PagoServicio pagoService;
 
     @Autowired
     private MercadoPagoServiceImpl mercadoPagoService;
 
 
     @Autowired
-    public PedidoControlador(PedidoService pedidoService, ServicioRestaurante servicioRestaurante,ServicioPedidoPlato servicioPedidoPlato) {
+    public PedidoControlador(PedidoService pedidoService, ServicioRestaurante servicioRestaurante,ServicioPedidoPlato servicioPedidoPlato, PagoServicio pagoService) {
+        this.pagoService=pagoService;
         this.pedidoService = pedidoService;
         this.servicioRestaurante = servicioRestaurante;
         this.servicioPedidoPlato=servicioPedidoPlato;
@@ -109,7 +109,7 @@ public class PedidoControlador {
             List<PedidoPlatoDto> platosAPagar = pedidoService.mostrarPlatosDelPedidoActual(usuario.getId());
 
             Preference preference = mercadoPagoService.crearPreferencia(platosAPagar, usuario.getId());
-
+            pedidoService.confirmarPedido(usuario.getId());
             return new RedirectView(preference.getInitPoint());
 
         } catch (Exception e) {
@@ -166,7 +166,6 @@ public class PedidoControlador {
         UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
 
         PlatoDto platoBuscado = servicioRestaurante.obtenerPlatoPorId(platoId);
-        System.out.println("Agregando plato al pedido. Usuario ID: " + usuario.getId() + ", Plato ID: " + platoBuscado.getId());
 
         pedidoService.agregarPlatoAlPedido(platoBuscado, usuario);
     }
@@ -226,6 +225,18 @@ public class PedidoControlador {
         model.addAttribute("usuario", usuario);
 
         return new ModelAndView("detalle-plato", model);
+    }
+
+    @GetMapping("/mis-pedidos/{id}/detalle")
+        public String verDetalleDelPedido(@PathVariable Integer id, HttpServletRequest request, Model model) {
+        UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
+
+        PedidoDto pedido = pedidoService.obtenerPedidoPorId(id, usuario.getId());
+        model.addAttribute("pedido", pedido);
+        Pago pago = pagoService.obtenerPagoPorIdPedido(id);
+        model.addAttribute("pago", pago);
+
+        return "detalle-pedido";
     }
 
 }

@@ -97,7 +97,8 @@
 
     <div class="row g-4" th:if="${!#lists.isEmpty(pedidosActivos)}">
         <div class="col-12 col-md-6 col-lg-4" th:each="pedido : ${pedidosActivos}">
-            <div class="card shadow-lg rounded-4 h-100 p-3">
+            <a th:href="@{'/mis-pedidos/' + ${pedido.id} + '/detalle'}" class="text-decoration-none text-dark">
+                <div class="card shadow-lg rounded-4 h-100 p-3">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <h5 class="fw-bold mb-0">Pedido #<span th:text="${pedido.id}">123</span></h5>
                     <span class="badge text-uppercase fw-semibold px-3 py-2"
@@ -120,6 +121,7 @@
                     </li>
                 </ul>
             </div>
+            </a>
         </div>
     </div>
 
