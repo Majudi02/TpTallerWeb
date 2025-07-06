@@ -27,4 +27,8 @@ public interface RepositorioPedido {
     void eliminarPlatoDelPedido(Integer idPedido, Integer idPlato);
 
     void actualizarPedido(Pedido pedido);
+
+    Pedido buscarPorIdYUsuario(Integer pedidoId, Long usuarioId);
+
+    Pedido buscarPedidoPendientePorUsuario(Long idUsuario);
 }

@@ -51,7 +51,7 @@ public class RepositorioPedidoImpl implements RepositorioPedido {
 
         pedidoBuscado.getPedidoPlatos().add(nuevoPedidoPlato);
 
-        // Actualizá el precio sumando el precio del plato
+
         pedidoBuscado.setPrecio(pedidoBuscado.getPrecio() + plato.getPrecio());
 
         sessionFactory.getCurrentSession().saveOrUpdate(pedidoBuscado);
@@ -189,6 +189,29 @@ public class RepositorioPedidoImpl implements RepositorioPedido {
     @Override
     public void actualizarPedido(Pedido pedido) {
         sessionFactory.getCurrentSession().saveOrUpdate(pedido);
+    }
+
+
+    @Override
+    public Pedido buscarPedidoPendientePorUsuario(Long idUsuario) {
+        String hql = "FROM Pedido p WHERE p.usuario.id = :idUsuario ORDER BY p.fecha DESC";
+        // p.estadoPedido = :estado
+        return sessionFactory.getCurrentSession()
+                .createQuery(hql, Pedido.class)
+                .setParameter("idUsuario", idUsuario)
+          //      .setParameter("estado", EstadoPedido.PENDIENTE)
+                .setMaxResults(1)
+                .uniqueResult();
+    }
+
+    @Override
+    public Pedido buscarPorIdYUsuario(Integer pedidoId, Long usuarioId) {
+        String hql = "FROM Pedido p WHERE p.id = :pedidoId AND p.usuario.id = :usuarioId";
+        return sessionFactory.getCurrentSession()
+                .createQuery(hql, Pedido.class)
+                .setParameter("pedidoId", pedidoId)
+                .setParameter("usuarioId", usuarioId)
+                .uniqueResult();
     }
 }
 
