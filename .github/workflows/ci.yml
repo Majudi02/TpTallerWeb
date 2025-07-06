@@ -1,5 +1,9 @@
 name: integracion_continua
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+
+permissions:
+  contents: read
+  pull-requests: read
 on:
   pull_request:
     branches: ["main"]
