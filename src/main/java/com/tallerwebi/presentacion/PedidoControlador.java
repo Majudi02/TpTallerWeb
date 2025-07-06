@@ -24,14 +24,14 @@ public class PedidoControlador {
     private PedidoService pedidoService;
     private ServicioRestaurante servicioRestaurante;
     private ServicioPedidoPlato servicioPedidoPlato;
-    private PagoServicio pagoService;
+    private ServicioPago pagoService;
 
     @Autowired
     private MercadoPagoServiceImpl mercadoPagoService;
 
 
     @Autowired
-    public PedidoControlador(PedidoService pedidoService, ServicioRestaurante servicioRestaurante,ServicioPedidoPlato servicioPedidoPlato, PagoServicio pagoService) {
+    public PedidoControlador(PedidoService pedidoService, ServicioRestaurante servicioRestaurante,ServicioPedidoPlato servicioPedidoPlato, ServicioPago pagoService) {
         this.pagoService=pagoService;
         this.pedidoService = pedidoService;
         this.servicioRestaurante = servicioRestaurante;
@@ -109,7 +109,7 @@ public class PedidoControlador {
             List<PedidoPlatoDto> platosAPagar = pedidoService.mostrarPlatosDelPedidoActual(usuario.getId());
 
             Preference preference = mercadoPagoService.crearPreferencia(platosAPagar, usuario.getId());
-            pedidoService.confirmarPedido(usuario.getId());
+
             return new RedirectView(preference.getInitPoint());
 
         } catch (Exception e) {

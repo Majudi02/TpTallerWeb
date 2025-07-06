@@ -21,7 +21,7 @@ public class MercadoPagoServiceImpl {
 
     private final PreferenceClient preferenceClient;
 
-    private static final String BASE_URL ="https://8ebb-2800-810-507-abe6-dcb1-ca9a-1a5b-7fea.ngrok-free.app";
+    private static final String BASE_URL ="https://5d37-2800-810-507-abe6-4480-8bba-9c2c-64ec.ngrok-free.app";
 
     public MercadoPagoServiceImpl() {
         this.preferenceClient = new PreferenceClient();
@@ -54,4 +54,3 @@ public class MercadoPagoServiceImpl {
         return preferenceClient.create(preferenceRequest);
     }
 }
-//guardar el detalle del pago

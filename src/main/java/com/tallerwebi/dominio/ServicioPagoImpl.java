@@ -5,25 +5,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service("pagoService")
-public class PagoServiceImpl implements PagoServicio {
+public class ServicioPagoImpl implements ServicioPago {
 
-    private final PagoRepositorio pagoRepositorio;
+    private final RepositorioPago pagoRepositorio;
 
     @Autowired
-    public PagoServiceImpl(PagoRepositorio pagoRepositorio) {
+    public ServicioPagoImpl(RepositorioPago pagoRepositorio) {
         this.pagoRepositorio = pagoRepositorio;
     }
 
     @Override
     public void guardarPago(Pago pago) {
-        System.out.println("📝 Intentando guardar pago: " + pago);
         pagoRepositorio.guardar(pago);
-        System.out.println("✅ Pago guardado correctamente con ID: ");
-    }
-
-    @Override
-    public Pago obtenerPagoPorIdMercadoPago(Long idPagoMP) {
-        return pagoRepositorio.buscarPorIdPagoMercadoPago(idPagoMP);
     }
 
     @Override
