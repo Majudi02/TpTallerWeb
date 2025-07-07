@@ -17,4 +17,6 @@ public interface RepositorioPedidoRestaurante {
     Pedido buscarPorId(int i);
 
     void guardar(Pedido pedido);
+
+    List<Pedido> traerPedidosEntregadosPorRestaurante(Long idRestaurante);
 }

@@ -1,9 +1,7 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.dominio.entidades.Etiqueta;
-import com.tallerwebi.dominio.entidades.Plato;
-import com.tallerwebi.dominio.entidades.Restaurante;
-import com.tallerwebi.dominio.entidades.UsuarioRestaurante;
+import com.tallerwebi.dominio.entidades.*;
+import com.tallerwebi.presentacion.ResumenRestauranteDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,10 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,14 +30,20 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
     */
     private final RepositorioUsuarioRestaurante repositorioUsuarioRestaurante;
     private final RepositorioPlato repositorioPlato;
-    private EtiquetaService etiquetaService;
+    private final RepositorioPedidoRestaurante repositorioPedidoRestaurante;
+    private final RepositorioPedidoPlato repositorioPedidoPlato;
+    private final RepositorioResena repositorioResena;
+    private final EtiquetaService etiquetaService;
 
 
 
     @Autowired
-    public ServicioRestauranteImpl(RepositorioUsuarioRestaurante repositorioUsuarioRestaurante, RepositorioPlato repositorioPlato, EtiquetaService etiquetaService) {
+    public ServicioRestauranteImpl(RepositorioUsuarioRestaurante repositorioUsuarioRestaurante, RepositorioPlato repositorioPlato, RepositorioPedidoRestaurante repositorioPedidoRestaurante, RepositorioPedidoPlato repositorioPedidoPlato, RepositorioResena repositorioResena, EtiquetaService etiquetaService) {
         this.repositorioUsuarioRestaurante = repositorioUsuarioRestaurante;
         this.repositorioPlato = repositorioPlato;
+        this.repositorioPedidoRestaurante = repositorioPedidoRestaurante;
+        this.repositorioPedidoPlato = repositorioPedidoPlato;
+        this.repositorioResena = repositorioResena;
         this.etiquetaService = etiquetaService;
     }
 
@@ -280,6 +281,57 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
         UsuarioRestaurante usuarioRestaurante = repositorioUsuarioRestaurante.buscarPorUsuarioId(usuarioId);
         return usuarioRestaurante.getRestaurante();
     }
+
+    @Override
+    public UsuarioRestaurante buscarUsuarioRestaurantePorId(Long id) {
+        return repositorioUsuarioRestaurante.buscarPorUsuarioId(id);
+    }
+
+
+    @Override
+    public ResumenRestauranteDTO obtenerResumenDelRestaurante(Long idRestaurante) {
+        // 1. Obtener pedidos entregados y platos vendidos
+        List<Pedido> pedidosEntregados = repositorioPedidoRestaurante.traerPedidosEntregadosPorRestaurante(idRestaurante);
+        List<PedidoPlato> platos = repositorioPedidoPlato.obtenerPlatosPorRestaurante(idRestaurante);
+
+        // 2. Calcular ganancias
+        double ganancias = pedidosEntregados.stream()
+                .mapToDouble(Pedido::getPrecio)
+                .sum();
+
+        // 3. Calcular más y menos pedido
+        Map<Plato, Long> conteoPlatos = platos.stream()
+                .collect(Collectors.groupingBy(PedidoPlato::getPlato, Collectors.counting()));
+
+        Plato masPedido = conteoPlatos.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey).orElse(null);
+
+        Plato menosPedido = conteoPlatos.entrySet().stream()
+                .min(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey).orElse(null);
+
+        // 4. Calcular promedio de calificación (convertir id → Plato)
+        Map<Integer, Double> promedioPorId = repositorioResena.calcularPromedioCalificacionPorPlato(idRestaurante);
+
+        Map<Plato, Double> promedioResenas = promedioPorId.entrySet().stream()
+                .map(entry -> Map.entry(repositorioPlato.buscarPlatoPorId(entry.getKey()), entry.getValue()))
+                .filter(entry -> entry.getKey() != null)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        Plato mejorValorado = promedioResenas.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey).orElse(null);
+
+        Plato peorValorado = promedioResenas.entrySet().stream()
+                .min(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey).orElse(null);
+
+        // 5. Retornar DTO
+        return new ResumenRestauranteDTO(ganancias, masPedido, menosPedido, mejorValorado, peorValorado);
+    }
+
+
 
 }
 

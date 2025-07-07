@@ -6,7 +6,9 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository("repositorioResena")
 public class RepositorioResenaImpl implements RepositorioResena {
@@ -39,6 +41,31 @@ public class RepositorioResenaImpl implements RepositorioResena {
                 .createQuery(hql, Resena.class)
                 .setParameter("restauranteId", restauranteId)
                 .getResultList();
+    }
+
+    @Override
+    public Map<Integer, Double> calcularPromedioCalificacionPorPlato(Long idRestaurante) {
+        String hql = "SELECT pp.plato.id, AVG(r.calificacion) " +
+                "FROM Resena r " +
+                "JOIN r.restaurante rest " +
+                "JOIN Pedido p ON p.restaurante.id = rest.id " +
+                "JOIN PedidoPlato pp ON pp.pedido.id = p.id " +
+                "WHERE rest.id = :idRestaurante AND r.calificacion IS NOT NULL " +
+                "GROUP BY pp.plato.id";
+
+        List<Object[]> resultados = sessionFactory.getCurrentSession()
+                .createQuery(hql)
+                .setParameter("idRestaurante", idRestaurante)
+                .getResultList();
+
+        Map<Integer, Double> promedios = new HashMap<>();
+        for (Object[] row : resultados) {
+            Integer platoId = (Integer) row[0];
+            Double promedio = (Double) row[1];
+            promedios.put(platoId, promedio);
+        }
+
+        return promedios;
     }
 
 }

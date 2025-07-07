@@ -9,6 +9,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class RepositorioPedidoPlatoImpl implements RepositorioPedidoPlato {
 
@@ -54,4 +56,15 @@ public class RepositorioPedidoPlatoImpl implements RepositorioPedidoPlato {
         return promedio != null ? promedio : 0.0;
     }
 
+    @Override
+    public List<PedidoPlato> obtenerPlatosPorRestaurante(Long idRestaurante) {
+        String hql = "SELECT pp FROM PedidoPlato pp " +
+                "JOIN FETCH pp.plato pl " +
+                "WHERE pl.restaurante.id = :idRestaurante";
+
+        return sessionFactory.getCurrentSession()
+                .createQuery(hql, PedidoPlato.class)
+                .setParameter("idRestaurante", idRestaurante)
+                .getResultList();
+    }
 }

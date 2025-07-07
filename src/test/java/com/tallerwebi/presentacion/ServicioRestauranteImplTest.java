@@ -4,6 +4,8 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.PlatoDto;
 import com.tallerwebi.dominio.RepositorioPlato;
 import com.tallerwebi.dominio.entidades.Etiqueta;
+import com.tallerwebi.dominio.entidades.Pedido;
+import com.tallerwebi.dominio.entidades.PedidoPlato;
 import com.tallerwebi.dominio.entidades.Plato;
 import com.tallerwebi.infraestructura.RepositorioPlatoImpl;
 import org.hibernate.Session;
@@ -114,7 +116,7 @@ public class ServicioRestauranteImplTest {
         assertTrue(actualizado);
         assertThat(plato.getDescripcion(), is("Milanesa con pure"));
     }
-
+    
 
 
     }

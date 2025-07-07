@@ -21,14 +21,14 @@ public class MercadoPagoServiceImpl {
 
     private final PreferenceClient preferenceClient;
 
-    private static final String BASE_URL ="https://5d37-2800-810-507-abe6-4480-8bba-9c2c-64ec.ngrok-free.app";
+    private static final String BASE_URL ="https://d3b2-2800-810-84a-8489-68fe-a47b-85b8-2942.ngrok-free.app";
 
     public MercadoPagoServiceImpl() {
         this.preferenceClient = new PreferenceClient();
     }
 
 
-    public Preference crearPreferencia(List<PedidoPlatoDto> platos, Long idPedido) throws MPException, MPApiException {
+    public Preference crearPreferencia(List<PedidoPlatoDto> platos, Long idUsuario) throws MPException, MPApiException {
         List<PreferenceItemRequest> items = platos.stream()
                 .map(pedidoPlato -> PreferenceItemRequest.builder()
                         .title(pedidoPlato.getPlato().getNombre())
@@ -42,12 +42,11 @@ public class MercadoPagoServiceImpl {
                 .items(items)
                 .backUrls(
                         PreferenceBackUrlsRequest.builder()
-                                .success(BASE_URL + "/pago-exitoso?idPedido=" + idPedido)
-                                .failure(BASE_URL + "/pago-fallido")
-                                .pending(BASE_URL + "/pago-pendiente")
+                                .success(BASE_URL+"/pago-exitoso?idUsuario=" + idUsuario)
+                                .failure(BASE_URL+"/pago-fallido")
+                                .pending(BASE_URL+"/pago-pendiente")
                                 .build()
                 )
-                .externalReference(idPedido.toString())
                 .statementDescriptor("NutriYa")
                 .build();
 

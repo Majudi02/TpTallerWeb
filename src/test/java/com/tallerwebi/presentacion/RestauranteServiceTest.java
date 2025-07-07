@@ -16,6 +16,9 @@ public class RestauranteServiceTest {
     private RepositorioPlato repositorioPlatoMock;
     private ServicioRestauranteImpl servicio;
     private EtiquetaService etiquetaServiceMock;
+    private RepositorioPedidoRestaurante repositorioPedidoRestaurante;
+    private RepositorioPedidoPlato repositorioPedidoPlato;
+    private RepositorioResena repositorioResena;
     ;
 
     @BeforeEach
@@ -33,7 +36,7 @@ public class RestauranteServiceTest {
 
         when(repositorioUsuarioRestauranteMock.buscarTodosLosRestaurantes()).thenReturn(restaurantesMock);
 
-        servicio = new ServicioRestauranteImpl(repositorioUsuarioRestauranteMock, repositorioPlatoMock, etiquetaServiceMock)
+        servicio = new ServicioRestauranteImpl(repositorioUsuarioRestauranteMock, repositorioPlatoMock, repositorioPedidoRestaurante, repositorioPedidoPlato, repositorioResena,  etiquetaServiceMock);
         ;
     }
 

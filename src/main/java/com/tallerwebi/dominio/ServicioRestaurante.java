@@ -1,6 +1,8 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.entidades.Restaurante;
+import com.tallerwebi.dominio.entidades.UsuarioRestaurante;
+import com.tallerwebi.presentacion.ResumenRestauranteDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -36,4 +38,8 @@ public interface ServicioRestaurante {
     List<PlatoDto> obtenerPlatosDelRestaurante(Long idRestaurante);
 
     Restaurante obtenerRestaurantePorUsuarioId(Long usuarioId);
+
+    ResumenRestauranteDTO obtenerResumenDelRestaurante(Long idRestaurante);
+
+    UsuarioRestaurante buscarUsuarioRestaurantePorId(Long id);
 }
