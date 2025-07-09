@@ -7,8 +7,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Repository("repositorioPedido")
@@ -39,7 +39,7 @@ public class RepositorioPedidoImpl implements RepositorioPedido {
             pedidoBuscado.setUsuario(sessionFactory.getCurrentSession().get(UsuarioNutriya.class, idUsuario));
             pedidoBuscado.setPedidoPlatos(new ArrayList<>());
             pedidoBuscado.setFinalizo(false);
-            pedidoBuscado.setFecha(String.valueOf(LocalDateTime.now()));
+            pedidoBuscado.setFecha(new Date());
             pedidoBuscado.setPrecio(0.0);
             pedidoBuscado.setEstadoPedido(EstadoPedido.PENDIENTE);
         }

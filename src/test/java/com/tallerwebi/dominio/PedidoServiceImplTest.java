@@ -10,7 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 public class PedidoServiceImplTest {
-
 
     private RepositorioPedido repositorioPedido;
     private PedidoServiceImpl pedidoService;
@@ -189,10 +191,12 @@ public class PedidoServiceImplTest {
     }
 
     @Test
-    public void queSePuedaListarPedidosPorUsuarioYConvertirADto() {
+    public void queSePuedaListarPedidosPorUsuarioYConvertirADto() throws ParseException {
         Pedido pedido = new Pedido();
         pedido.setId(1);
-        pedido.setFecha("2025-06-15");
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        Date fechaFija = formato.parse("12/06/2025 15:30");
+        pedido.setFecha(fechaFija);
         pedido.setPrecio(1000.0);
         pedido.setFinalizo(true);
         pedido.setEstadoPedido(EstadoPedido.PENDIENTE);
@@ -212,7 +216,7 @@ public class PedidoServiceImplTest {
 
         PedidoDto dto = resultado.get(0);
         assertEquals(1, dto.getId());
-        assertEquals("2025-06-15", dto.getFecha());
+        assertEquals("12/06/2025 15:30", dto.getFecha());
         assertEquals(1000.0, dto.getPrecio(), 0.0001);
         assertEquals(EstadoPedido.PENDIENTE, dto.getEstadoPedido());
         assertNotNull(dto.getPedidoPlatos());

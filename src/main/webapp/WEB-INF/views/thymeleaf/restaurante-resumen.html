@@ -41,7 +41,9 @@
 
     <div class="card resumen-card bg-white p-4 mb-4">
         <h4 class="text-center text-muted mb-2">Ganancias Totales</h4>
-        <p class="fw-bold text-center text-success fs-3" th:text="'$' + ${resumen.gananciasTotales}"></p>
+        <p class="fw-bold text-center text-success fs-4">
+            $<span th:text="${#numbers.formatDecimal(resumen.gananciasTotales, 1, 'POINT', 2, 'COMMA')}">0.00</span>
+        </p>
     </div>
 
     <div class="row row-cols-1 row-cols-md-2 g-4">

@@ -51,7 +51,10 @@ IGNORE INTO UsuarioNutriya (id, email, password, tokenConfirmacion, confirmado) 
 (106, 'veggie@nutriya.com', '$2a$10$T1U4R6S.z0O2z5Q8.2Y.J.Z0J9L.J.J.Z0J9L', null, true),
 (107, 'marisqueria@nutriya.com', '$2a$10$T1U4R6S.z0O2z5Q8.2Y.J.Z0J9L.J.J.Z0J9L', null, true),
 (108, 'cafe@nutriya.com', '$2a$10$T1U4R6S.z0O2z5Q8.2Y.J.Z0J9L.J.J.Z0J9L', null, true),
-(109, 'panaderia@nutriya.com', '$2a$10$T1U4R6S.z0O2z5Q8.2Y.J.Z0J9L.J.J.Z0J9L', null, true);
+(109, 'panaderia@nutriya.com', '$2a$10$T1U4R6S.z0O2z5Q8.2Y.J.Z0J9L.J.J.Z0J9L', null, true),
+(999, 'admin@nutriya.com', 'admin', null, true),
+(1000, 'repartidor@nutriya.com', 'repartidor', null, true);
+INSERT INTO admin (id) VALUES (999);
 
 INSERT
 IGNORE INTO UsuarioRestaurante (id, restaurante_id) VALUES
@@ -66,7 +69,8 @@ IGNORE INTO UsuarioRestaurante (id, restaurante_id) VALUES
 (108, 119),
 (109, 120);
 
-
+INSERT IGNORE INTO repartidor (apellido, dni, nombre, telefono, vehiculo, id)
+VALUES ("Gómez", 30892333, "Juan", 12345678, "Moto", 1000);
 
 INSERT IGNORE INTO UsuarioNutriya (id, email, password, tokenConfirmacion, confirmado)
 VALUES (200, 'cliente@nutriya.com', '$2a$10$T1U4R6S.z0O2z5Q8.2Y.J.Z0J9L.J.J.Z0J9L', null, true);
@@ -234,6 +238,7 @@ INSERT IGNORE INTO Plato_Etiqueta (plato_id, etiqueta_id) VALUES
 
 
 INSERT IGNORE INTO Plato (id, restaurante_id, nombre, descripcion, imagen, precio, calorias, proteinas, grasas, carbohidratos) VALUES
+
 (55, 120, 'Pan de Masa Madre', 'Hogaza de pan artesanal con masa madre, de corteza crujiente.', '/assets/imagenesPlatos/02fd6620-9929-4a87-865f-efc9832c232d.jpg', 7.00, 400, 12, 15, 55),
 (56, 120, 'Facturas Mixtas (6u)', 'Surtido de facturas frescas para el desayuno o la merienda.', '/assets/imagenesPlatos/4e5cda47-8676-4c3c-8c9a-fcad30fdfe57.jpg', 9.00, 500, 10, 18, 65),
 (57, 120, 'Budín de Limón', 'Suave budín de limón con glaseado cítrico.', '/assets/imagenesPlatos/b09aa9e4-9735-45de-b0c4-c5767b8769a8.jpg', 8.50, 450, 8, 20, 50),
@@ -246,6 +251,7 @@ INSERT IGNORE INTO Plato_Etiqueta (plato_id, etiqueta_id) VALUES
 (58, 2),
 (59, 2),
 (60, 4);
+
 
 
 

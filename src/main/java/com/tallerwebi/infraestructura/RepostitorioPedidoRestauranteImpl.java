@@ -1,10 +1,7 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.RepositorioPedidoRestaurante;
-import com.tallerwebi.dominio.entidades.EstadoPedido;
-import com.tallerwebi.dominio.entidades.EstadoPlato;
-import com.tallerwebi.dominio.entidades.Pedido;
-import com.tallerwebi.dominio.entidades.PedidoPlato;
+import com.tallerwebi.dominio.entidades.*;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -31,9 +28,43 @@ public class RepostitorioPedidoRestauranteImpl implements RepositorioPedidoResta
                 "JOIN FETCH pp.plato pl " +
                 "JOIN FETCH pl.restaurante";
 
-        return sessionFactory.getCurrentSession()
+        List<Pedido> pedidos = sessionFactory.getCurrentSession()
                 .createQuery(hql, Pedido.class)
                 .getResultList();
+
+        // Asignar restaurante a pedido desde el plato
+        for (Pedido pedido : pedidos) {
+            if (pedido.getPedidoPlatos() != null && !pedido.getPedidoPlatos().isEmpty()) {
+                Restaurante restaurante = pedido.getPedidoPlatos().get(0).getPlato().getRestaurante();
+                pedido.setRestaurante(restaurante);
+            }
+        }
+
+        return pedidos;
+    }
+
+    @Override
+    public List<Pedido> traerPedidosFinalizados() {
+        String hql = "SELECT DISTINCT p FROM Pedido p " +
+                "JOIN FETCH p.pedidoPlatos pp " +
+                "JOIN FETCH pp.plato pl " +
+                "JOIN FETCH pl.restaurante " +
+                "WHERE p.estadoPedido = :estado";
+
+        List<Pedido> pedidos = sessionFactory.getCurrentSession()
+                .createQuery(hql, Pedido.class)
+                .setParameter("estado", EstadoPedido.ENTREGADO)  
+                .getResultList();
+
+        // asignar restaurante como antes
+        for (Pedido pedido : pedidos) {
+            if (pedido.getPedidoPlatos() != null && !pedido.getPedidoPlatos().isEmpty()) {
+                Restaurante restaurante = pedido.getPedidoPlatos().get(0).getPlato().getRestaurante();
+                pedido.setRestaurante(restaurante);
+            }
+        }
+
+        return pedidos;
     }
 
 

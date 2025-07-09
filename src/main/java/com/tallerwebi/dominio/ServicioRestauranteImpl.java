@@ -308,9 +308,17 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
         List<Pedido> pedidosEntregados = repositorioPedidoRestaurante.traerPedidosEntregadosPorRestaurante(idRestaurante);
         List<PedidoPlato> platos = repositorioPedidoPlato.obtenerPlatosPorRestaurante(idRestaurante);
 
-        double ganancias = pedidosEntregados.stream()
-                .mapToDouble(Pedido::getPrecio)
+        // 2. Calcular ganancias
+        Set<PedidoPlato> platosUnicos = pedidosEntregados.stream()
+                .flatMap(p -> p.getPedidoPlatos().stream())
+                .collect(Collectors.toSet());
+
+        double ganancias = platosUnicos.stream()
+                .mapToDouble(pp -> pp.getPlato().getPrecio())
                 .sum();
+
+
+        // 3. Calcular más y menos pedido
 
         Map<Plato, Long> conteoPlatos = platos.stream()
                 .collect(Collectors.groupingBy(PedidoPlato::getPlato, Collectors.counting()));

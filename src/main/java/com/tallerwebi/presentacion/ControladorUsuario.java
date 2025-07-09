@@ -163,6 +163,8 @@ public class ControladorUsuario {
                 return new ModelAndView("redirect:/repartidor/perfil");
             } else if ("restaurante".equalsIgnoreCase(tipo)) {
                 return new ModelAndView("redirect:/restaurante/perfil");
+            } else if("admin".equalsIgnoreCase(tipo)) {
+                return new ModelAndView("redirect:/admin/dashboard");
             }
         }
 
@@ -196,12 +198,16 @@ public class ControladorUsuario {
 
         String tipo = usuarioEncontrado.getTipoUsuario();
 
+        System.out.println(usuarioEncontrado);
+
         if ("cliente".equalsIgnoreCase(tipo)) {
             return new ModelAndView("redirect:/cliente/perfil");
         } else if ("repartidor".equalsIgnoreCase(tipo)) {
             return new ModelAndView("redirect:/repartidor/perfil");
         } else if ("restaurante".equalsIgnoreCase(tipo)) {
             return new ModelAndView("redirect:/restaurante/perfil");
+        } else if("admin".equalsIgnoreCase(tipo)) {
+            return new ModelAndView("redirect:/admin/dashboard");
         }
 
         return new ModelAndView("nutriya-login", model);
