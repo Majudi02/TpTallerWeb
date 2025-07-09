@@ -51,7 +51,10 @@ IGNORE INTO UsuarioNutriya (id, email, password, tokenConfirmacion, confirmado) 
 (106, 'veggie@nutriya.com', '$2a$10$T1U4R6S.z0O2z5Q8.2Y.J.Z0J9L.J.J.Z0J9L', null, true),
 (107, 'marisqueria@nutriya.com', '$2a$10$T1U4R6S.z0O2z5Q8.2Y.J.Z0J9L.J.J.Z0J9L', null, true),
 (108, 'cafe@nutriya.com', '$2a$10$T1U4R6S.z0O2z5Q8.2Y.J.Z0J9L.J.J.Z0J9L', null, true),
-(109, 'panaderia@nutriya.com', '$2a$10$T1U4R6S.z0O2z5Q8.2Y.J.Z0J9L.J.J.Z0J9L', null, true);
+(109, 'panaderia@nutriya.com', '$2a$10$T1U4R6S.z0O2z5Q8.2Y.J.Z0J9L.J.J.Z0J9L', null, true),
+(999, 'admin@nutriya.com', 'admin', null, true),
+(1000, 'repartidor@nutriya.com', 'repartidor', null, true);
+INSERT INTO admin (id) VALUES (999);
 
 INSERT
 IGNORE INTO UsuarioRestaurante (id, restaurante_id) VALUES
@@ -66,7 +69,8 @@ IGNORE INTO UsuarioRestaurante (id, restaurante_id) VALUES
 (108, 119),
 (109, 120);
 
-
+INSERT IGNORE INTO repartidor (apellido, dni, nombre, telefono, vehiculo, id)
+VALUES ("Gómez", 30892333, "Juan", 12345678, "Moto", 1000);
 
 
 -- Insertar en la tabla padre (UsuarioNutriya)

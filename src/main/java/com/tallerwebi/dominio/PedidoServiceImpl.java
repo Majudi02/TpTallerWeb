@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -145,7 +145,7 @@ public class PedidoServiceImpl implements PedidoService {
                 Pedido nuevoPedido = new Pedido();
         nuevoPedido.setUsuario(usuario);
         nuevoPedido.setEstadoPedido(EstadoPedido.PENDIENTE);
-        nuevoPedido.setFecha(LocalDateTime.now().toString());
+        nuevoPedido.setFecha(new Date());
         nuevoPedido.setFinalizo(false);
         nuevoPedido.setPrecio(0.0);
         nuevoPedido.setPedidoPlatos(new ArrayList<>());

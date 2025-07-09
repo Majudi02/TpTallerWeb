@@ -8,9 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Service
 @Transactional
 public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante {
@@ -20,7 +24,7 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
     private final ServicioPedidoPlato servicioPedidoPlato;
 
     @Autowired
-    public ServicioPedidoRestauranteImpl(RepositorioPedidoRestaurante repositorioPedidoRestaurante, ServicioPedidoPlato servicioPedidoPlato,PedidoService pedidoService) {
+    public ServicioPedidoRestauranteImpl(RepositorioPedidoRestaurante repositorioPedidoRestaurante, ServicioPedidoPlato servicioPedidoPlato, PedidoService pedidoService) {
         this.pedidoService = pedidoService;
         this.repositorioPedidoRestaurante = repositorioPedidoRestaurante;
         this.servicioPedidoPlato = servicioPedidoPlato;
@@ -31,6 +35,13 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
         List<Pedido> pedidos = repositorioPedidoRestaurante.traerTodosLosPedidos();
         return pedidos.stream().map(Pedido::obtenerDto).collect(Collectors.toList());
     }
+
+    @Override
+    public List<PedidoDto> traerPedidosFinalizados() {
+        List<Pedido> pedidos = repositorioPedidoRestaurante.traerPedidosFinalizados();
+        return pedidos.stream().map(Pedido::obtenerDto).collect(Collectors.toList());
+    }
+
 
     @Override
     public List<PedidoDto> traerPedidosDelRestaurante(Long id) {
@@ -236,5 +247,47 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
             }
         }
         return new PedidosRestauranteDto(enPreparacion, listosParaEnviar, entregados);
+    }
+
+    @Override
+    public List<PedidoDto> traerPedidosEntreFechas(LocalDate desde, LocalDate hasta) {
+        if (desde == null) {
+            desde = LocalDate.of(2025, 1, 1);
+        }
+        if (hasta == null) {
+            hasta = LocalDate.now();
+        }
+
+        final LocalDate desdeFinal = desde; // <-- final
+        final LocalDate hastaFinal = hasta; // <-- final
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        System.out.println("Buscando pedidos entre " + desdeFinal + " y " + hastaFinal);
+
+        return traerTodosLosPedidos().stream()
+                .filter(pedido -> {
+                    String fechaStr = pedido.getFecha();
+                    if (fechaStr == null || fechaStr.isEmpty()) {
+                        return false;
+                    }
+                    try {
+                        LocalDateTime fechaHora = LocalDateTime.parse(fechaStr, formatter);
+                        LocalDate fecha = fechaHora.toLocalDate();
+
+                        System.out.println("Pedido fecha: " + fechaStr + " -> fecha parseada: " + fecha);
+
+                        boolean despuesDesde = !fecha.isBefore(desdeFinal);
+                        boolean antesHasta = !fecha.isAfter(hastaFinal);
+                        System.out.println("Pedido: " + pedido.getFecha() + ", fechaLocalDate: " + fecha);
+                        System.out.println("desdeFinal: " + desdeFinal + ", hastaFinal: " + hastaFinal);
+                        System.out.println("Condiciones: despuesDesde=" + despuesDesde + ", antesHasta=" + antesHasta);
+
+                        return despuesDesde && antesHasta;
+                    } catch (Exception e) {
+                        System.out.println("Error parseando fecha de pedido: " + fechaStr);
+                        return false;
+                    }
+                })
+                .collect(Collectors.toList());
     }
 }

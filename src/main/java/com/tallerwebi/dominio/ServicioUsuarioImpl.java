@@ -301,6 +301,8 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
             dto.setTelefono(rep.getTelefono());
             dto.setVehiculo(rep.getVehiculo());
             dto.setTipoUsuario("repartidor");
+        } else if (usuario instanceof Admin){
+            dto.setTipoUsuario(usuario.tipoUsuario());
         }
 
         return dto;
