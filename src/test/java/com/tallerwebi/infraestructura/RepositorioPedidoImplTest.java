@@ -236,15 +236,18 @@ public class RepositorioPedidoImplTest {
         Cliente usuario = new Cliente();
         sessionFactory.getCurrentSession().save(usuario);
 
+        Date date1 = new Date();
+        Date date2 = Date.from(date1.toInstant().minusSeconds(24 * 60 * 60));
+
         Pedido pedido1 = new Pedido();
         pedido1.setUsuario(usuario);
-        pedido1.setFecha(new Date());
+        pedido1.setFecha(date1);
         pedido1.setPagado(true);
         sessionFactory.getCurrentSession().save(pedido1);
 
         Pedido pedido2 = new Pedido();
         pedido2.setUsuario(usuario);
-        pedido2.setFecha(new Date());
+        pedido2.setFecha(date2);
         pedido2.setPagado(true);
         sessionFactory.getCurrentSession().save(pedido2);
 
