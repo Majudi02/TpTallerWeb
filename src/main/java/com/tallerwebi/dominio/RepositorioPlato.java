@@ -14,4 +14,6 @@ public interface RepositorioPlato {
     Boolean editarEtiquetas(Plato plato);
     Boolean actualizarPlato(Plato plato);
     List<Plato> buscarPlatosPorEtiquetasDelCliente(Long idCliente);
+    void actualizarPrecioConDescuento(Integer id, Double nuevoPrecioConDescuento);
+    void quitarDescuento(Integer idPlato);
 }

@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.entidades.Plato;
 import com.tallerwebi.dominio.entidades.Restaurante;
 import com.tallerwebi.dominio.entidades.UsuarioRestaurante;
 import com.tallerwebi.presentacion.ResumenRestauranteDTO;
@@ -42,4 +43,11 @@ public interface ServicioRestaurante {
     ResumenRestauranteDTO obtenerResumenDelRestaurante(Long idRestaurante);
 
     UsuarioRestaurante buscarUsuarioRestaurantePorId(Long id);
+
+    List<PlatoDto> traerLos4platosMenosPedidos(Long idRestaurante);
+
+    void aplicarDescuento(Integer idPlato);
+
+
+    void quitarDescuento(Integer idPlato);
 }

@@ -111,7 +111,6 @@ public class ControladorRestaurante {
             return "redirect:/nutriya-login";
         }
 
-        // Buscar el usuarioRestaurante para obtener el restaurante real
         UsuarioRestaurante usuarioRestaurante = servicioRestaurante.buscarUsuarioRestaurantePorId(usuario.getId());
         if (usuarioRestaurante == null || usuarioRestaurante.getRestaurante() == null) {
             return "redirect:/nutriya-login";
@@ -123,6 +122,21 @@ public class ControladorRestaurante {
         model.addAttribute("resumen", resumen);
 
         return "restaurante-resumen";
+    }
+
+    @GetMapping("/restaurante/platos-menos-pedidos")
+    public ModelAndView mostrarPlatosMenosPedidos(HttpServletRequest request) {
+        UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
+        UsuarioRestaurante usuarioRestaurante = servicioRestaurante.buscarUsuarioRestaurantePorId(usuario.getId());
+        Long idRestaurante = usuarioRestaurante.getRestaurante().getId();
+
+        List<PlatoDto> platosMenosVendidos = servicioRestaurante.traerLos4platosMenosPedidos(idRestaurante);
+
+        ModelMap model = new ModelMap();
+        model.addAttribute("platosMenosVendidos", platosMenosVendidos);
+        System.out.println("Platos menos vendidos: " + platosMenosVendidos.size());
+        return new ModelAndView("platos-menos-pedidos",model);
+
     }
 
 }

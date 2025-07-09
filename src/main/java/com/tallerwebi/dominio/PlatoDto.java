@@ -23,8 +23,9 @@ public class PlatoDto {
     private List<Integer> etiquetasIds;
     private List<EtiquetaDto> etiquetas;
     private Double calificacionPromedio;
+    private Double precioConDescuento;
 
-    public PlatoDto(Integer id, Long idRestaurante, String nombre, String descripcion, String imagen, Double precio, List<EtiquetaDto> etiquetas, Double calorias, Double proteinas, Double grasas, Double carbohidratos) {
+    public PlatoDto(Integer id, Long idRestaurante, String nombre, String descripcion, String imagen, Double precio, List<EtiquetaDto> etiquetas, Double calorias, Double proteinas, Double grasas, Double carbohidratos,Double precioConDescuento) {
         this.id = id;
         this.idRestaurante = idRestaurante;
         this.nombre = nombre;
@@ -36,6 +37,7 @@ public class PlatoDto {
         this.proteinas = proteinas;
         this.grasas = grasas;
         this.carbohidratos = carbohidratos;
+        this.precioConDescuento=precioConDescuento;
     }
 
     public PlatoDto(Plato plato) {
@@ -53,6 +55,7 @@ public class PlatoDto {
         this.proteinas = plato.getProteinas();
         this.grasas = plato.getGrasas();
         this.carbohidratos = plato.getCarbohidratos();
+        this.precioConDescuento=plato.getPrecioConDescuento();
     }
 
     public PlatoDto() {
@@ -66,7 +69,11 @@ public class PlatoDto {
         plato.setImagen(this.imagen);
         plato.setPrecio(this.precio);
         plato.setEtiquetas(listaEtiquetas);
-
+        plato.setCalorias(this.calorias);
+        plato.setProteinas(this.proteinas);
+        plato.setGrasas(this.grasas);
+        plato.setCarbohidratos(this.carbohidratos);
+        plato.setPrecioConDescuento(this.precioConDescuento);
         Restaurante restaurante = new Restaurante();
         restaurante.setId(this.idRestaurante);
         plato.setRestaurante(restaurante);
@@ -86,6 +93,7 @@ public class PlatoDto {
         plato.setProteinas(this.proteinas);
         plato.setGrasas(this.grasas);
         plato.setCarbohidratos(this.carbohidratos);
+        plato.setPrecioConDescuento(this.precioConDescuento);
 
         List<Etiqueta> listaEtiquetas = new ArrayList<>();
 
@@ -112,6 +120,7 @@ public class PlatoDto {
         plato.setProteinas(this.proteinas);
         plato.setGrasas(this.grasas);
         plato.setCarbohidratos(this.carbohidratos);
+        plato.setPrecioConDescuento(this.precioConDescuento);
 
         List<Etiqueta> etiquetasEntidad = new ArrayList<>();
         if (this.etiquetas != null) {
@@ -126,6 +135,9 @@ public class PlatoDto {
         plato.setEtiquetas(etiquetasEntidad);
         return plato;
     }
+
+
+
 
     public Double getCalificacionPromedio() {
         return calificacionPromedio;
@@ -142,6 +154,7 @@ public class PlatoDto {
     public void setEtiquetasIds(List<Integer> etiquetasIds) {
         this.etiquetasIds = etiquetasIds;
     }
+
 
     // Getters y Setters
     public Integer getId() {
@@ -230,5 +243,13 @@ public class PlatoDto {
 
     public void setCarbohidratos(Double carbohidratos) {
         this.carbohidratos = carbohidratos;
+    }
+
+    public Double getPrecioConDescuento() {
+        return precioConDescuento;
+    }
+
+    public void setPrecioConDescuento(Double precioConDescuento) {
+        this.precioConDescuento = precioConDescuento;
     }
 }
