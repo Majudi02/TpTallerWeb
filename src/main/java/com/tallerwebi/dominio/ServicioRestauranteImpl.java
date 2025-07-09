@@ -296,7 +296,8 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
 
         // 2. Calcular ganancias
         double ganancias = pedidosEntregados.stream()
-                .mapToDouble(Pedido::getPrecio)
+                .flatMap(p -> p.getPedidoPlatos().stream())
+                .mapToDouble(pp -> pp.getPlato().getPrecio())
                 .sum();
 
         // 3. Calcular más y menos pedido

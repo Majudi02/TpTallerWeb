@@ -10,6 +10,6 @@ public class MercadoPagoConfigSpring {
 
     @PostConstruct
     public void init() {
-        MercadoPagoConfig.setAccessToken("TEST-692578912920910-062811-02dde1dc32f2487a20f5adb1cefe0728-303115883");
+        MercadoPagoConfig.setAccessToken("TEST-3751280516928760-070821-a9281d1c8f6fea1b68553f8353f4ffe8-174016325");
     }
 }

@@ -1,4 +1,4 @@
-
+/*
 INSERT
 IGNORE INTO Etiqueta (id, nombre) VALUES
 (1, 'Vegana'),
@@ -211,3 +211,4 @@ IGNORE INTO Plato_Etiqueta (plato_id, etiqueta_id) VALUES (28, 2);
 INSERT
 IGNORE INTO Plato_Etiqueta (plato_id, etiqueta_id) VALUES (30, 2);
 
+*/

@@ -130,7 +130,9 @@ public class Pedido {
     }
 
     public Double getPrecio() {
-        return precio;
+        return pedidoPlatos.stream()
+                .mapToDouble(pp -> pp.getPlato().getPrecio())
+                .sum();
     }
 
     public void setPrecio(Double precio) {
