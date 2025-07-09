@@ -27,6 +27,8 @@ public class Plato {
     private Double proteinas;
     private Double grasas;
     private Double carbohidratos;
+    @Column(name = "precioConDescuento")
+    private Double precioConDescuento;;
 
     @ManyToMany()
     @JoinTable(
@@ -54,6 +56,7 @@ public class Plato {
         platoDto.setProteinas(this.proteinas);
         platoDto.setGrasas(this.grasas);
         platoDto.setCarbohidratos(this.carbohidratos);
+        platoDto.setPrecioConDescuento(this.precioConDescuento);
 
         List<EtiquetaDto> etiquetasDto = this.etiquetas.stream()
                 .map(e -> new EtiquetaDto(e.getId(), e.getNombre()))
@@ -64,6 +67,15 @@ public class Plato {
     }
 
     // Getters y setters
+
+    public Double getPrecioConDescuento() {
+        return precioConDescuento;
+    }
+
+    public void setPrecioConDescuento(Double precioConDescuento) {
+        this.precioConDescuento = precioConDescuento;
+    }
+
     public Integer getId() {
         return id;
     }

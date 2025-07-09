@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.entidades.PedidoPlato;
+import com.tallerwebi.dominio.entidades.Plato;
 
 import java.util.List;
 
@@ -10,4 +11,6 @@ public interface RepositorioPedidoPlato {
     void finalizarPedido(Long id);
     Double obtenerPromedioCalificacionPorPlato(Integer id);
     List<PedidoPlato> obtenerPlatosPorRestaurante(Long idRestaurante);
+    List<Plato> traerLos4PlatosMenosPedidos(Long idRestaurante);
+
 }
