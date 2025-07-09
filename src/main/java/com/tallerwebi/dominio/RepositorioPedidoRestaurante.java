@@ -8,6 +8,8 @@ public interface RepositorioPedidoRestaurante {
 
     List<Pedido> traerTodosLosPedidos();
 
+    List<Pedido> traerPedidosFinalizados();
+
     Long obtenerIdDelRestaurate(Long id);
 
     List<Pedido> traerPedidosListosParaRetirar();

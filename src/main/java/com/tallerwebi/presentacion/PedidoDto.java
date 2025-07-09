@@ -3,9 +3,12 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.PlatoDto;
 import com.tallerwebi.dominio.entidades.*;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.text.ParseException;
 
 public class PedidoDto {
 
@@ -18,7 +21,8 @@ public class PedidoDto {
     private EstadoPedido estadoPedido;
     private boolean platosFinalizados;
     private boolean pagado;
-
+    private Long idRestaurante;
+    public static final SimpleDateFormat FORMATO_FECHA = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
     public PedidoDto() {
     }
@@ -31,17 +35,22 @@ public class PedidoDto {
         this.finalizo = finalizo;
         this.pedidoPlatos = pedidoPlatos;
         this.estadoPedido = estadoPedido;
-        this.pagado=pagado;
+        this.pagado = pagado;
     }
 
     public PedidoDto(Pedido pedido) {
         this.id = pedido.getId();
-        this.fecha = pedido.getFecha();
+        Date fechaPedido = pedido.getFecha();
+        this.fecha = fechaPedido != null ? FORMATO_FECHA.format(fechaPedido) : null;
         this.usuarioId = pedido.getUsuario().getId();
         this.precio = pedido.getPrecio();
         this.finalizo = pedido.isFinalizo();
         this.estadoPedido = pedido.getEstadoPedido();
-        this.pagado=pedido.isPagado();
+        this.pagado = pedido.isPagado();
+
+        if (pedido.getRestaurante() != null) {
+            this.idRestaurante = pedido.getRestaurante().getId();
+        }
 
         this.pedidoPlatos = pedido.getPedidoPlatos()
                 .stream()
@@ -55,7 +64,6 @@ public class PedidoDto {
                 })
                 .collect(Collectors.toList());
     }
-
 
     public List<PedidoPlatoDto> getPedidoPlatosDelRestaurante(Long idRestaurante) {
         if (pedidoPlatos == null) return new ArrayList<>();
@@ -71,7 +79,11 @@ public class PedidoDto {
     public Pedido obtenerEntidad(UsuarioNutriya usuario) {
         Pedido pedido = new Pedido();
         pedido.setId(this.id);
-        pedido.setFecha(this.fecha);
+        try {
+            pedido.setFecha(this.fecha != null ? FORMATO_FECHA.parse(this.fecha) : null);
+        } catch (ParseException e) {
+            pedido.setFecha(null);
+        }
         pedido.setUsuario(usuario);
         pedido.setPrecio(this.precio);
         pedido.setFinalizo(this.finalizo);
@@ -169,5 +181,13 @@ public class PedidoDto {
 
     public void setPedidoPlatos(List<PedidoPlatoDto> pedidoPlatos) {
         this.pedidoPlatos = pedidoPlatos;
+    }
+
+    public Long getIdRestaurante() {
+        return idRestaurante;
+    }
+
+    public void setIdRestaurante(Long idRestaurante) {
+        this.idRestaurante = idRestaurante;
     }
 }

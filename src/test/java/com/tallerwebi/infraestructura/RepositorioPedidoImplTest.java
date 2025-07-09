@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -44,7 +45,7 @@ public class RepositorioPedidoImplTest {
         pedido.setUsuario(cliente);
         pedido.setFinalizo(false);
         pedido.setEstadoPedido(EstadoPedido.PENDIENTE);
-        pedido.setFecha(String.valueOf(LocalDateTime.now()));
+        pedido.setFecha(new Date());
 
         repositorioPedido.crearPedido(pedido);
 
@@ -237,20 +238,20 @@ public class RepositorioPedidoImplTest {
 
         Pedido pedido1 = new Pedido();
         pedido1.setUsuario(usuario);
-        pedido1.setFecha("2025-06-01");
+        pedido1.setFecha(new Date());
         pedido1.setPagado(true);
         sessionFactory.getCurrentSession().save(pedido1);
 
         Pedido pedido2 = new Pedido();
         pedido2.setUsuario(usuario);
-        pedido2.setFecha("2025-06-10");
+        pedido2.setFecha(new Date());
         pedido2.setPagado(true);
         sessionFactory.getCurrentSession().save(pedido2);
 
         List<Pedido> pedidos = repositorioPedido.listarPedidosPorUsuario(usuario.getId());
 
         assertEquals(2, pedidos.size());
-        assertTrue(pedidos.get(0).getFecha().compareTo(pedidos.get(1).getFecha()) > 0); // orden descendente
+        assertTrue(pedidos.get(0).getFecha().compareTo(pedidos.get(1).getFecha()) > 0);
     }
 
 }

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -198,14 +199,14 @@ public class PedidoServiceImplTest {
         pedido1.setId(1);
         pedido1.setPrecio(1000.0);
         pedido1.setFinalizo(false);
-        pedido1.setFecha("2024-06-01");
+        pedido1.setFecha(new Date());
         pedido1.setPedidoPlatos(new ArrayList<>());
 
         Pedido pedido2 = new Pedido();
         pedido2.setId(2);
         pedido2.setPrecio(2500.0);
         pedido2.setFinalizo(true);
-        pedido2.setFecha("2024-06-02");
+        pedido2.setFecha(new Date());
         pedido2.setPedidoPlatos(new ArrayList<>());
 
         List<Pedido> pedidos = List.of(pedido1, pedido2);
@@ -225,14 +226,14 @@ public class PedidoServiceImplTest {
         Pedido pedido1 = new Pedido();
         pedido1.setId(1);
         pedido1.setPrecio(1000.0);
-        pedido1.setFecha("2024-06-01");
+        pedido1.setFecha(new Date());
         pedido1.setPedidoPlatos(new ArrayList<>());
         pedido1.setFinalizo(false);
 
         Pedido pedido2 = new Pedido();
         pedido2.setId(2);
         pedido2.setPrecio(2500.0);
-        pedido2.setFecha("2024-06-02");
+        pedido2.setFecha(new Date());
         pedido2.setPedidoPlatos(new ArrayList<>());
         pedido2.setFinalizo(true);
 
@@ -250,21 +251,21 @@ public class PedidoServiceImplTest {
         Pedido pedido1 = new Pedido();
         pedido1.setId(1);
         pedido1.setPrecio(1000.0);
-        pedido1.setFecha("2024-06-01");
+        pedido1.setFecha(new Date());
         pedido1.setPedidoPlatos(new ArrayList<>());
         pedido1.setFinalizo(true);
 
         Pedido pedido2 = new Pedido();
         pedido2.setId(2);
         pedido2.setPrecio(2500.0);
-        pedido2.setFecha("2024-06-02");
+        pedido2.setFecha(new Date());
         pedido2.setPedidoPlatos(new ArrayList<>());
         pedido2.setFinalizo(true);
 
         Pedido pedido3 = new Pedido();
         pedido3.setId(3);
         pedido3.setPrecio(1300.0);
-        pedido3.setFecha("2024-04-01");
+        pedido3.setFecha(new Date());
         pedido3.setPedidoPlatos(new ArrayList<>());
         pedido3.setFinalizo(false);
 
@@ -301,7 +302,7 @@ public class PedidoServiceImplTest {
         Pedido pedido1 = new Pedido();
         pedido1.setId(idPedido);
         pedido1.setPrecio(1000.0);
-        pedido1.setFecha("2024-06-01");
+        pedido1.setFecha(new Date());
         pedido1.setPedidoPlatos(new ArrayList<>());
         pedido1.setFinalizo(true);
 

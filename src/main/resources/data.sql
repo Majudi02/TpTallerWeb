@@ -51,7 +51,10 @@ IGNORE INTO UsuarioNutriya (id, email, password, tokenConfirmacion, confirmado) 
 (106, 'veggie@nutriya.com', '$2a$10$T1U4R6S.z0O2z5Q8.2Y.J.Z0J9L.J.J.Z0J9L', null, true),
 (107, 'marisqueria@nutriya.com', '$2a$10$T1U4R6S.z0O2z5Q8.2Y.J.Z0J9L.J.J.Z0J9L', null, true),
 (108, 'cafe@nutriya.com', '$2a$10$T1U4R6S.z0O2z5Q8.2Y.J.Z0J9L.J.J.Z0J9L', null, true),
-(109, 'panaderia@nutriya.com', '$2a$10$T1U4R6S.z0O2z5Q8.2Y.J.Z0J9L.J.J.Z0J9L', null, true);
+(109, 'panaderia@nutriya.com', '$2a$10$T1U4R6S.z0O2z5Q8.2Y.J.Z0J9L.J.J.Z0J9L', null, true),
+(999, 'admin@nutriya.com', 'admin', null, true);
+
+INSERT INTO admin (id) VALUES (999);
 
 INSERT
 IGNORE INTO UsuarioRestaurante (id, restaurante_id) VALUES
