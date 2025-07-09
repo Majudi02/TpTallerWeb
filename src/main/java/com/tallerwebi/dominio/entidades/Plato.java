@@ -27,7 +27,6 @@ public class Plato {
     private Double proteinas;
     private Double grasas;
     private Double carbohidratos;
-    @Column(name = "precioConDescuento")
     private Double precioConDescuento;;
 
     @ManyToMany()

@@ -252,4 +252,5 @@ public class PlatoDto {
     public void setPrecioConDescuento(Double precioConDescuento) {
         this.precioConDescuento = precioConDescuento;
     }
+
 }

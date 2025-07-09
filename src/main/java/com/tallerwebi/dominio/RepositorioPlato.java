@@ -16,4 +16,5 @@ public interface RepositorioPlato {
     List<Plato> buscarPlatosPorEtiquetasDelCliente(Long idCliente);
     void actualizarPrecioConDescuento(Integer id, Double nuevoPrecioConDescuento);
     void quitarDescuento(Integer idPlato);
+    List<Plato> buscarPlatosEnPromocion();
 }

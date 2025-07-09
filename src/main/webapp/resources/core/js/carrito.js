@@ -40,33 +40,37 @@ function actualizarCarrito() {
                 precioTotalElemento.textContent = `$0.00`;
             } else {
                 platos.forEach(pedidoPlato => {
+                    const plato = pedidoPlato.plato;
+                    const precio = plato.precioConDescuento != null
+                        ? plato.precioConDescuento
+                        : plato.precio;
+
                     const item = document.createElement('li');
                     item.className = 'list-group-item d-flex justify-content-between align-items-center';
                     item.innerHTML = `
-                    <div>
-                        <span>${pedidoPlato.plato.nombre}</span>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <span class="me-2">$${pedidoPlato.plato.precio.toFixed(2)}</span>
-                        <button type="button" class="btn btn-danger btn-sm eliminar-item" data-id="${pedidoPlato.plato.id}">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </div>
-                `;
+                        <div>
+                            <span>${plato.nombre}</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="me-2">$${precio.toFixed(2)}</span>
+                            <button type="button" class="btn btn-danger btn-sm eliminar-item" data-id="${plato.id}">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    `;
                     listaCarrito.appendChild(item);
-                    total += pedidoPlato.plato.precio;
+                    total += parseFloat(precio);
                 });
-
 
                 resumenNutricional.innerHTML = `
                     <strong>Valores nutricionales</strong>
                     <ul style="list-style-type: none; padding-left: 0; margin: 0;">
-                      <li>Calorías: ${totales.calorias.toFixed(0)} kcal</li>
-                      <li>Proteínas: ${totales.proteinas.toFixed(1)} g</li>
-                      <li>Carbohidratos: ${totales.carbohidratos.toFixed(1)} g</li>
-                      <li>Grasas: ${totales.grasas.toFixed(1)} g</li>
+                        <li>Calorías: ${totales.calorias.toFixed(0)} kcal</li>
+                        <li>Proteínas: ${totales.proteinas.toFixed(1)} g</li>
+                        <li>Carbohidratos: ${totales.carbohidratos.toFixed(1)} g</li>
+                        <li>Grasas: ${totales.grasas.toFixed(1)} g</li>
                     </ul>
-                    `;
+                `;
 
                 precioTotalElemento.textContent = `$${total.toFixed(2)}`;
             }

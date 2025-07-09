@@ -96,5 +96,14 @@
                     .executeUpdate();
         }
 
+        @Override
+        public List<Plato> buscarPlatosEnPromocion() {
+            String hql = "SELECT p FROM Plato p WHERE p.precioConDescuento IS NOT NULL";
+             return sessionFactory.getCurrentSession()
+                    .createQuery(hql, Plato.class)
+                    .setMaxResults(4)
+                     .getResultList();
+        }
+
 
     }
