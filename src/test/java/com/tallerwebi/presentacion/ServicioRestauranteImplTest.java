@@ -137,14 +137,12 @@ public class ServicioRestauranteImplTest {
 
     @Test
     public void queCalculeCorrectamenteLasGananciasTotales() {
-        // Crear platos
         Plato plato1 = new Plato();
         plato1.setPrecio(100.0);
 
         Plato plato2 = new Plato();
         plato2.setPrecio(50.0);
 
-        // Crear pedido 1 con 2 platos
         Pedido pedido1 = new Pedido();
 
         PedidoPlato pp1 = new PedidoPlato();
@@ -157,7 +155,6 @@ public class ServicioRestauranteImplTest {
 
         pedido1.setPedidoPlatos(List.of(pp1, pp2));
 
-        // Crear pedido 2 con 1 plato
         Pedido pedido2 = new Pedido();
 
         PedidoPlato pp3 = new PedidoPlato();
@@ -166,19 +163,16 @@ public class ServicioRestauranteImplTest {
 
         pedido2.setPedidoPlatos(List.of(pp3));
 
-        // Mock del repositorio
         when(repositorioPedidoRestaurante.traerPedidosEntregadosPorRestaurante(1L))
                 .thenReturn(List.of(pedido1, pedido2));
 
-        // Ejecutar el servicio
         ResumenRestauranteDTO resumen = servicioRestaurante.obtenerResumenDelRestaurante(1L);
 
-        // Verificar
         assertEquals(250.0, resumen.getGananciasTotales());
     }
 
 
-     /*
+
     @Test
     public void queObtengaElPlatoMejorYPeorValorado() {
         Plato plato1 = new Plato();
@@ -204,6 +198,8 @@ public class ServicioRestauranteImplTest {
         assertEquals("Pizza", resumen.getMejorValorado().getNombre());
         assertEquals("Empanada", resumen.getPeorValorado().getNombre());
     }
-*/
-    }
+
+
+
+}
 
