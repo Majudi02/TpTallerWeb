@@ -3,7 +3,6 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.PlatoDto;
 import com.tallerwebi.dominio.ServicioResena;
 import com.tallerwebi.dominio.ServicioRestaurante;
-import com.tallerwebi.dominio.ServicioRestauranteImpl;
 import com.tallerwebi.dominio.entidades.Resena;
 import com.tallerwebi.dominio.entidades.Restaurante;
 import com.tallerwebi.dominio.entidades.UsuarioRestaurante;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -130,7 +128,7 @@ public class ControladorRestaurante {
         UsuarioRestaurante usuarioRestaurante = servicioRestaurante.buscarUsuarioRestaurantePorId(usuario.getId());
         Long idRestaurante = usuarioRestaurante.getRestaurante().getId();
 
-        List<PlatoDto> platosMenosVendidos = servicioRestaurante.traerLos4platosMenosPedidos(idRestaurante);
+        List<PlatoDto> platosMenosVendidos = servicioRestaurante.traerLos3platosMenosPedidos(idRestaurante);
 
         ModelMap model = new ModelMap();
         model.addAttribute("platosMenosVendidos", platosMenosVendidos);

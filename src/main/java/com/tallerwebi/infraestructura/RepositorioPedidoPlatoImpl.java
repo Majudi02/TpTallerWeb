@@ -66,7 +66,7 @@ public class RepositorioPedidoPlatoImpl implements RepositorioPedidoPlato {
     }
 
     @Override
-    public List<Plato> traerLos4PlatosMenosPedidos(Long idRestaurante) {
+    public List<Plato> traerLos3PlatosMenosPedidos(Long idRestaurante) {
         String sql = "SELECT p.* " +
                 "FROM Plato p " +
                 "LEFT JOIN Pedido_Plato pp ON pp.plato_id = p.id " +

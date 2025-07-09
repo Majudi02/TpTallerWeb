@@ -1,7 +1,6 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.*;
-import com.tallerwebi.dominio.entidades.Plato;
 import com.tallerwebi.dominio.entidades.Restaurante;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -95,7 +94,7 @@ public class ControladorEditorDePlatosDelRestaurante {
         }
 
 
-        List<PlatoDto> menosVendidos = servicioRestaurante.traerLos4platosMenosPedidos(restaurante.getId());
+        List<PlatoDto> menosVendidos = servicioRestaurante.traerLos3platosMenosPedidos(restaurante.getId());
         List<Integer> idsMenosVendidos = menosVendidos.stream()
                 .map(PlatoDto::getId)
                 .collect(Collectors.toList());

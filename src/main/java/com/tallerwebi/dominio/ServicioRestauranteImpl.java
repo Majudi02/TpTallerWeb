@@ -277,8 +277,8 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
     }
 
     @Override
-    public List<PlatoDto> traerLos4platosMenosPedidos(Long idRestaurante) {
-      List<Plato> platos = repositorioPedidoPlato.traerLos4PlatosMenosPedidos(idRestaurante);
+    public List<PlatoDto> traerLos3platosMenosPedidos(Long idRestaurante) {
+      List<Plato> platos = repositorioPedidoPlato.traerLos3PlatosMenosPedidos(idRestaurante);
         List<PlatoDto> platosObtenidos = new ArrayList<>();
         for (Plato plato : platos) {
             PlatoDto platoDto = plato.obtenerDto();

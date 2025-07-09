@@ -16,34 +16,29 @@
         public RepositorioPlatoImpl(SessionFactory sessionFactory){this.sessionFactory = sessionFactory;}
 
         @Override
-        public Boolean crearPlato(com.tallerwebi.dominio.entidades.Plato plato) {
+        public Boolean crearPlato(Plato plato) {
             this.sessionFactory.getCurrentSession().save(plato);
             return true;
         }
 
         @Override
-        public com.tallerwebi.dominio.entidades.Plato buscarPlatoPorId(Integer id) {
+        public Plato buscarPlatoPorId(Integer id) {
 
-            return sessionFactory.getCurrentSession().get(com.tallerwebi.dominio.entidades.Plato.class,id);
+            return sessionFactory.getCurrentSession().get(Plato.class,id);
         }
 
         @Override
-        public boolean eliminarPlato(Integer id) {
-            return false;
-        }
-
-        @Override
-        public List<com.tallerwebi.dominio.entidades.Plato> buscarPlatosPorTipoComida(String tipoComida) {
+        public List<Plato> buscarPlatosPorTipoComida(String tipoComida) {
             return sessionFactory.getCurrentSession()
-                    .createQuery("SELECT p FROM Plato p JOIN p.etiquetas e WHERE e.nombre = :nombreEtiqueta", com.tallerwebi.dominio.entidades.Plato.class)
+                    .createQuery("SELECT p FROM Plato p JOIN p.etiquetas e WHERE e.nombre = :nombreEtiqueta", Plato.class)
                     .setParameter("nombreEtiqueta", tipoComida)
                     .getResultList();
         }
 
         @Override
-        public List<com.tallerwebi.dominio.entidades.Plato> traerTodosLosPlatos() {
+        public List<Plato> traerTodosLosPlatos() {
             return sessionFactory.getCurrentSession()
-                    .createQuery("FROM Plato", com.tallerwebi.dominio.entidades.Plato.class)
+                    .createQuery("FROM Plato", Plato.class)
                     .getResultList();
         }
 
