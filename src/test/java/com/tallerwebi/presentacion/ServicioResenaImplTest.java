@@ -12,6 +12,7 @@ import com.tallerwebi.dominio.ServicioResena;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 
 import java.util.List;
 
@@ -60,6 +61,36 @@ public class ServicioResenaImplTest {
                         resena.getCliente().getId().equals(clienteId) &&
                         resena.getComentario().equals("Muy sabroso")
         ));
+    }
+
+
+    @Test
+    public void queSeGuardeLaCalificacionEnLaResena() {
+        Long clienteId = 1L;
+        Long restauranteId = 2L;
+        String comentario = "Muy sabroso";
+        Integer calificacion = 4;
+
+        Cliente cliente = new Cliente();
+        cliente.setId(clienteId);
+
+        Restaurante restaurante = new Restaurante();
+        restaurante.setId(restauranteId);
+
+        when(repositorioUsuarioNutriyaMock.buscarPorId(clienteId)).thenReturn(cliente);
+        when(repositorioUsuarioRestauranteMock.buscarRestaurantePorId(restauranteId)).thenReturn(restaurante);
+
+        servicioResena.guardarResena(restauranteId, clienteId, comentario, calificacion);
+
+        ArgumentCaptor<Resena> captor = ArgumentCaptor.forClass(Resena.class);
+        verify(repositorioResenaMock).guardar(captor.capture());
+
+        Resena resenaGuardada = captor.getValue();
+
+        assertThat(resenaGuardada.getComentario(), is(comentario));
+        assertThat(resenaGuardada.getCalificacion(), is(calificacion));
+        assertThat(resenaGuardada.getCliente().getId(), is(clienteId));
+        assertThat(resenaGuardada.getRestaurante().getId(), is(restauranteId));
     }
 
 

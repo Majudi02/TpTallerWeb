@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Resumen del Restaurante</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/estilo-principal.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        .resumen-card {
+            border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .titulo-resumen {
+            color: #38BD48;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100 bg-light">
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top px-3">
+    <div class="container-fluid">
+        <div class="d-flex w-100 justify-content-between align-items-center">
+            <a class="navbar-brand" th:href="@{/restaurante/perfil}">Nutri<span style="color: #38BD48;">Ya</span></a>
+            <div class="botones-nav">
+                <a class="btn btn-outline-secondary mx-1" th:href="@{/nutriya-login}">
+                    <i class="bi bi-person"></i>
+                </a>
+                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#menuLateral" aria-controls="menuLateral">
+                    <i class="bi bi-list"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<main class="container mt-5 pt-5">
+    <h1 class="text-center titulo-resumen mb-4">Resumen del Restaurante</h1>
+
+    <div class="card resumen-card bg-white p-4 mb-4">
+        <h4 class="text-center text-muted mb-2">Ganancias Totales</h4>
+        <p class="fw-bold text-center text-success fs-4">
+            $<span th:text="${#numbers.formatDecimal(resumen.gananciasTotales, 1, 'POINT', 2, 'COMMA')}">0.00</span>
+        </p>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="col">
+            <div class="card resumen-card p-3 h-100 border-start border-4 border-primary">
+                <h5 class="text-primary"><i class="bi bi-star-fill"></i> Plato más pedido</h5>
+                <p class="fs-5" th:text="${resumen.masPedido != null ? resumen.masPedido.nombre : 'N/A'}"></p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card resumen-card p-3 h-100 border-start border-4 border-secondary">
+                <h5 class="text-secondary"><i class="bi bi-star"></i> Plato menos pedido</h5>
+                <p class="fs-5" th:text="${resumen.menosPedido != null ? resumen.menosPedido.nombre : 'N/A'}"></p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card resumen-card p-3 h-100 border-start border-4 border-success">
+                <h5 class="text-success"><i class="bi bi-hand-thumbs-up-fill"></i> Mejor valorado</h5>
+                <p class="fs-5" th:text="${resumen.mejorValorado != null ? resumen.mejorValorado.nombre : 'N/A'}"></p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card resumen-card p-3 h-100 border-start border-4 border-danger">
+                <h5 class="text-danger"><i class="bi bi-hand-thumbs-down-fill"></i> Peor valorado</h5>
+                <p class="fs-5" th:text="${resumen.peorValorado != null ? resumen.peorValorado.nombre : 'N/A'}"></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <a class="btn btn-outline-success" th:href="@{/restaurante/perfil}">
+            <i class="bi bi-arrow-left"></i> Volver al Perfil
+        </a>
+    </div>
+</main>
+
+<script th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

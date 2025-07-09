@@ -55,6 +55,35 @@ public class RepositorioResenaImplTest {
     }
 
     @Test
+    public void queSePuedaGuardarResenaConCalificacion() {
+        Cliente cliente = new Cliente();
+        cliente.setNombre("Juan");
+        sessionFactory.getCurrentSession().save(cliente);
+
+        Restaurante restaurante = new Restaurante();
+        restaurante.setNombre("Verde Sano");
+        sessionFactory.getCurrentSession().save(restaurante);
+
+        Resena resena = new Resena();
+        resena.setCliente(cliente);
+        resena.setRestaurante(restaurante);
+        resena.setComentario("Todo excelente");
+        resena.setCalificacion(5);
+        resena.setFecha(LocalDateTime.now());
+
+        repositorioResena.guardar(resena);
+
+        Resena resenaGuardada = sessionFactory.getCurrentSession().get(Resena.class, resena.getId());
+
+        assertNotNull(resenaGuardada);
+        assertEquals("Todo excelente", resenaGuardada.getComentario());
+        assertEquals(5, resenaGuardada.getCalificacion());
+        assertEquals(cliente.getId(), resenaGuardada.getCliente().getId());
+        assertEquals(restaurante.getId(), resenaGuardada.getRestaurante().getId());
+    }
+
+
+    @Test
     public void queSePuedanObtenerResenasPorRestaurante() {
         Restaurante restaurante = new Restaurante();
         sessionFactory.getCurrentSession().save(restaurante);

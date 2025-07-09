@@ -99,4 +99,19 @@ public class RepostitorioPedidoRestauranteImpl implements RepositorioPedidoResta
     public void guardar(Pedido pedido) {
         sessionFactory.getCurrentSession().saveOrUpdate(pedido);
     }
+
+    @Override
+    public List<Pedido> traerPedidosEntregadosPorRestaurante(Long idRestaurante) {
+        String hql = "SELECT p FROM Pedido p " +
+                "JOIN FETCH p.pedidoPlatos pp " +
+                "JOIN FETCH pp.plato pl " +
+                "WHERE pl.restaurante.id = :idRestaurante " +
+                "AND p.estadoPedido = :estado";
+
+        return sessionFactory.getCurrentSession()
+                .createQuery(hql, Pedido.class)
+                .setParameter("idRestaurante", idRestaurante)
+                .setParameter("estado", EstadoPedido.ENTREGADO)
+                .getResultList();
+    }
 }

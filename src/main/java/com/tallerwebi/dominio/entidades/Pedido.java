@@ -24,6 +24,10 @@ public class Pedido {
     @JoinColumn(name = "usuario_id")
     private UsuarioNutriya usuario;
 
+    @ManyToOne
+    @JoinColumn(name = "restaurante_id")
+    private Restaurante restaurante;
+
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PedidoPlato> pedidoPlatos;
 
@@ -126,7 +130,9 @@ public class Pedido {
     }
 
     public Double getPrecio() {
-        return precio;
+        return pedidoPlatos.stream()
+                .mapToDouble(pp -> pp.getPlato().getPrecio())
+                .sum();
     }
 
     public void setPrecio(Double precio) {

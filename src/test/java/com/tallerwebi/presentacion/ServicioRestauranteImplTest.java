@@ -1,9 +1,10 @@
 package com.tallerwebi.presentacion;
 
 
-import com.tallerwebi.dominio.PlatoDto;
-import com.tallerwebi.dominio.RepositorioPlato;
+import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.entidades.Etiqueta;
+import com.tallerwebi.dominio.entidades.Pedido;
+import com.tallerwebi.dominio.entidades.PedidoPlato;
 import com.tallerwebi.dominio.entidades.Plato;
 import com.tallerwebi.infraestructura.RepositorioPlatoImpl;
 import org.hibernate.Session;
@@ -13,10 +14,13 @@ import org.junit.jupiter.api.Test;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -25,21 +29,36 @@ import static org.mockito.Mockito.*;
 @Transactional
 public class ServicioRestauranteImplTest {
 
+    private SessionFactory sessionFactoryMock;
+    private Session sessionMock;
+    private RepositorioPlato repositorioPlato;
+    private RepositorioPedidoRestaurante repositorioPedidoRestaurante;
+    private RepositorioResena repositorioResena;
+    private RepositorioPedidoPlato repositorioPedidoPlato;
+    private ServicioRestauranteImpl servicioRestaurante;
 
-        private SessionFactory sessionFactoryMock;
-        private Session sessionMock;
+    @BeforeEach
+    public void setUp() {
+        sessionFactoryMock = mock(SessionFactory.class);
+        sessionMock = mock(Session.class);
 
-        private RepositorioPlato repositorioPlato;
+        when(sessionFactoryMock.getCurrentSession()).thenReturn(sessionMock);
 
-        @BeforeEach
-        public void setUp() {
-            sessionFactoryMock = mock(SessionFactory.class);
-            sessionMock = mock(Session.class);
+        repositorioPlato = mock(RepositorioPlato.class);
+        repositorioPedidoRestaurante = mock(RepositorioPedidoRestaurante.class);
+        repositorioPedidoPlato = mock(RepositorioPedidoPlato.class);
+        repositorioResena = mock(RepositorioResena.class);
 
-            when(sessionFactoryMock.getCurrentSession()).thenReturn(sessionMock);
+        servicioRestaurante = new ServicioRestauranteImpl(
+                null, // repositorioUsuarioRestaurante no se usa acá
+                repositorioPlato,
+                repositorioPedidoRestaurante,
+                repositorioPedidoPlato,
+                repositorioResena,
+                null // etiquetaService no se usa en estos tests
 
-            repositorioPlato = new RepositorioPlatoImpl(sessionFactoryMock);
-        }
+        );
+    }
 
         @Test
         public void dadoQueTengoUnIdDeUnPlatoQuieroQueMeLoBusqueYMeLoDevueva(){
@@ -116,6 +135,71 @@ public class ServicioRestauranteImplTest {
     }
 
 
+    @Test
+    public void queCalculeCorrectamenteLasGananciasTotales() {
+        Plato plato1 = new Plato();
+        plato1.setPrecio(100.0);
 
+        Plato plato2 = new Plato();
+        plato2.setPrecio(50.0);
+
+        Pedido pedido1 = new Pedido();
+
+        PedidoPlato pp1 = new PedidoPlato();
+        pp1.setPedido(pedido1);
+        pp1.setPlato(plato1);
+
+        PedidoPlato pp2 = new PedidoPlato();
+        pp2.setPedido(pedido1);
+        pp2.setPlato(plato2);
+
+        pedido1.setPedidoPlatos(List.of(pp1, pp2));
+
+        Pedido pedido2 = new Pedido();
+
+        PedidoPlato pp3 = new PedidoPlato();
+        pp3.setPedido(pedido2);
+        pp3.setPlato(plato1);
+
+        pedido2.setPedidoPlatos(List.of(pp3));
+
+        when(repositorioPedidoRestaurante.traerPedidosEntregadosPorRestaurante(1L))
+                .thenReturn(List.of(pedido1, pedido2));
+
+        ResumenRestauranteDTO resumen = servicioRestaurante.obtenerResumenDelRestaurante(1L);
+
+        assertEquals(250.0, resumen.getGananciasTotales());
     }
+
+
+
+    @Test
+    public void queObtengaElPlatoMejorYPeorValorado() {
+        Plato plato1 = new Plato();
+        plato1.setId(1);
+        plato1.setNombre("Pizza");
+
+        Plato plato2 = new Plato();
+        plato2.setId(2);
+        plato2.setNombre("Empanada");
+
+        when(repositorioPlato.buscarPlatoPorId(1)).thenReturn(plato1);
+        when(repositorioPlato.buscarPlatoPorId(2)).thenReturn(plato2);
+
+        Map<Integer, Double> promedios = new HashMap<>();
+        promedios.put(1, 4.8);
+        promedios.put(2, 2.0);
+
+        when(repositorioResena.calcularPromedioCalificacionPorPlato(1L))
+                .thenReturn(promedios);
+
+        ResumenRestauranteDTO resumen = servicioRestaurante.obtenerResumenDelRestaurante(1L);
+
+        assertEquals("Pizza", resumen.getMejorValorado().getNombre());
+        assertEquals("Empanada", resumen.getPeorValorado().getNombre());
+    }
+
+
+
+}
 

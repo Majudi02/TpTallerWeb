@@ -6,6 +6,7 @@ import com.tallerwebi.dominio.ServicioRestaurante;
 import com.tallerwebi.dominio.ServicioRestauranteImpl;
 import com.tallerwebi.dominio.entidades.Resena;
 import com.tallerwebi.dominio.entidades.Restaurante;
+import com.tallerwebi.dominio.entidades.UsuarioRestaurante;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -100,4 +102,27 @@ public class ControladorRestaurante {
 
         return new ModelAndView("hacer-pedido-platos", modelo);
     }
+
+    @GetMapping("/restaurante/resumen")
+    public String mostrarResumenRestaurante(Model model, HttpServletRequest request) {
+        UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
+
+        if (usuario == null || !"restaurante".equalsIgnoreCase(usuario.getTipoUsuario())) {
+            return "redirect:/nutriya-login";
+        }
+
+        // Buscar el usuarioRestaurante para obtener el restaurante real
+        UsuarioRestaurante usuarioRestaurante = servicioRestaurante.buscarUsuarioRestaurantePorId(usuario.getId());
+        if (usuarioRestaurante == null || usuarioRestaurante.getRestaurante() == null) {
+            return "redirect:/nutriya-login";
+        }
+
+        Long idRestaurante = usuarioRestaurante.getRestaurante().getId();
+
+        ResumenRestauranteDTO resumen = servicioRestaurante.obtenerResumenDelRestaurante(idRestaurante);
+        model.addAttribute("resumen", resumen);
+
+        return "restaurante-resumen";
+    }
+
 }
