@@ -252,7 +252,7 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
     @Override
     public List<PedidoDto> traerPedidosEntreFechas(LocalDate desde, LocalDate hasta) {
         if (desde == null) {
-            desde = LocalDate.of(1970, 1, 1);
+            desde = LocalDate.of(2025, 1, 1);
         }
         if (hasta == null) {
             hasta = LocalDate.now();

@@ -243,7 +243,7 @@ public class ServicioAdminImpl implements ServicioAdmin {
     @Override
     public Double obtenerPromedioFacturacionDiaria(LocalDate desde, LocalDate hasta) {
         if (desde == null) {
-            desde = LocalDate.of(1970, 1, 1); // FECHA MINIMA RANDOM PARA QUE AGARRE TODOS
+            desde = LocalDate.of(2025, 1, 1);
         }
         if (hasta == null) {
             hasta = LocalDate.now();
