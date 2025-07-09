@@ -3,7 +3,6 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.PlatoDto;
 import com.tallerwebi.dominio.ServicioResena;
 import com.tallerwebi.dominio.ServicioRestaurante;
-import com.tallerwebi.dominio.ServicioRestauranteImpl;
 import com.tallerwebi.dominio.entidades.Resena;
 import com.tallerwebi.dominio.entidades.Restaurante;
 import com.tallerwebi.dominio.entidades.UsuarioRestaurante;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -111,7 +109,6 @@ public class ControladorRestaurante {
             return "redirect:/nutriya-login";
         }
 
-        // Buscar el usuarioRestaurante para obtener el restaurante real
         UsuarioRestaurante usuarioRestaurante = servicioRestaurante.buscarUsuarioRestaurantePorId(usuario.getId());
         if (usuarioRestaurante == null || usuarioRestaurante.getRestaurante() == null) {
             return "redirect:/nutriya-login";
@@ -123,6 +120,21 @@ public class ControladorRestaurante {
         model.addAttribute("resumen", resumen);
 
         return "restaurante-resumen";
+    }
+
+    @GetMapping("/restaurante/platos-menos-pedidos")
+    public ModelAndView mostrarPlatosMenosPedidos(HttpServletRequest request) {
+        UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
+        UsuarioRestaurante usuarioRestaurante = servicioRestaurante.buscarUsuarioRestaurantePorId(usuario.getId());
+        Long idRestaurante = usuarioRestaurante.getRestaurante().getId();
+
+        List<PlatoDto> platosMenosVendidos = servicioRestaurante.traerLos3platosMenosPedidos(idRestaurante);
+
+        ModelMap model = new ModelMap();
+        model.addAttribute("platosMenosVendidos", platosMenosVendidos);
+        System.out.println("Platos menos vendidos: " + platosMenosVendidos.size());
+        return new ModelAndView("platos-menos-pedidos",model);
+
     }
 
 }

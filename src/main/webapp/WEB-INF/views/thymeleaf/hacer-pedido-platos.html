@@ -146,40 +146,39 @@
                         <div class="d-flex flex-column w-75 position-relative">
                             <h5 class="card-title" th:text="${plato.getNombre()}"></h5>
                             <p th:text="${plato.getDescripcion()}"></p>
-                            <strong class="card-text mt-3" th:text="'$' + ${plato.getPrecio()}"></strong>
-                            <div class="mt-2">
-                               <span class="badge badge-etiqueta me-2"
-                                     th:each="etiqueta : ${plato.etiquetas}"
-                                     th:text="${etiqueta.nombre}">
-                              </span>
+                            <div class="mt-2 mb-2">
+                                <span class="badge badge-etiqueta me-2" th:each="etiqueta : ${plato.etiquetas}" th:text="${etiqueta.nombre}"></span>
                             </div>
-                            <div th:if="${usuario != null}" class="my-2">
+                            <div class="mb-2">
+                                <span th:if="${plato.precioConDescuento != null}" class="text-muted text-decoration-line-through me-2">$[[${plato.precio}]]</span>
+                                <strong class="card-text"
+                                        th:text="${plato.precioConDescuento != null} ? '$' + ${plato.precioConDescuento} : '$' + ${plato.precio}">
+                                </strong>
+                            </div>
+                            <div th:if="${usuario != null}" class="mt-2">
                                 <a th:href="@{'/pedido/plato'(id=${plato.id})}" class="btn btn-success me-2">
                                     Ver Detalle
                                 </a>
                                 <form th:action="@{/pedido/agregar}" method="post" class="d-inline agregar-plato-form"
                                       th:attr="data-plato-id=${plato.getId()}">
                                     <input type="hidden" name="platoId" th:value="${plato.getId()}"/>
-                                    <button type="submit" class="btn btn-success">
-                                        Agregar
-                                    </button>
+                                    <button type="submit" class="btn btn-success">Agregar</button>
                                 </form>
                             </div>
-                            <div th:if="${usuario == null}" class="mt-3">
-                                <a th:href="@{'/pedido/plato'(id=${plato.id})}" class="btn btn-success">Ver Detalle</a>
+                            <div th:if="${usuario == null}" class="mt-2">
+                                <a th:href="@{'/pedido/plato'(id=${plato.id})}" class="btn btn-success me-2">Ver Detalle</a>
                                 <a th:href="@{/nutriya-login}" class="btn btn-secondary">Iniciar sesión</a>
                             </div>
                         </div>
-                        <div class="d-flex flex-column ">
+                        <div class="d-flex flex-column align-items-center justify-content-between">
                             <a th:href="@{'/pedido/plato'(id=${plato.id})}">
-                                <div>
-                                    <img th:src="@{${plato.getImagen()}}" class="img-plato" alt="Imagen del plato"/>
-                                </div>
+                                <img th:src="@{${plato.getImagen()}}" class="img-plato" alt="Imagen del plato"/>
                             </a>
-                            <div class="star-rating mt-4" th:with="promedio=${plato.calificacionPromedio != null ? plato.calificacionPromedio : 0}">
-                            <span th:each="i : ${#numbers.sequence(1,5)}">
-                                <i class="fa-star fa" th:classappend="${i <= promedio ? ' checked' : (i - promedio < 1 ? ' half-checked' : '')}"></i>
-                            </span>
+                            <div class="star-rating mt-4"
+                                 th:with="promedio=${plato.calificacionPromedio != null ? plato.calificacionPromedio : 0}">
+                                <span th:each="i : ${#numbers.sequence(1,5)}">
+                                    <i class="fa-star fa" th:classappend="${i <= promedio ? ' checked' : (i - promedio < 1 ? ' half-checked' : '')}"></i>
+                                 </span>
                                 <span th:text="'(' + ${#numbers.formatDecimal(promedio, 1, 1)} + ')'"></span>
                             </div>
                         </div>

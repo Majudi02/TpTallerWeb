@@ -199,6 +199,37 @@ public class ServicioRestauranteImplTest {
         assertEquals("Empanada", resumen.getPeorValorado().getNombre());
     }
 
+    @Test
+    public void dadoQueTengoLos3PlatosMenosPedidosLosQuieroObtener(){
+        Etiqueta etiqueta1 = new Etiqueta();
+        etiqueta1.setNombre("Proteica");
+
+        Long idRestaurante = 1L;
+
+        Plato plato1 = new Plato();
+        plato1.setId(1);
+        plato1.setNombre("Plato 1");
+        plato1.setEtiquetas(List.of(etiqueta1));
+
+        Plato plato2 = new Plato();
+        plato2.setId(2);
+        plato2.setNombre("Plato 2");
+        plato2.setEtiquetas(List.of(etiqueta1));
+
+        Plato plato3 = new Plato();
+        plato3.setId(3);
+        plato3.setNombre("Plato 3");
+        plato3.setEtiquetas(List.of(etiqueta1));
+
+        List<Plato> platosMenosPedidos = List.of(plato1, plato2, plato3);
+
+        when(repositorioPedidoPlato.traerLos3PlatosMenosPedidos(idRestaurante)).thenReturn(platosMenosPedidos);
+
+        List<PlatoDto> resultado = servicioRestaurante.traerLos3platosMenosPedidos(idRestaurante);
+
+        assertEquals(3, resultado.size());
+    }
+
 
 
 }

@@ -45,4 +45,12 @@ public class ServicioPlatoImpl implements ServicioPlato {
                 .map(Plato::obtenerDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<PlatoDto> traerPlatosEnPromocion() {
+        List<Plato> platos = repositorioPlato.buscarPlatosEnPromocion();
+        return platos.stream()
+                .map(Plato::obtenerDto)
+                .collect(Collectors.toList());
+    }
 }

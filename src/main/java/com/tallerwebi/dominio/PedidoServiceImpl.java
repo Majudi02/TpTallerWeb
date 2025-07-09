@@ -73,8 +73,13 @@ public class PedidoServiceImpl implements PedidoService {
             }
         }
 
+        if (platoDto.getPrecioConDescuento() != null) {
+            System.out.println("*** Usando precio con descuento: $" + platoDto.getPrecioConDescuento());
+            platoDto.setPrecio(platoDto.getPrecioConDescuento());
+        }
 
         Plato platoEntidad = platoDto.obtenerEntidad(etiquetasEntidad);
+
 
         this.repositorioPedido.agregarPlatoAlPedido(platoEntidad, usuarioDTO.getId());
     }
@@ -201,6 +206,12 @@ public class PedidoServiceImpl implements PedidoService {
         }
         return pedido.obtenerDto();
     }
+
+    @Override
+    public List<PlatoDto> traerPlatosEnPromocion() {
+        return servicioPlato.traerPlatosEnPromocion();
+    }
+
 
     @Override
     public PedidoDto obtenerPedidoPorId(Integer pedidoId, Long idUsuario) {

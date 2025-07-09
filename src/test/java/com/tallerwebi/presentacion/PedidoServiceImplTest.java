@@ -314,6 +314,30 @@ public class PedidoServiceImplTest {
     }
 
 
+    @Test
+    public void dadoQueTengoPedidosEnPromocionSeLosQuieroMostrarAlCliente(){
+        PlatoDto platoEnPromo1 = new PlatoDto();
+        platoEnPromo1.setId(1);
+        platoEnPromo1.setNombre("Tiramisu");
+        platoEnPromo1.setPrecio(7.5);
+        platoEnPromo1.setPrecioConDescuento(6.0);
+
+        PlatoDto platoEnPromo2 = new PlatoDto();
+        platoEnPromo2.setId(2);
+        platoEnPromo2.setNombre("Ensalada César");
+        platoEnPromo2.setPrecio(5.0);
+        platoEnPromo2.setPrecioConDescuento(4.0);
+
+        List<PlatoDto> platosEnPromo = List.of(platoEnPromo1, platoEnPromo2);
+
+        when(servicioPlato.traerPlatosEnPromocion()).thenReturn(platosEnPromo);
+
+        List<PlatoDto> platosObtenidos = pedidoService.traerPlatosEnPromocion();
+
+        assertEquals(platosEnPromo.size(),platosObtenidos.size());
+    }
+
+
 
 
 

@@ -42,4 +42,11 @@ public interface ServicioRestaurante {
     ResumenRestauranteDTO obtenerResumenDelRestaurante(Long idRestaurante);
 
     UsuarioRestaurante buscarUsuarioRestaurantePorId(Long id);
+
+    List<PlatoDto> traerLos3platosMenosPedidos(Long idRestaurante);
+
+    void aplicarDescuento(Integer idPlato);
+
+
+    void quitarDescuento(Integer idPlato);
 }

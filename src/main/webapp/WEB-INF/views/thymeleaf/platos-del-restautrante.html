@@ -13,7 +13,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
     <style>
         .star-rating {
             font-size: 1.2rem;
@@ -22,7 +21,6 @@
         .star-rating .fa {
             margin-right: 2px;
         }
-
         .star-rating .checked {
             color: gold;
         }
@@ -32,11 +30,9 @@
             font-weight: 900;
             color: gold;
         }
-
     </style>
 </head>
 <body>
-
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top px-3">
     <div class="container-fluid">
@@ -55,7 +51,6 @@
                 <a class="btn btn-outline-secondary mx-1" th:href="@{nutriya-login}">
                     <i class="bi bi-person"></i>
                 </a>
-
                 <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
                         data-bs-target="#menuLateral" aria-controls="menuLateral">
                     <i class="bi bi-list"></i>
@@ -64,6 +59,7 @@
         </div>
     </div>
 </nav>
+
 <div class="offcanvas offcanvas-end" tabindex="-1" id="menuLateral" aria-labelledby="menuLateralLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="menuLateralLabel">Opciones</h5>
@@ -89,42 +85,72 @@
         </ul>
     </div>
 </div>
+
 <main>
     <section class="col-12 col-md-9 container">
         <h2 class="mb-3 text-center titulo" style="color:#38BD48">Platos Del Restaurante</h2>
         <div class="d-flex flex-column container">
             <article class="d-flex flex-column gap-3 mt-3 justify-content-center flex-wrap plato-container w-100">
-
-                <div class="card pt-2" th:each="plato :${platos}">
+                <div class="card pt-2" th:each="plato : ${platos}">
                     <a th:href="@{'/plato/' + ${plato.id}}" class="text-decoration-none text-reset">
                         <div class="d-flex flex-row gap-3 plato p-3">
                             <div class="d-flex flex-column w-100">
                                 <h5 class="card-title" th:text="${plato.getNombre()}"></h5>
                                 <p th:text="${plato.getDescripcion()}"></p>
                                 <p th:text="${plato.getId()}"></p>
-                                <strong class="card-text mt-3" th:text="'$' + ${plato.getPrecio()}"></strong>
+                                <div>
+    <span th:if="${plato.precioConDescuento != null}" class="text-muted text-decoration-line-through">
+        $[[${plato.precio}]]
+    </span>
+                                    <span th:text="${plato.precioConDescuento != null} ? '$' + ${plato.precioConDescuento} : '$' + ${plato.precio}"></span>
+                                </div>
                             </div>
                             <div class="d-flex flex-column" style="width: 200px;">
-                            <div class="position-relative">
-                                <img th:src="@{${plato.getImagen()}}" class="img-plato" alt="imagen del plato">
-                            </div>
-                            <div class="star-rating mt-2" th:with="promedio=${plato.calificacionPromedio != null ? plato.calificacionPromedio : 0}">
-                            <span th:each="i : ${#numbers.sequence(1,5)}">
-                                <i class="fa-star fa" th:classappend="${i <= promedio ? ' checked' : (i - promedio < 1 ? ' half-checked' : '')}"></i>
-                            </span>
-                                <span th:text="'(' + ${#numbers.formatDecimal(promedio, 1, 1)} + ')'"></span>
-                            </div>
-
+                                <div class="position-relative">
+                                    <img th:src="@{${plato.getImagen()}}" class="img-plato" alt="imagen del plato">
+                                </div>
+                                <div class="star-rating mt-2"
+                                     th:with="promedio=${plato.calificacionPromedio != null ? plato.calificacionPromedio : 0}">
+                    <span th:each="i : ${#numbers.sequence(1,5)}">
+                        <i class="fa-star fa"
+                           th:classappend="${i <= promedio ? ' checked' : (i - promedio < 1 ? ' half-checked' : '')}"></i>
+                    </span>
+                                    <span th:text="'(' + ${#numbers.formatDecimal(promedio, 1, 1)} + ')'"></span>
+                                </div>
                             </div>
                         </div>
                     </a>
-                </div>
 
+                    <div th:if="${platosMenosVendidosIds.contains(plato.id)}"
+                         class="alert alert-warning m-3 d-flex justify-content-between align-items-center rounded-3">
+                        <span>¡Este plato es de los menos vendidos!</span>
+
+                        <form th:if="${plato.precioConDescuento == null}" th:action="@{/plato/descuento}" method="post" class="mb-0">
+                            <input type="hidden" name="idPlato" th:value="${plato.id}" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-tags"></i> Aplicar Descuento
+                            </button>
+                        </form>
+
+
+                        <div th:if="${plato.getPrecioConDescuento() != null}" class="d-flex align-items-center gap-2">
+                            <span class="badge bg-danger text-white mt-2">Descuento aplicado</span>
+
+                            <form th:action="@{/plato/quitar-descuento}" method="post" class="mb-0">
+                                <input type="hidden" name="idPlato" th:value="${plato.id}" />
+                                <button type="submit" class="btn btn-sm btn-outline-secondary">
+                                    <i class="bi bi-x-circle"></i> Quitar descuento
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
             </article>
         </div>
-
     </section>
 </main>
+
 <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 </body>
 </html>

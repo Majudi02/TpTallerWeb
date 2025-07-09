@@ -8,10 +8,12 @@ import java.util.List;
 public interface RepositorioPlato {
     Boolean crearPlato(Plato plato);
     Plato buscarPlatoPorId(Integer id);
-    boolean eliminarPlato(Integer id);
     List<Plato> buscarPlatosPorTipoComida(String tipoComida);
     List<Plato> traerTodosLosPlatos();
     Boolean editarEtiquetas(Plato plato);
     Boolean actualizarPlato(Plato plato);
     List<Plato> buscarPlatosPorEtiquetasDelCliente(Long idCliente);
+    void actualizarPrecioConDescuento(Integer id, Double nuevoPrecioConDescuento);
+    void quitarDescuento(Integer idPlato);
+    List<Plato> buscarPlatosEnPromocion();
 }

@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -71,7 +72,7 @@ public class ControladorEditorDePlatosDelRestaurante {
     }
 
     @GetMapping("/editarPlatos")
-    public ModelAndView editarPlatosPantalla(HttpServletRequest request){
+    public ModelAndView editarPlatosPantalla(HttpServletRequest request) {
         UsuarioDTO usuarioLogueado = (UsuarioDTO) request.getSession().getAttribute("usuario");
         if (usuarioLogueado == null || !usuarioLogueado.getTipoUsuario().equals("restaurante")) {
             return new ModelAndView("redirect:/nutriya-login");
@@ -82,7 +83,7 @@ public class ControladorEditorDePlatosDelRestaurante {
         Restaurante restaurante = servicioRestaurante.obtenerRestaurantePorUsuarioId(usuarioLogueado.getId());
 
         List<PlatoDto> platos = new ArrayList<>();
-        if(restaurante != null) {
+        if (restaurante != null) {
             platos = servicioRestaurante.obtenerPlatosDelRestaurante(restaurante.getId());
         }
 
@@ -92,7 +93,19 @@ public class ControladorEditorDePlatosDelRestaurante {
             plato.setCalificacionPromedio(promedio);
         }
 
+
+        List<PlatoDto> menosVendidos = servicioRestaurante.traerLos3platosMenosPedidos(restaurante.getId());
+        List<Integer> idsMenosVendidos = menosVendidos.stream()
+                .map(PlatoDto::getId)
+                .collect(Collectors.toList());
+
+        for (PlatoDto plato : platos) {
+            Double promedio = servicioPedidoPlato.obtenerPromedioCalificacionPorPlato(plato.getId());
+            promedio = Math.round(promedio * 10.0) / 10.0;
+            plato.setCalificacionPromedio(promedio);
+        }
         modelo.put("platos", platos);
+        modelo.put("platosMenosVendidosIds", idsMenosVendidos);
 
         return new ModelAndView("platos-del-restautrante", modelo);
     }
@@ -138,4 +151,17 @@ public class ControladorEditorDePlatosDelRestaurante {
             return new ModelAndView("redirect:/perfil-home");
         }
     }
+
+    @PostMapping("/plato/descuento")
+    public ModelAndView aplicarDescuento(@RequestParam("idPlato") Integer idPlato) {
+        servicioRestaurante.aplicarDescuento(idPlato);
+        return new ModelAndView("redirect:/editarPlatos");
+    }
+
+    @PostMapping("/plato/quitar-descuento")
+        public ModelAndView quitarDescuento(@RequestParam("idPlato") Integer idPlato){
+            servicioRestaurante.quitarDescuento(idPlato);
+            return new ModelAndView("redirect:/editarPlatos");
+        }
+
 }

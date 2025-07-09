@@ -25,4 +25,5 @@ public interface PedidoService {
     void eliminarPlatoDelCarrito(Long id, Integer platoId);
     PedidoDto obtenerPedidoPorId(Integer pedidoId, Long idUsuario);
     PedidoDto buscarPedidoPendientePorUsuario(Long idUsuario);
+    List<PlatoDto> traerPlatosEnPromocion();
 }
