@@ -44,11 +44,11 @@ public class ControladorAdmin {
             return "redirect:/nutriya-login";
         }
 
-        // Definimos fechas para filtrar el gráfico (default últimos 30 días)
+        // Definimos fechas para filtrar el grafico (default ultimos 30 días)
         LocalDate filtroDesdeGrafico = (fechaDesde != null) ? fechaDesde : LocalDate.now().minusDays(30);
         LocalDate filtroHastaGrafico = (fechaHasta != null) ? fechaHasta : LocalDate.now();
 
-        // Pedidos por fecha para gráfico
+        // Pedidos por fecha para grafico
         Map<LocalDate, Integer> pedidosPorFecha = servicioAdmin.obtenerCantidadPedidosPorFecha(filtroDesdeGrafico, filtroHastaGrafico);
         List<String> fechasPedidos = pedidosPorFecha.keySet().stream()
                 .map(LocalDate::toString)
@@ -56,11 +56,11 @@ public class ControladorAdmin {
 
         List<Integer> cantidadPedidosPorFecha = new ArrayList<>(pedidosPorFecha.values());
 
-        // Totales filtrados (si filtroDesdeTotales es null, mostrar todos)
+        // Totales filtrados (si las fechas son null, mostrar todos)
         Integer totalPedidos = servicioAdmin.obtenerTotalPedidosFiltrado(fechaDesde, fechaHasta);
         Double totalFacturado = servicioAdmin.obtenerTotalFacturadoFiltrado(fechaDesde, fechaHasta);
 
-        // Otros datos no filtrados (o podrías también filtrar si querés)
+        // Otros datos con max
         List<PlatoDto> topPlatos = servicioAdmin.obtenerTopPlatosMasVendidos(5);
         Map<Integer, Integer> cantidadPorPlato = servicioAdmin.obtenerCantidadPorPlato();
         List<Restaurante> topRestaurantes = servicioAdmin.obtenerTopRestaurantesPorCantidadDePedidos(3);
@@ -68,7 +68,7 @@ public class ControladorAdmin {
         Map<Long, Integer> cantidadPedidosPorRestaurante = servicioAdmin.obtenerCantidadPedidosPorRestaurante();
         Double promedioFacturacionDiaria = servicioAdmin.obtenerPromedioFacturacionDiaria(fechaDesde, fechaHasta);
 
-        // Enviar todo al modelo
+        // Guardar en model
         model.addAttribute("fechasPedidos", fechasPedidos);
         model.addAttribute("cantidadPedidosPorFecha", cantidadPedidosPorFecha);
         model.addAttribute("totalPedidos", totalPedidos);
