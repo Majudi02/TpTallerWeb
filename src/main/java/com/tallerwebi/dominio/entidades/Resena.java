@@ -22,6 +22,11 @@ public class Resena {
     @JoinColumn(name = "restaurante_id")
     private Restaurante restaurante;
 
+    @ManyToOne
+    @JoinColumn(name = "plato_id")
+    private Plato plato;
+
+
     private LocalDateTime fecha;
 
     public Long getId() {

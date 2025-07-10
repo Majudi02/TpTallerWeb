@@ -69,7 +69,8 @@ public class RepositorioResenaImplTest {
         resena.setRestaurante(restaurante);
         resena.setComentario("Todo excelente");
         resena.setCalificacion(5);
-        resena.setFecha(LocalDateTime.now());
+        resena.setFecha(LocalDateTime.now().withNano(0));
+
 
         repositorioResena.guardar(resena);
 
