@@ -4,9 +4,11 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.Duration;
 
 public class VistaWeb {
     protected Page page;
+    private String baseUrl = "http://localhost:8080/";
 
     public VistaWeb(Page page) {
         this.page = page;
@@ -17,11 +19,11 @@ public class VistaWeb {
         return url;
     }
 
-    protected String obtenerTextoDelElemento(String selectorCSS){
+    public String obtenerTextoDelElemento(String selectorCSS){
         return this.obtenerElemento(selectorCSS).textContent();
     }
 
-    protected void darClickEnElElemento(String selectorCSS){
+    public void darClickEnElElemento(String selectorCSS){
         this.obtenerElemento(selectorCSS).click();
     }
 
@@ -32,4 +34,19 @@ public class VistaWeb {
     private Locator obtenerElemento(String selectorCSS){
         return page.locator(selectorCSS);
     }
+
+    public void irA(String rutaRelativa) {
+        String urlCompleta;
+        if (rutaRelativa.startsWith("http://") || rutaRelativa.startsWith("https://")) {
+            urlCompleta = rutaRelativa;
+        } else {
+            urlCompleta = baseUrl + rutaRelativa;
+        }
+        page.navigate(urlCompleta);
+    }
+
+    public void esperarElementoVisiblePorSelector(String selectorCSS) {
+        this.obtenerElemento(selectorCSS).waitFor();
+    }
+
 }

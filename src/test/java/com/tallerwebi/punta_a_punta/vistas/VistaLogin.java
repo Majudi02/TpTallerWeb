@@ -26,12 +26,21 @@ public class VistaLogin extends VistaWeb {
         this.page.waitForURL("**/cliente/perfil", new Page.WaitForURLOptions().setTimeout(10000));
     }
 
+    public void esperarRedireccion(String pathParcial) {
+        page.waitForURL(urlString -> urlString.contains(pathParcial));
+    }
+
     public String obtenerTextoDeLaBarraDeNavegacion() {
         return this.obtenerTextoDelElemento("nav a.navbar-brand");
+    }
+
+    public String obtenerTextoPorId(String selectorCSS) {
+        return this.obtenerTextoDelElemento(selectorCSS);
     }
 
     public String obtenerMensajeDeError() {
         return this.obtenerTextoDelElemento("p.alert.alert-danger, div.alert.alert-danger");
     }
-}
 
+
+}
