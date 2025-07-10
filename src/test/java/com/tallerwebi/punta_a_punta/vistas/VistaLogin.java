@@ -2,30 +2,36 @@ package com.tallerwebi.punta_a_punta.vistas;
 
 import com.microsoft.playwright.Page;
 
+
 public class VistaLogin extends VistaWeb {
 
     public VistaLogin(Page page) {
         super(page);
-        page.navigate("localhost:8080/spring/login");
+        page.navigate("http://localhost:8080/nutriya-login");
     }
 
-    public String obtenerTextoDeLaBarraDeNavegacion(){
+    public void escribirEMAIL(String email) {
+        this.escribirEnElElemento("#inputEmail", email);
+    }
+
+    public void escribirClave(String clave) {
+        this.escribirEnElElemento("#inputPassword", clave);
+    }
+
+    public void darClickEnIniciarSesion() {
+        this.darClickEnElElemento("button.btn-green");
+    }
+
+    public void esperarRedireccionAPerfilCliente() {
+        this.page.waitForURL("**/cliente/perfil", new Page.WaitForURLOptions().setTimeout(10000));
+    }
+
+    public String obtenerTextoDeLaBarraDeNavegacion() {
         return this.obtenerTextoDelElemento("nav a.navbar-brand");
     }
 
-    public String obtenerMensajeDeError(){
-        return this.obtenerTextoDelElemento("p.alert.alert-danger");
-    }
-
-    public void escribirEMAIL(String email){
-        this.escribirEnElElemento("#email", email);
-    }
-
-    public void escribirClave(String clave){
-        this.escribirEnElElemento("#password", clave);
-    }
-
-    public void darClickEnIniciarSesion(){
-        this.darClickEnElElemento("#btn-login");
+    public String obtenerMensajeDeError() {
+        return this.obtenerTextoDelElemento("p.alert.alert-danger, div.alert.alert-danger");
     }
 }
+
