@@ -316,6 +316,8 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
                 .min(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey).orElse(null);
 
+        Long cantidadMasPedido = masPedido != null ? conteoPlatos.get(masPedido) : 0L;
+        Long cantidadMenosPedido = menosPedido != null ? conteoPlatos.get(menosPedido) : 0L;
         // 4. Calcular promedio de calificación (convertir id → Plato)
         List<Plato> platosCalificados = repositorioPedidoPlato.obtenerPlatosConCalificacionesPorRestaurante(idRestaurante);
 
@@ -335,11 +337,45 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
                 .map(Map.Entry::getKey)
                 .orElse(null);
 
+        if (mejorValorado != null) {
+            mejorValorado.setValoracion(promedios.get(mejorValorado));
+        }
+        if (peorValorado != null) {
+            peorValorado.setValoracion(promedios.get(peorValorado));
+        }
+
         // 5. Retornar DTO
-        return new ResumenRestauranteDTO(ganancias, masPedido, menosPedido, mejorValorado, peorValorado);
+        ResumenRestauranteDTO dto = new ResumenRestauranteDTO(ganancias, masPedido, menosPedido, mejorValorado, peorValorado);
+        dto.setCantidadMasPedido(cantidadMasPedido);
+        dto.setCantidadMenosPedido(cantidadMenosPedido);
+        return dto;
     }
 
+    @Override
+    public List<PlatoDto> traerLos3platosMenosPedidos(Long idRestaurante) {
+        List<Plato> platos = repositorioPedidoPlato.traerLos3PlatosMenosPedidos(idRestaurante);
+        List<PlatoDto> platosObtenidos = new ArrayList<>();
+        for (Plato plato : platos) {
+            PlatoDto platoDto = plato.obtenerDto();
+            platosObtenidos.add(platoDto);
+        }
+        return platosObtenidos;
+    }
 
+    @Override
+    public void aplicarDescuento(Integer idPlato) {
+        PlatoDto platoDto = obtenerPlatoPorId(idPlato);
+
+        Double precioOriginal = platoDto.getPrecio();
+        Double precioConDescuento = precioOriginal - (precioOriginal * 20 / 100);
+
+        repositorioPlato.actualizarPrecioConDescuento(platoDto.getId(), precioConDescuento);
+    }
+
+    @Override
+    public void quitarDescuento(Integer idPlato) {
+        repositorioPlato.quitarDescuento(idPlato);
+    }
 
 }
 

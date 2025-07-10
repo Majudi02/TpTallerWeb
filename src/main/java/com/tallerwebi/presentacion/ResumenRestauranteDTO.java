@@ -8,6 +8,9 @@ public class ResumenRestauranteDTO {
     private Plato menosPedido;
     private Plato mejorValorado;
     private Plato peorValorado;
+    private Long cantidadMasPedido;
+    private Long cantidadMenosPedido;
+
 
     public ResumenRestauranteDTO(double gananciasTotales, Plato masPedido, Plato menosPedido, Plato mejorValorado, Plato peorValorado) {
         this.gananciasTotales = gananciasTotales;
@@ -58,6 +61,22 @@ public class ResumenRestauranteDTO {
 
     public void setPeorValorado(Plato peorValorado) {
         this.peorValorado = peorValorado;
+    }
+
+    public Long getCantidadMasPedido() {
+        return cantidadMasPedido;
+    }
+
+    public void setCantidadMasPedido(Long cantidadMasPedido) {
+        this.cantidadMasPedido = cantidadMasPedido;
+    }
+
+    public Long getCantidadMenosPedido() {
+        return cantidadMenosPedido;
+    }
+
+    public void setCantidadMenosPedido(Long cantidadMenosPedido) {
+        this.cantidadMenosPedido = cantidadMenosPedido;
     }
 }
 
