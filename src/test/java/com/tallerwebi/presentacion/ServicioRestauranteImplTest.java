@@ -171,30 +171,39 @@ public class ServicioRestauranteImplTest {
 
 
     @Test
-    public void queObtengaElPlatoMejorYPeorValorado() {
+    public void queCalculeElPlatoMejorYPeorValoradoCorrectamente() {
+        Long idRestaurante = 1L;
+
         Plato plato1 = new Plato();
         plato1.setId(1);
-        plato1.setNombre("Pizza");
+        plato1.setNombre("Ensalada");
 
         Plato plato2 = new Plato();
         plato2.setId(2);
-        plato2.setNombre("Empanada");
+        plato2.setNombre("Pizza");
 
-        when(repositorioPlato.buscarPlatoPorId(1)).thenReturn(plato1);
-        when(repositorioPlato.buscarPlatoPorId(2)).thenReturn(plato2);
+        Plato plato3 = new Plato();
+        plato3.setId(3);
+        plato3.setNombre("Sopa");
 
-        Map<Integer, Double> promedios = new HashMap<>();
-        promedios.put(1, 4.8);
-        promedios.put(2, 2.0);
+        List<Plato> platosCalificados = List.of(plato1, plato2, plato3);
 
-        when(repositorioResena.calcularPromedioCalificacionPorPlato(1L))
-                .thenReturn(promedios);
+        when(repositorioPedidoPlato.obtenerPlatosConCalificacionesPorRestaurante(idRestaurante))
+                .thenReturn(platosCalificados);
 
-        ResumenRestauranteDTO resumen = servicioRestaurante.obtenerResumenDelRestaurante(1L);
+        when(repositorioPedidoPlato.obtenerPromedioCalificacionPorPlato(1)).thenReturn(4.0);
+        when(repositorioPedidoPlato.obtenerPromedioCalificacionPorPlato(2)).thenReturn(2.0);
+        when(repositorioPedidoPlato.obtenerPromedioCalificacionPorPlato(3)).thenReturn(5.0);
 
-        assertEquals("Pizza", resumen.getMejorValorado().getNombre());
-        assertEquals("Empanada", resumen.getPeorValorado().getNombre());
+        ResumenRestauranteDTO resumen = servicioRestaurante.obtenerResumenDelRestaurante(idRestaurante);
+
+        assertNotNull(resumen.getMejorValorado());
+        assertNotNull(resumen.getPeorValorado());
+
+        assertEquals("Sopa", resumen.getMejorValorado().getNombre());
+        assertEquals("Pizza", resumen.getPeorValorado().getNombre());
     }
+
 
     @Test
     public void dadoQueTengoLos3PlatosMenosPedidosLosQuieroObtener() {
