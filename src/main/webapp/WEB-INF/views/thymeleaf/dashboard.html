@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
 </head>
 <body class="bg-light">
-
+<h2 class="titulo-verde text-center mt-3" id="tituloDashboardAdmin">Dashboard Admin</h2>
 <div class="container py-4">
     <form class="row g-3 mb-3" method="get" action="#" th:action="@{/admin/dashboard}">
         <div class="col-auto">
@@ -28,7 +28,7 @@
         </div>
     </form>
     <div class="d-flex justify-content-end mb-3">
-        <a href="/cerrar-sesion" class="btn btn-outline-danger">
+        <a href="/cerrar-sesion" class="btn btn-outline-danger" id="botonCerrarSesion">
             <i class="bi bi-box-arrow-right"></i> Cerrar sesión
         </a>
     </div>
