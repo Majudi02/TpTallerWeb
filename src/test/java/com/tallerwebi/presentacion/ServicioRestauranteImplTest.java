@@ -2,10 +2,7 @@ package com.tallerwebi.presentacion;
 
 
 import com.tallerwebi.dominio.*;
-import com.tallerwebi.dominio.entidades.Etiqueta;
-import com.tallerwebi.dominio.entidades.Pedido;
-import com.tallerwebi.dominio.entidades.PedidoPlato;
-import com.tallerwebi.dominio.entidades.Plato;
+import com.tallerwebi.dominio.entidades.*;
 import com.tallerwebi.infraestructura.RepositorioPlatoImpl;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,8 +18,7 @@ import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -174,33 +171,42 @@ public class ServicioRestauranteImplTest {
 
 
     @Test
-    public void queObtengaElPlatoMejorYPeorValorado() {
+    public void queCalculeElPlatoMejorYPeorValoradoCorrectamente() {
+        Long idRestaurante = 1L;
+
         Plato plato1 = new Plato();
         plato1.setId(1);
-        plato1.setNombre("Pizza");
+        plato1.setNombre("Ensalada");
 
         Plato plato2 = new Plato();
         plato2.setId(2);
-        plato2.setNombre("Empanada");
+        plato2.setNombre("Pizza");
 
-        when(repositorioPlato.buscarPlatoPorId(1)).thenReturn(plato1);
-        when(repositorioPlato.buscarPlatoPorId(2)).thenReturn(plato2);
+        Plato plato3 = new Plato();
+        plato3.setId(3);
+        plato3.setNombre("Sopa");
 
-        Map<Integer, Double> promedios = new HashMap<>();
-        promedios.put(1, 4.8);
-        promedios.put(2, 2.0);
+        List<Plato> platosCalificados = List.of(plato1, plato2, plato3);
 
-        when(repositorioResena.calcularPromedioCalificacionPorPlato(1L))
-                .thenReturn(promedios);
+        when(repositorioPedidoPlato.obtenerPlatosConCalificacionesPorRestaurante(idRestaurante))
+                .thenReturn(platosCalificados);
 
-        ResumenRestauranteDTO resumen = servicioRestaurante.obtenerResumenDelRestaurante(1L);
+        when(repositorioPedidoPlato.obtenerPromedioCalificacionPorPlato(1)).thenReturn(4.0);
+        when(repositorioPedidoPlato.obtenerPromedioCalificacionPorPlato(2)).thenReturn(2.0);
+        when(repositorioPedidoPlato.obtenerPromedioCalificacionPorPlato(3)).thenReturn(5.0);
 
-        assertEquals("Pizza", resumen.getMejorValorado().getNombre());
-        assertEquals("Empanada", resumen.getPeorValorado().getNombre());
+        ResumenRestauranteDTO resumen = servicioRestaurante.obtenerResumenDelRestaurante(idRestaurante);
+
+        assertNotNull(resumen.getMejorValorado());
+        assertNotNull(resumen.getPeorValorado());
+
+        assertEquals("Sopa", resumen.getMejorValorado().getNombre());
+        assertEquals("Pizza", resumen.getPeorValorado().getNombre());
     }
 
+
     @Test
-    public void dadoQueTengoLos3PlatosMenosPedidosLosQuieroObtener(){
+    public void dadoQueTengoLos3PlatosMenosPedidosLosQuieroObtener() {
         Etiqueta etiqueta1 = new Etiqueta();
         etiqueta1.setNombre("Proteica");
 
@@ -229,6 +235,62 @@ public class ServicioRestauranteImplTest {
 
         assertEquals(3, resultado.size());
     }
+
+    @Test
+    public void queCalculeCorrectamenteCantidadDeVecesPedidos() {
+        Plato plato1 = new Plato();
+        plato1.setId(1);
+        plato1.setNombre("Ensalada");
+        plato1.setPrecio(100.0);
+
+        Plato plato2 = new Plato();
+        plato2.setId(2);
+        plato2.setNombre("Milanesa");
+        plato2.setPrecio(150.0);
+
+        Pedido pedido1 = new Pedido();
+        Pedido pedido2 = new Pedido();
+
+        PedidoPlato pp1 = new PedidoPlato();
+        pp1.setPlato(plato1);
+        pp1.setPedido(pedido1);
+
+        PedidoPlato pp2 = new PedidoPlato();
+        pp2.setPlato(plato1);
+        pp2.setPedido(pedido2);
+
+        PedidoPlato pp3 = new PedidoPlato();
+        pp3.setPlato(plato2);
+        pp3.setPedido(pedido1);
+
+        pedido1.setPedidoPlatos(List.of(pp1, pp3));
+        pedido2.setPedidoPlatos(List.of(pp2));
+
+        when(repositorioPedidoRestaurante.traerPedidosEntregadosPorRestaurante(1L))
+                .thenReturn(List.of(pedido1, pedido2));
+
+        when(repositorioPedidoPlato.obtenerPlatosPorRestaurante(1L))
+                .thenReturn(List.of(pp1, pp2, pp3));
+
+        when(repositorioPedidoPlato.obtenerPlatosConCalificacionesPorRestaurante(1L))
+                .thenReturn(List.of());
+
+        ResumenRestauranteDTO resumen = servicioRestaurante.obtenerResumenDelRestaurante(1L);
+
+        assertNotNull(resumen.getMasPedido());
+        assertNotNull(resumen.getMenosPedido());
+
+        assertEquals("Ensalada", resumen.getMasPedido().getNombre());
+        assertEquals("Milanesa", resumen.getMenosPedido().getNombre());
+
+        assertEquals(2L, resumen.getCantidadMasPedido());
+        assertEquals(1L, resumen.getCantidadMenosPedido());
+
+        assertEquals(100.0 + 150.0 + 100.0, resumen.getGananciasTotales());
+    }
+
+
+
 
 
 

@@ -37,7 +37,7 @@ public class ServicioResenaImpl implements ServicioResena {
         resena.setCalificacion(calificacion);
         resena.setCliente(cliente);
         resena.setRestaurante(restaurante);
-        resena.setFecha(LocalDateTime.now());
+        resena.setFecha(LocalDateTime.now().withNano(0)); // ✅ Esto trunca los nanosegundos
 
         repositorioResena.guardar(resena);
     }

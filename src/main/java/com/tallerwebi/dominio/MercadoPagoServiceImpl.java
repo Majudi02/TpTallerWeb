@@ -21,8 +21,7 @@ public class MercadoPagoServiceImpl {
 
     private final PreferenceClient preferenceClient;
 
-    private static final String BASE_URL ="https://e85c40c80807.ngrok-free.app";
-
+    private static final String BASE_URL ="https://e8088e7929d7.ngrok-free.app";
 
     public MercadoPagoServiceImpl() {
         this.preferenceClient = new PreferenceClient();
@@ -35,10 +34,7 @@ public class MercadoPagoServiceImpl {
                         .title(pedidoPlato.getPlato().getNombre())
                         .quantity(1)
                         .unitPrice(BigDecimal.valueOf(
-                                pedidoPlato.getPlato().getPrecioConDescuento() != null
-                                        ? pedidoPlato.getPlato().getPrecioConDescuento()
-                                        : pedidoPlato.getPlato().getPrecio()
-                        ))
+                                Float.parseFloat(pedidoPlato.getPlato().getPrecio().toString())))
                         .build())
                 .collect(Collectors.toList());
 

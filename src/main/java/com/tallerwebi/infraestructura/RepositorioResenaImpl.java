@@ -45,13 +45,10 @@ public class RepositorioResenaImpl implements RepositorioResena {
 
     @Override
     public Map<Integer, Double> calcularPromedioCalificacionPorPlato(Long idRestaurante) {
-        String hql = "SELECT pp.plato.id, AVG(r.calificacion) " +
+        String hql = "SELECT r.plato.id, AVG(r.calificacion) " +
                 "FROM Resena r " +
-                "JOIN r.restaurante rest " +
-                "JOIN Pedido p ON p.restaurante.id = rest.id " +
-                "JOIN PedidoPlato pp ON pp.pedido.id = p.id " +
-                "WHERE rest.id = :idRestaurante AND r.calificacion IS NOT NULL " +
-                "GROUP BY pp.plato.id";
+                "WHERE r.restaurante.id = :idRestaurante AND r.calificacion IS NOT NULL AND r.plato IS NOT NULL " +
+                "GROUP BY r.plato.id";
 
         List<Object[]> resultados = sessionFactory.getCurrentSession()
                 .createQuery(hql)
@@ -67,6 +64,7 @@ public class RepositorioResenaImpl implements RepositorioResena {
 
         return promedios;
     }
+
 
 }
 

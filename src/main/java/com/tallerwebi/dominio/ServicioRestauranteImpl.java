@@ -17,6 +17,17 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class ServicioRestauranteImpl implements ServicioRestaurante {
+    /*
+    private static final List<Restaurante> restaurantesVista = List.of(
+            new Restaurante("Green Bowl", "Comida Vegana", "/assets/restaurante.png", "calle", 123, "Don Torcuato", "Norte", List.of("Vegana")),
+            new Restaurante("Natural Express", "Comida Vegana", "/assets/restaurante.png", "calle", 321, "La Matanza", "Oeste", List.of("Proteica")),
+            new Restaurante("Vital Food", "Comida Proteica", "/assets/restaurante.png", "calle", 213, "La Matanza", "Oeste", List.of("Vegana", "Proteica")),
+            new Restaurante("La Parrilla del Sur", "Especialidad en carnes a la parrilla", "/assets/restaurante-logo.png", "Av. Corrientes", 1234, "Buenos Aires", "Microcentro", List.of("Proteica")),
+            new Restaurante("Sushi Zen", "Lo mejor de la cocina japonesa", "/assets/restaurante-logo.png", "Calle Defensa", 567, "Buenos Aires", "San Telmo", List.of("Proteica", "Sin gluten")),
+            new Restaurante("Pizza Napoli", "Pizzas artesanales al horno de leña", "/assets/restaurante-logo.png", "Av. Santa Fe", 890, "Buenos Aires", "Recoleta", List.of("Opciones vegetarianas")),
+            new Restaurante("Verde Vivo", "Comida saludable y vegana", "/assets/restaurante-logo.png", "Calle Mendoza", 234, "Mendoza", "Centro", List.of("Vegana", "Vegetariana", "Sin gluten"))
+    );
+    */
     private final RepositorioUsuarioRestaurante repositorioUsuarioRestaurante;
     private final RepositorioPlato repositorioPlato;
     private final RepositorioPedidoRestaurante repositorioPedidoRestaurante;
@@ -276,9 +287,73 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
         return repositorioUsuarioRestaurante.buscarPorUsuarioId(id);
     }
 
+
+    @Override
+    public ResumenRestauranteDTO obtenerResumenDelRestaurante(Long idRestaurante) {
+        // 1. Obtener pedidos entregados y platos vendidos
+        List<Pedido> pedidosEntregados = repositorioPedidoRestaurante.traerPedidosEntregadosPorRestaurante(idRestaurante);
+        List<PedidoPlato> platos = repositorioPedidoPlato.obtenerPlatosPorRestaurante(idRestaurante);
+
+        // 2. Calcular ganancias
+        Set<PedidoPlato> platosUnicos = pedidosEntregados.stream()
+                .flatMap(p -> p.getPedidoPlatos().stream())
+                .collect(Collectors.toSet());
+
+        double ganancias = platosUnicos.stream()
+                .mapToDouble(pp -> pp.getPlato().getPrecio())
+                .sum();
+
+
+        // 3. Calcular más y menos pedido
+        Map<Plato, Long> conteoPlatos = platos.stream()
+                .collect(Collectors.groupingBy(PedidoPlato::getPlato, Collectors.counting()));
+
+        Plato masPedido = conteoPlatos.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey).orElse(null);
+
+        Plato menosPedido = conteoPlatos.entrySet().stream()
+                .min(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey).orElse(null);
+
+        Long cantidadMasPedido = masPedido != null ? conteoPlatos.get(masPedido) : 0L;
+        Long cantidadMenosPedido = menosPedido != null ? conteoPlatos.get(menosPedido) : 0L;
+        // 4. Calcular promedio de calificación (convertir id → Plato)
+        List<Plato> platosCalificados = repositorioPedidoPlato.obtenerPlatosConCalificacionesPorRestaurante(idRestaurante);
+
+        Map<Plato, Double> promedios = platosCalificados.stream()
+                .collect(Collectors.toMap(
+                        plato -> plato,
+                        plato -> repositorioPedidoPlato.obtenerPromedioCalificacionPorPlato(plato.getId())
+                ));
+
+        Plato mejorValorado = promedios.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElse(null);
+
+        Plato peorValorado = promedios.entrySet().stream()
+                .min(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElse(null);
+
+        if (mejorValorado != null) {
+            mejorValorado.setValoracion(promedios.get(mejorValorado));
+        }
+        if (peorValorado != null) {
+            peorValorado.setValoracion(promedios.get(peorValorado));
+        }
+
+        // 5. Retornar DTO
+        ResumenRestauranteDTO dto = new ResumenRestauranteDTO(ganancias, masPedido, menosPedido, mejorValorado, peorValorado);
+        dto.setCantidadMasPedido(cantidadMasPedido);
+        dto.setCantidadMenosPedido(cantidadMenosPedido);
+        return dto;
+    }
+
     @Override
     public List<PlatoDto> traerLos3platosMenosPedidos(Long idRestaurante) {
-      List<Plato> platos = repositorioPedidoPlato.traerLos3PlatosMenosPedidos(idRestaurante);
+        List<Plato> platos = repositorioPedidoPlato.traerLos3PlatosMenosPedidos(idRestaurante);
         List<PlatoDto> platosObtenidos = new ArrayList<>();
         for (Plato plato : platos) {
             PlatoDto platoDto = plato.obtenerDto();
@@ -301,55 +376,6 @@ public class ServicioRestauranteImpl implements ServicioRestaurante {
     public void quitarDescuento(Integer idPlato) {
         repositorioPlato.quitarDescuento(idPlato);
     }
-
-
-    @Override
-    public ResumenRestauranteDTO obtenerResumenDelRestaurante(Long idRestaurante) {
-        List<Pedido> pedidosEntregados = repositorioPedidoRestaurante.traerPedidosEntregadosPorRestaurante(idRestaurante);
-        List<PedidoPlato> platos = repositorioPedidoPlato.obtenerPlatosPorRestaurante(idRestaurante);
-
-        // 2. Calcular ganancias
-        Set<PedidoPlato> platosUnicos = pedidosEntregados.stream()
-                .flatMap(p -> p.getPedidoPlatos().stream())
-                .collect(Collectors.toSet());
-
-        double ganancias = platosUnicos.stream()
-                .mapToDouble(pp -> pp.getPlato().getPrecio())
-                .sum();
-
-
-        // 3. Calcular más y menos pedido
-
-        Map<Plato, Long> conteoPlatos = platos.stream()
-                .collect(Collectors.groupingBy(PedidoPlato::getPlato, Collectors.counting()));
-
-        Plato masPedido = conteoPlatos.entrySet().stream()
-                .max(Map.Entry.comparingByValue())
-                .map(Map.Entry::getKey).orElse(null);
-
-        Plato menosPedido = conteoPlatos.entrySet().stream()
-                .min(Map.Entry.comparingByValue())
-                .map(Map.Entry::getKey).orElse(null);
-
-        Map<Integer, Double> promedioPorId = repositorioResena.calcularPromedioCalificacionPorPlato(idRestaurante);
-
-        Map<Plato, Double> promedioResenas = promedioPorId.entrySet().stream()
-                .map(entry -> Map.entry(repositorioPlato.buscarPlatoPorId(entry.getKey()), entry.getValue()))
-                .filter(entry -> entry.getKey() != null)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
-        Plato mejorValorado = promedioResenas.entrySet().stream()
-                .max(Map.Entry.comparingByValue())
-                .map(Map.Entry::getKey).orElse(null);
-
-        Plato peorValorado = promedioResenas.entrySet().stream()
-                .min(Map.Entry.comparingByValue())
-                .map(Map.Entry::getKey).orElse(null);
-
-        return new ResumenRestauranteDTO(ganancias, masPedido, menosPedido, mejorValorado, peorValorado);
-    }
-
-
 
 }
 

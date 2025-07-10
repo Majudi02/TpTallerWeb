@@ -10,6 +10,7 @@ public interface RepositorioPedidoPlato {
     void guardar(PedidoPlato pedidoPlato);
     void finalizarPedido(Long id);
     Double obtenerPromedioCalificacionPorPlato(Integer id);
+    List<Plato> obtenerPlatosConCalificacionesPorRestaurante(Long idRestaurante);
     List<PedidoPlato> obtenerPlatosPorRestaurante(Long idRestaurante);
     List<Plato> traerLos3PlatosMenosPedidos(Long idRestaurante);
 

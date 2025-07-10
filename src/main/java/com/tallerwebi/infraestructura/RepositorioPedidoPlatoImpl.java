@@ -1,6 +1,7 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.  RepositorioPedidoPlato;
+
+import com.tallerwebi.dominio.RepositorioPedidoPlato;
 import com.tallerwebi.dominio.entidades.*;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,17 @@ public class RepositorioPedidoPlatoImpl implements RepositorioPedidoPlato {
 
         return promedio != null ? promedio : 0.0;
     }
+
+    @Override
+    public List<Plato> obtenerPlatosConCalificacionesPorRestaurante(Long idRestaurante) {
+        String hql = "SELECT DISTINCT pp.plato FROM PedidoPlato pp " +
+                "WHERE pp.plato.restaurante.id = :idRestaurante AND pp.calificacion IS NOT NULL";
+        return sessionFactory.getCurrentSession()
+                .createQuery(hql, Plato.class)
+                .setParameter("idRestaurante", idRestaurante)
+                .getResultList();
+    }
+
 
     @Override
     public List<PedidoPlato> obtenerPlatosPorRestaurante(Long idRestaurante) {
