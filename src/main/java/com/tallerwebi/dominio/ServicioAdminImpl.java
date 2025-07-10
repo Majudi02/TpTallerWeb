@@ -18,41 +18,40 @@ import java.util.stream.Collectors;
 public class ServicioAdminImpl implements ServicioAdmin {
 
     private final ServicioPedidoRestaurante servicioPedidoRestaurante;
-    private final ServicioPedidoPlato servicioPedidoPlato;
     private final ServicioPlato servicioPlato;
     private final ServicioRestaurante servicioRestaurante;
     private final ServicioResena servicioResena;
 
     @Autowired
     public ServicioAdminImpl(ServicioPedidoRestaurante servicioPedidoRestaurante,
-                             ServicioPedidoPlato servicioPedidoPlato,
                              ServicioPlato servicioPlato,
                              ServicioRestaurante servicioRestaurante,
                              ServicioResena servicioResena) {
         this.servicioPedidoRestaurante = servicioPedidoRestaurante;
-        this.servicioPedidoPlato = servicioPedidoPlato;
         this.servicioPlato = servicioPlato;
         this.servicioRestaurante = servicioRestaurante;
         this.servicioResena = servicioResena;
     }
 
-    // Total pedidos en general (todos)
+    // Total pedidos en general
     @Override
     public Integer obtenerTotalPedidos() {
         return servicioPedidoRestaurante.traerTodosLosPedidos().size();
     }
 
-    // Top platos vendidos: SOLO pedidos finalizados (ventas reales)
+    // Top platos vendidos SOLO pedidos finalizados
     @Override
     public List<PlatoDto> obtenerTopPlatosMasVendidos(int cantidad) {
         List<PedidoDto> pedidosFinalizados = servicioPedidoRestaurante.traerPedidosFinalizados();
 
+        // key id plato, cantidad
         Map<Integer, Integer> conteoPlatos = new HashMap<>();
 
         for (PedidoDto pedido : pedidosFinalizados) {
             if (pedido.getPedidoPlatos() != null) {
                 for (var pedidoPlatoDto : pedido.getPedidoPlatos()) {
                     Integer idPlato = pedidoPlatoDto.getPlato().getId();
+                    // Si el plato ya esta en el map le suma 1
                     conteoPlatos.put(idPlato, conteoPlatos.getOrDefault(idPlato, 0) + 1);
                 }
             }
@@ -71,10 +70,11 @@ public class ServicioAdminImpl implements ServicioAdmin {
                 topPlatos.add(plato);
             }
         }
+
         return topPlatos;
     }
 
-    // Top restaurantes por pedidos: también mejor con pedidos finalizados
+    // Top restaurantes por pedidos
     @Override
     public List<Restaurante> obtenerTopRestaurantesPorCantidadDePedidos(int cantidad) {
         List<PedidoDto> pedidosFinalizados = servicioPedidoRestaurante.traerPedidosFinalizados();
@@ -149,7 +149,7 @@ public class ServicioAdminImpl implements ServicioAdmin {
         return conteoPlatos;
     }
 
-    // Cantidad pedidos por restaurante: acá mejor TODOS para mostrar actividad total
+    // Cantidad pedidos por restaurante
     @Override
     public Map<Long, Integer> obtenerCantidadPedidosPorRestaurante() {
         List<PedidoDto> pedidos = servicioPedidoRestaurante.traerTodosLosPedidos();

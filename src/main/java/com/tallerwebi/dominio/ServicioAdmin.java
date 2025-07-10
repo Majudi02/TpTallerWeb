@@ -24,9 +24,9 @@ public interface ServicioAdmin {
 
     Map<LocalDate, Integer> obtenerCantidadPedidosPorFecha(LocalDate desde, LocalDate hasta);
 
-    Integer obtenerTotalPedidosFiltrado(LocalDate filtroDesdeTotales, LocalDate filtroHastaTotales);
+    Integer obtenerTotalPedidosFiltrado(LocalDate filtroDesde, LocalDate filtroHasta);
 
-    Double obtenerTotalFacturadoFiltrado(LocalDate filtroDesdeTotales, LocalDate filtroHastaTotales);
+    Double obtenerTotalFacturadoFiltrado(LocalDate filtroDesde, LocalDate filtroHasta);
 
     Double obtenerPromedioFacturacionDiaria(LocalDate desde, LocalDate hasta);
 }
