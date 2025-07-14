@@ -212,6 +212,22 @@ public class PedidoServiceImpl implements PedidoService {
         return servicioPlato.traerPlatosEnPromocion();
     }
 
+    @Override
+    public void asignarRepartidorAPedido(Integer pedidoId, Long repartidorId) {
+        Pedido pedido = repositorioPedido.buscarPorId(pedidoId);
+
+
+        if (pedido != null && pedido.getEstadoPedido() == EstadoPedido.LISTO_PARA_ENVIAR && pedido.getRepartidor() == null) {
+
+            UsuarioNutriya repartidor = servicioUsuario.buscarPorId(repartidorId);
+
+            pedido.setRepartidor(repartidor);
+            pedido.setEstadoPedido(EstadoPedido.EN_CAMINO);
+
+            repositorioPedido.actualizarPedido(pedido);
+        }
+    }
+
 
     @Override
     public PedidoDto obtenerPedidoPorId(Integer pedidoId, Long idUsuario) {

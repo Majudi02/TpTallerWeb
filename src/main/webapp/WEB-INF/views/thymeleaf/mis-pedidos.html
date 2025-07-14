@@ -85,7 +85,28 @@
 </div>
 
 <!-- CONTENIDO PRINCIPAL -->
-<main class="container-lg py-5" style="margin-top: 100px;">
+<main class="container-lg py-5" style="margin-top: 100px;" th:attr="data-cliente-id=${clienteId}">
+
+    <!-- Modal del chat -->
+    <div class="modal fade" id="chatModal" tabindex="-1" aria-labelledby="chatModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content rounded-4">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="chatModalLabel">Chat con el repartidor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="chat-mensajes" style="max-height: 300px; overflow-y: auto;"></div>
+                    <div class="input-group mt-3">
+                        <input id="mensaje-input" type="text" class="form-control" placeholder="Escribí un mensaje...">
+                        <button class="btn btn-success" onclick="enviarMensaje()">Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <h2 class="text-center fw-bold mb-5" style="color: #38BD48;">Mis Pedidos Activos</h2>
 
     <div th:if="${#lists.isEmpty(pedidosActivos)}" class="alert alert-info text-center shadow-sm rounded-4 p-4">
@@ -97,42 +118,51 @@
 
     <div class="row g-4" th:if="${!#lists.isEmpty(pedidosActivos)}">
         <div class="col-12 col-md-6 col-lg-4" th:each="pedido : ${pedidosActivos}">
-            <a th:href="@{'/mis-pedidos/' + ${pedido.id} + '/detalle'}" class="text-decoration-none text-dark">
-                <div class="card shadow-lg rounded-4 h-100 p-3">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h5 class="fw-bold mb-0">Pedido #<span th:text="${pedido.id}">123</span></h5>
-                    <span class="badge text-uppercase fw-semibold px-3 py-2"
-                          th:text="${pedido.estadoPedido != null ? pedido.estadoPedido.name().replace('_',' ') : 'SIN ESTADO'}"
-                          th:classappend="${pedido.estadoPedido == null ? ' bg-secondary'
-                                    : (pedido.estadoPedido.name() == 'EN_PREPARACION' ? ' bg-warning text-dark'
-                                    : (pedido.estadoPedido.name() == 'EN_CAMINO' ? ' bg-primary'
-                                    : (pedido.estadoPedido.name() == 'EN_PROCESO' ? ' bg-info text-dark'
-                                    : ' bg-success')))}">
-                </span>
-                </div>
-<!--                <p class="mb-1 text-muted"><strong>Fecha:</strong> <span th:text="${pedido.fecha}">2025-06-15</span></p>-->
-<!--                <p class="mb-2 text-muted"><strong>Total:</strong> $<span th:text="${pedido.precio}">999</span></p>-->
+            <div class="card shadow-lg rounded-4 h-100 p-3 position-relative">
 
-                <ul class="list-group list-group-flush mt-3 border-top pt-2">
-                    <li class="list-group-item d-flex justify-content-between px-0"
-                        th:each="pp : ${pedido.pedidoPlatos}">
-                        <span class="text-dark" th:text="${pp.plato.nombre}">Plato</span>
-                        <span class="text-muted" th:text="'$ ' + ${pp.plato.precio}">Precio</span>
-                    </li>
-                </ul>
+                <a th:href="@{'/mis-pedidos/' + ${pedido.id} + '/detalle'}" class="text-decoration-none text-dark d-block">
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="fw-bold mb-0">Pedido #<span th:text="${pedido.id}">123</span></h5>
+                            <span class="badge text-uppercase fw-semibold px-3 py-2"
+                                  th:text="${pedido.estadoPedido != null ? pedido.estadoPedido.name().replace('_',' ') : 'SIN ESTADO'}"
+                                  th:classappend="${pedido.estadoPedido == null ? ' bg-secondary'
+                            : (pedido.estadoPedido.name() == 'EN_PREPARACION' ? ' bg-warning text-dark'
+                            : (pedido.estadoPedido.name() == 'EN_CAMINO' ? ' bg-primary'
+                            : (pedido.estadoPedido.name() == 'EN_PROCESO' ? ' bg-info text-dark'
+                            : ' bg-success')))}">
+                </span>
+                        </div>
+
+                        <ul class="list-group list-group-flush mt-3 border-top pt-2">
+                            <li class="list-group-item d-flex justify-content-between px-0"
+                                th:each="pp : ${pedido.pedidoPlatos}">
+                                <span class="text-dark" th:text="${pp.plato.nombre}">Plato</span>
+                                <span class="text-muted" th:text="'$ ' + ${pp.plato.precio}">Precio</span>
+                            </li>
+                        </ul>
+                    </div>
+                </a>
+
+                <button class="btn btn-outline-success mt-3 w-100"
+                        th:attr="data-pedido-id=${pedido.id}, data-repartidor-id=${pedido.idRepartidor}"
+                        onclick="abrirChat(event, this)">
+                    Chatear con el repartidor
+                </button>
+
             </div>
-            </a>
         </div>
     </div>
+
 
     <h2 class="text-center fw-bold my-5" style="color: #38BD48;">Pedidos Entregados</h2>
 
     <div th:if="${#lists.isEmpty(pedidosEntregados)}" class="alert alert-info text-center shadow-sm rounded-4 p-4">
         No tenés pedidos entregados.
     </div>
-
     <div class="row g-4" th:if="${!#lists.isEmpty(pedidosEntregados)}">
         <div class="col-12 col-md-6 col-lg-4" th:each="pedido : ${pedidosEntregados}">
+            <a th:href="@{'/mis-pedidos/' + ${pedido.id} + '/detalle'}" class="text-decoration-none text-dark d-block">
             <div class="card shadow-lg rounded-4 h-100 p-3">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <h5 class="fw-bold mb-0">Pedido #<span th:text="${pedido.id}">123</span></h5>
@@ -175,13 +205,86 @@
                     </li>
                 </ul>
             </div>
+            </a>
         </div>
     </div>
-
 </main>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+<script th:inline="javascript">
+    let remitenteId = null;
+    let destinatarioId = null;
+    let pedidoId = null;
+</script>
+<script>
+    let stompClient = null;
+
+    function conectarWebSocket() {
+        const socket = new SockJS('/chat-websocket');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function () {
+            stompClient.subscribe('/topic/chat/pedido/' + pedidoId, function (contenido) {
+                const msg = JSON.parse(contenido.body);
+                const div = document.createElement('div');
+                const texto = msg.contenido || '[mensaje vacío]';
+
+                if (msg.remitenteId == remitenteId) {
+                    div.textContent = 'Vos: ' + texto;
+                } else {
+                    div.textContent = 'Repartidor: ' + texto;
+                }
+
+                document.getElementById('chat-mensajes').appendChild(div);
+                scrollChat();
+            });
+        });
+    }
+
+    function abrirChat(event = null, btn = null) {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
+
+        if (btn) {
+            pedidoId = btn.getAttribute('data-pedido-id');
+            destinatarioId = btn.getAttribute('data-repartidor-id');
+            remitenteId = document.querySelector('main').getAttribute('data-cliente-id'); // cliente
+        }
+
+        // Limpiar y abrir modal
+        document.getElementById('chat-mensajes').innerHTML = '';
+        document.getElementById('mensaje-input').value = '';
+        new bootstrap.Modal(document.getElementById('chatModal')).show();
+
+        // Conectar y suscribirse solo cuando se abre el chat
+        conectarWebSocket();
+    }
+
+    function enviarMensaje() {
+        const input = document.getElementById('mensaje-input');
+        const contenido = input.value.trim();
+
+        if (contenido && stompClient && stompClient.connected) {
+            stompClient.send('/app/chat', {}, JSON.stringify({
+                mensaje: contenido,
+                remitenteId,
+                destinatarioId,
+                pedidoId
+            }));
+            input.value = '';
+        }
+    }
+
+    function scrollChat() {
+        const chatBox = document.getElementById('chat-mensajes');
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+</script>
+
 
 <script>
-
     document.querySelectorAll('.form-calificacion').forEach(form => {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -214,9 +317,6 @@
                 })
         });
     });
-
-
-
 </script>
 <script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.bundle.min.js}"></script>
 </body>

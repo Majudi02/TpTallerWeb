@@ -22,6 +22,7 @@ public class PedidoDto {
     private boolean platosFinalizados;
     private boolean pagado;
     private Long idRestaurante;
+    private Long idRepartidor;
     public static final SimpleDateFormat FORMATO_FECHA = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
     public PedidoDto() {
@@ -189,5 +190,13 @@ public class PedidoDto {
 
     public void setIdRestaurante(Long idRestaurante) {
         this.idRestaurante = idRestaurante;
+    }
+
+    public Long getIdRepartidor() {
+        return idRepartidor;
+    }
+
+    public void setIdRepartidor(Long idRepartidor) {
+        this.idRepartidor = idRepartidor;
     }
 }

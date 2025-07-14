@@ -50,8 +50,8 @@
           <div th:if="${pago != null}">
             <p><strong>Correo del Pagador:</strong> <span th:text="${pago.correoPagador}">--</span></p>
             <p><strong>Estado del Pago:</strong> <span th:text="${pago.estado}">--</span></p>
-            <p><strong>Fecha de Aprobación:</strong> <span th:text="${pago.fechaAprobacion}">--</span></p>
-            <p><strong>Fecha de Creación:</strong> <span th:text="${pago.fechaCreacion}">--</span></p>
+            <p><strong>Fecha de Aprobación:</strong> <span th:text="${fechaAprobacionFormateada}">--</span></p>
+            <p><strong>Fecha de Creación:</strong> <span th:text="${fechaCreacionFormateada}">--</span></p>
             <p><strong>Método de Pago:</strong> <span th:text="${pago.metodoPago}">--</span></p>
             <p><strong>Tipo de Pago:</strong> <span th:text="${pago.tipoPago}">--</span></p>
             <p><strong>Moneda:</strong> <span th:text="${pago.moneda}">--</span></p>

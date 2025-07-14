@@ -29,11 +29,118 @@
     </ul>
   </div>
 
+  <!-- Modal chat repartidor - cliente -->
+  <div class="modal fade" id="chatModal" tabindex="-1" aria-labelledby="chatModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content rounded-4">
+        <div class="modal-header">
+          <h5 class="modal-title" id="chatModalLabel">Chat con el Cliente</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div id="chat-mensajes" style="max-height: 300px; overflow-y: auto;"></div>
+          <div class="input-group mt-3">
+            <input id="mensaje-input" type="text" class="form-control" placeholder="Escribí un mensaje...">
+            <button class="btn btn-success" onclick="enviarMensaje()">Enviar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón para abrir chat -->
+  <button class="btn btn-outline-primary mt-3" onclick="abrirChat()">Chatear con Cliente</button>
+
+
   <form th:action="@{'/pedido/entregar/' + ${pedido.pedidoId}}" method="post">
     <button type="submit" class="btn btn-success">Confirmar Entrega</button>
     <a href="/pedidos-retirar" class="btn btn-secondary">Volver</a>
   </form>
+
+  <p>Remitente: <span th:text="${repartidorId}">?</span></p>
+  <p>Destinatario: <span th:text="${clienteId}">?</span></p>
+  <p>Pedido ID: <span th:text="${pedidoId}">?</span></p>
 </main>
 <script th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+<!-- Scripts WebSocket -->
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
+<script th:inline="javascript">
+  let remitenteId = [[${repartidorId}]]; // en el HTML del repartidor
+  let destinatarioId = [[${clienteId}]];
+  let pedidoId = [[${pedidoId}]];
+</script>
+<script>
+  let stompClient = null;
+
+  function conectarWebSocket() {
+    if (stompClient !== null) {
+      stompClient.disconnect();
+      stompClient = null;
+    }
+
+    const socket = new SockJS('/chat-websocket');
+    stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function () {
+      stompClient.subscribe('/topic/chat/pedido/' + pedidoId, function (contenido) {
+        const msg = JSON.parse(contenido.body);
+        const div = document.createElement('div');
+        const texto = msg.contenido || '[mensaje vacío]';
+
+        if (msg.remitenteId == remitenteId) {
+          div.textContent = 'Vos: ' + texto;
+        } else {
+          div.textContent = 'Cliente: ' + texto;
+        }
+
+        document.getElementById('chat-mensajes').appendChild(div);
+        scrollChat();
+      });
+    });
+  }
+
+  function abrirChat(event = null, btn = null) {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+
+      if (btn) {
+        pedidoId = btn.getAttribute('data-pedido-id');
+        destinatarioId = btn.getAttribute('data-repartidor-id');
+      }
+    }
+
+    document.getElementById('chat-mensajes').innerHTML = '';
+    document.getElementById('mensaje-input').value = '';
+
+    conectarWebSocket();  // Reconectar para suscribirse al pedido correcto
+
+    new bootstrap.Modal(document.getElementById('chatModal')).show();
+  }
+
+  function enviarMensaje() {
+    const input = document.getElementById('mensaje-input');
+    const contenido = input.value.trim();
+
+    if (contenido && stompClient && stompClient.connected) {
+      stompClient.send('/app/chat', {}, JSON.stringify({
+        mensaje: contenido,
+        remitenteId,
+        destinatarioId,
+        pedidoId
+      }));
+      input.value = '';
+    }
+  }
+
+  function scrollChat() {
+    const chatBox = document.getElementById('chat-mensajes');
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+</script>
+
 </body>
 </html>
