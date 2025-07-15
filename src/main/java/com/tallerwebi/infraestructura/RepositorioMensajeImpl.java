@@ -1,7 +1,7 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.RepositorioMensaje;
-import com.tallerwebi.dominio.entidades.chat.Mensaje;
+import com.tallerwebi.dominio.entidades.Mensaje;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -21,7 +21,7 @@ public class RepositorioMensajeImpl implements RepositorioMensaje {
 
 
     @Override
-    public List<Mensaje> traerMensajePorPedido(Long pedidoId) {
+    public List<Mensaje> traerMensajesPorPedido(Long pedidoId) {
         String hql = "FROM Mensaje m WHERE m.pedidoId = :pedidoId ORDER BY m.fecha ASC";
         return sessionFactory.getCurrentSession()
                             .createQuery(hql,Mensaje.class)

@@ -75,6 +75,9 @@ public class Pedido {
             }
         }
         dto.setPedidoPlatos(platosDto);
+        if (this.repartidor != null) {
+            dto.setIdRepartidor(this.repartidor.getId());
+        }
 
 
         return dto;

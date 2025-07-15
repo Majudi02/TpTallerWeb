@@ -98,7 +98,6 @@ public class PedidoDto {
             pedidoPlato.setPedido(pedido);
             return pedidoPlato;
         }).collect(Collectors.toList());
-
         pedido.setPedidoPlatos(pedidoPlatosEntidad);
 
         return pedido;

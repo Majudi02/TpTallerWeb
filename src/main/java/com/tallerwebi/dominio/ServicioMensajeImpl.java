@@ -1,10 +1,12 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.dominio.entidades.chat.Mensaje;
+import com.tallerwebi.dominio.entidades.Mensaje;
+import com.tallerwebi.presentacion.MensajeDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ServicioMensajeImpl implements ServicioMensaje {
@@ -22,7 +24,9 @@ public class ServicioMensajeImpl implements ServicioMensaje {
     }
 
     @Override
-    public List<Mensaje> traerMensajePorPedido(Long pedidoId) {
-       return repositorioMensaje.traerMensajePorPedido(pedidoId);
+    public List<MensajeDto> traerMensajesPorPedido(Long pedidoId) {
+        return repositorioMensaje.traerMensajesPorPedido(pedidoId).stream()
+                .map(MensajeDto::new)
+                .collect(Collectors.toList());
     }
 }

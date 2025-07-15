@@ -1,4 +1,4 @@
-package com.tallerwebi.dominio.entidades.chat;
+package com.tallerwebi.dominio;
 
 
 public class MensajeRecibido {

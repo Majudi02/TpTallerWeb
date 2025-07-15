@@ -1,25 +1,29 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ServicioMensaje;
-import com.tallerwebi.dominio.entidades.chat.Mensaje;
-import com.tallerwebi.dominio.entidades.chat.MensajeEnviado;
-import com.tallerwebi.dominio.entidades.chat.MensajeRecibido;
+import com.tallerwebi.dominio.entidades.Mensaje;
+import com.tallerwebi.dominio.MensajeEnviado;
+import com.tallerwebi.dominio.MensajeRecibido;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Controller
-public class ControladorWebSocket {
+public class ControladorChat {
 
     private ServicioMensaje servicioMensaje;
     private final SimpMessagingTemplate template;
 
 
     @Autowired
-    public ControladorWebSocket(ServicioMensaje servicioMensaje, SimpMessagingTemplate template) {
+    public ControladorChat(ServicioMensaje servicioMensaje, SimpMessagingTemplate template) {
         this.servicioMensaje = servicioMensaje;
         this.template = template;
     }
@@ -44,5 +48,9 @@ public class ControladorWebSocket {
 
     }
 
-
+    @GetMapping("/chat/mensajes/{pedidoId}")
+    @ResponseBody
+    public List<MensajeDto> obtenerMensajes(@PathVariable Long pedidoId) {
+        return servicioMensaje.traerMensajesPorPedido(pedidoId);
+    }
 }

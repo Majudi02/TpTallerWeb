@@ -1,22 +1,11 @@
-package com.tallerwebi.dominio.entidades.chat;
+package com.tallerwebi.dominio;
 
 
 public class MensajeEnviado {
-  //  private String mensaje;
     private String contenido;
     private Long remitenteId;
     private Long pedidoId;
-/*
 
-    public String getMensaje() {
-        return mensaje;
-    }
-
-    public void setMensaje(String mensaje) {
-        this.mensaje = mensaje;
-    }
-
- */
 
     public String getContenido() {
         return contenido;

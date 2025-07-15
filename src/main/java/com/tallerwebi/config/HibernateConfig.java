@@ -15,11 +15,11 @@ import java.util.Properties;
 public class HibernateConfig {
 
 
-//LOCAL
+    //LOCAL
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-         dataSource.setDriverClassName("org.hsqldb.jdbcDriver");
+        dataSource.setDriverClassName("org.hsqldb.jdbcDriver");
         dataSource.setUrl("jdbc:hsqldb:mem:db_");
         dataSource.setUrl("jdbc:mysql://localhost:3306/tallerwebi");
         dataSource.setUsername("user");
