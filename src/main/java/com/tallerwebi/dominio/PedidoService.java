@@ -26,4 +26,6 @@ public interface PedidoService {
     PedidoDto obtenerPedidoPorId(Integer pedidoId, Long idUsuario);
     PedidoDto buscarPedidoPendientePorUsuario(Long idUsuario);
     List<PlatoDto> traerPlatosEnPromocion();
+    void asignarRepartidorAPedido(Integer pedidoId, Long repartidorId);
+
 }

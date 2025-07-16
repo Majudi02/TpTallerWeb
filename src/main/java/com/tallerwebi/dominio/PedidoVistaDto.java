@@ -7,6 +7,7 @@ public class PedidoVistaDto {
     private String direccionRestaurante;
     private String direccionCliente;
     private List<PlatoCantidadDto> platos;
+    private Long clienteId;
 
     private Integer pedidoId;
 
@@ -24,6 +25,14 @@ public class PedidoVistaDto {
 
     public void setDireccionRestaurante(String direccionRestaurante) {
         this.direccionRestaurante = direccionRestaurante;
+    }
+
+    public Long getClienteId() {
+        return clienteId;
+    }
+
+    public void setClienteId(Long clienteId) {
+        this.clienteId = clienteId;
     }
 
     public String getDireccionCliente() {

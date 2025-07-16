@@ -13,6 +13,7 @@
     import org.springframework.web.servlet.view.RedirectView;
 
     import javax.servlet.http.HttpServletRequest;
+    import java.time.format.DateTimeFormatter;
     import java.util.ArrayList;
     import java.util.HashMap;
     import java.util.List;
@@ -203,10 +204,12 @@
 
                 model.addAttribute("pedidosActivos", pedidosActivos);
                 model.addAttribute("pedidosEntregados", pedidosEntregados);
+                model.addAttribute("clienteId",user.getId());
             } else {
                 model.addAttribute("pedidosActivos", new ArrayList<PedidoDto>());
                 model.addAttribute("pedidosEntregados", new ArrayList<PedidoDto>());
             }
+
 
             return "mis-pedidos";
         }
@@ -236,6 +239,7 @@
             model.addAttribute("plato", plato);
             model.addAttribute("usuario", usuario);
 
+
             return new ModelAndView("detalle-plato", model);
         }
 
@@ -245,7 +249,12 @@
 
             PedidoDto pedido = pedidoService.obtenerPedidoPorId(id, usuario.getId());
             model.addAttribute("pedido", pedido);
+
             Pago pago = pagoService.obtenerPagoPorIdPedido(id);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            model.addAttribute("fechaAprobacionFormateada", pago.getFechaAprobacion().format(formatter));
+            model.addAttribute("fechaCreacionFormateada", pago.getFechaCreacion().format(formatter));
+
             model.addAttribute("pago", pago);
 
             return "detalle-pedido";
