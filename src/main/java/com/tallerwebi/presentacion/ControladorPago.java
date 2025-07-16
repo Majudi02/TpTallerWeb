@@ -11,21 +11,23 @@
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.http.ResponseEntity;
     import org.springframework.stereotype.Controller;
+    import org.springframework.ui.ModelMap;
     import org.springframework.web.bind.annotation.*;
+    import org.springframework.web.servlet.ModelAndView;
 
 
     @Controller
     public class ControladorPago {
 
+        private final ServicioPago servicioPago;
         private PedidoService pedidoService;
-        private ServicioPago pagoServicio;
         private ServicioUsuario servicioUsuario;
 
         @Autowired
-        public ControladorPago(PedidoService pedidoService, ServicioPago pagoServicio, ServicioUsuario servicioUsuario) {
+        public ControladorPago(PedidoService pedidoService, ServicioPago servicioPago, ServicioUsuario servicioUsuario) {
             this.servicioUsuario = servicioUsuario;
             this.pedidoService = pedidoService;
-            this.pagoServicio = pagoServicio;
+            this.servicioPago = servicioPago;
         }
 
         @GetMapping("/pago-exitoso")
@@ -71,7 +73,7 @@
                         nuevoPago.setPedido(pedidoEntidad);
                     }
                 }
-                pagoServicio.guardarPago(nuevoPago);
+                servicioPago.guardarPago(nuevoPago);
             }
 
             return ResponseEntity.ok().build();
@@ -89,6 +91,20 @@
             nuevoPago.setFechaAprobacion(payment.getDateApproved() != null ? payment.getDateApproved().toLocalDateTime() : null);
             nuevoPago.setCorreoPagador(payment.getPayer().getEmail());
             return nuevoPago;
+        }
+
+        @PostMapping("/guardar-pago")
+        public ModelAndView guardarPago(@ModelAttribute("pago") Pago pago) {
+            servicioPago.guardarPago(pago);
+            return new ModelAndView("redirect:/pedido/exito");
+        }
+
+        @GetMapping("/pedido/exito")
+        public ModelAndView pagoExitoso(@RequestParam("idPedido") Integer idPedido) {
+            Pago pago = servicioPago.obtenerPagoPorIdPedido(idPedido);
+            ModelMap modelo = new ModelMap();
+            modelo.put("pago", pago);
+            return new ModelAndView("pago-exitoso", modelo);
         }
     }
 
