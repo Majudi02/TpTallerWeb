@@ -40,6 +40,9 @@ public class Pedido {
     @Enumerated(EnumType.STRING)
     private EstadoPedido estadoPedido;
     private boolean pagado;
+    @ManyToOne
+    @JoinColumn(name = "repartidor_id")
+    private UsuarioNutriya repartidor;
 
 
     public PedidoDto obtenerDto() {
@@ -72,6 +75,11 @@ public class Pedido {
             }
         }
         dto.setPedidoPlatos(platosDto);
+        if (this.repartidor != null) {
+            dto.setIdRepartidor(this.repartidor.getId());
+        }
+
+
         return dto;
     }
 
@@ -160,5 +168,13 @@ public class Pedido {
 
     public void setRestaurante(Restaurante restaurante) {
         this.restaurante = restaurante;
+    }
+
+    public UsuarioNutriya getRepartidor() {
+        return repartidor;
+    }
+
+    public void setRepartidor(UsuarioNutriya repartidor) {
+        this.repartidor = repartidor;
     }
 }

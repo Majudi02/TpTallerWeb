@@ -22,7 +22,7 @@ public class ServicioPagoImplTest {
     private SessionFactory sessionFactoryMock;
     private Session sessionMock;
     private RepositorioPago repositorioMock;
-    ServicioPago servicio;
+    private ServicioPago servicio;
 
     @BeforeEach
     public void setUp(){

@@ -30,4 +30,5 @@ public interface ServicioPedidoRestaurante {
     PedidosRestauranteDto obtenerPedidosClasificados(Long idRestaurante);
 
     List<PedidoDto> traerPedidosEntreFechas(LocalDate desde, LocalDate hasta);
+
 }

@@ -22,6 +22,7 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
     private final RepositorioPedidoRestaurante repositorioPedidoRestaurante;
     private final PedidoService pedidoService;
     private final ServicioPedidoPlato servicioPedidoPlato;
+    private PedidoService servicioPedido;
 
     @Autowired
     public ServicioPedidoRestauranteImpl(RepositorioPedidoRestaurante repositorioPedidoRestaurante, ServicioPedidoPlato servicioPedidoPlato, PedidoService pedidoService) {
@@ -177,6 +178,7 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
 
         if (pedido.getUsuario() instanceof Cliente) {
             Cliente cliente = (Cliente) pedido.getUsuario();
+            dto.setClienteId(cliente.getId());
             if (cliente.getDirecciones() != null && !cliente.getDirecciones().isEmpty()) {
                 Direccion direccion = cliente.getDirecciones().get(0);
                 dto.setDireccionCliente(direccion.getCalle() + " " + direccion.getNumero() + ", Localidad: " + direccion.getLocalidad());
@@ -290,4 +292,5 @@ public class ServicioPedidoRestauranteImpl implements ServicioPedidoRestaurante 
                 })
                 .collect(Collectors.toList());
     }
+
 }
