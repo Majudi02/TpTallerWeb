@@ -48,13 +48,18 @@
     <div class="container-fluid">
         <div class="d-flex w-100 justify-content-between align-items-center">
             <a class="navbar-brand" th:href="@{nutriya}">Nutri<span style="color: #38BD48;">Ya</span></a>
-            <form class="d-none d-lg-flex mx-auto" role="search" style="width: 40%;">
-                <div class="input-group">
-                    <input class="form-control" type="search" placeholder="Buscá comidas, restaurantes..."
-                           aria-label="Buscar"/>
+            <form th:action="@{/buscar}" method="get" class="d-none d-lg-flex mx-auto" role="search" style="width: 40%;"
+                  accept-charset="UTF-8">
+                <div class="input-group position-relative">
+                    <input class="form-control" type="search" name="busqueda" id="busqueda"
+                           placeholder="Buscá comidas, restaurantes..."
+                           aria-label="Buscar" autocomplete="off"/>
                     <button class="btn buscar" type="submit">
                         <i class="bi bi-search"></i>
                     </button>
+                    <div id="sugerencias"
+                         class="list-group position-absolute w-100"
+                         style="top: 100%; z-index: 1000;"></div>
                 </div>
             </form>
             <div class="botones-nav">

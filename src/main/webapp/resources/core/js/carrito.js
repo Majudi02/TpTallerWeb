@@ -1,11 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
     const forms = document.querySelectorAll(".agregar-plato-form");
     actualizarCarrito();
+
     forms.forEach(form => {
         form.addEventListener("submit", function (e) {
             e.preventDefault();
 
             const platoId = form.querySelector('input[name="platoId"]').value;
+            const nombrePlato = form.getAttribute('data-plato-nombre') || 'Plato';
 
             fetch("/pedido/agregar", {
                 method: "POST",
@@ -15,10 +17,46 @@ document.addEventListener("DOMContentLoaded", function () {
                 body: `platoId=${platoId}`
             }).then(response => {
                 actualizarCarrito();
-            })
+                mostrarPopup(`Se agregó "${nombrePlato}" al carrito.`);
+            });
         });
     });
 });
+
+function mostrarPopup(mensaje) {
+    let contenedor = document.getElementById('popup-container');
+    if (!contenedor) {
+        contenedor = document.createElement('div');
+        contenedor.id = 'popup-container';
+        contenedor.style.position = 'fixed';
+        contenedor.style.top = '20px';
+        contenedor.style.right = '20px';
+        contenedor.style.zIndex = '9999';
+        document.body.appendChild(contenedor);
+    }
+
+    const popup = document.createElement('div');
+    popup.textContent = mensaje;
+    popup.style.backgroundColor = '#38BD48';
+    popup.style.color = 'white';
+    popup.style.padding = '10px 20px';
+    popup.style.marginTop = '10px';
+    popup.style.borderRadius = '5px';
+    popup.style.boxShadow = '0 2px 6px rgba(0,0,0,0.3)';
+    popup.style.opacity = '1';
+    popup.style.transition = 'opacity 0.5s ease';
+
+    contenedor.appendChild(popup);
+
+    setTimeout(() => {
+        popup.style.opacity = '0';
+        setTimeout(() => {
+            if (contenedor.contains(popup)) {
+                contenedor.removeChild(popup);
+            }
+        }, 500);
+    }, 3000);
+}
 
 function actualizarCarrito() {
     fetch("/pedido/carrito")

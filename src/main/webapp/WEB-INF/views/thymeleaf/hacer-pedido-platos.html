@@ -55,16 +55,27 @@
         <div class="container-fluid">
             <div class="d-flex w-100 justify-content-between align-items-center">
                 <a class="navbar-brand" th:href="@{/nutriya}">Nutri<span style="color: #38BD48;">Ya</span></a>
-                <form class="d-none d-lg-flex mx-auto" role="search" style="width: 40%;">
-                    <div class="input-group">
-                        <input class="form-control" type="search" placeholder="Buscá comidas, restaurantes..."
-                               aria-label="Buscar"/>
+                <form th:action="@{/buscar}" method="get" class="d-none d-lg-flex mx-auto" role="search" style="width: 40%;"
+                      accept-charset="UTF-8">
+                    <div class="input-group position-relative">
+                        <input class="form-control" type="search" name="busqueda" id="busqueda"
+                               placeholder="Buscá comidas, restaurantes..."
+                               aria-label="Buscar" autocomplete="off"/>
                         <button class="btn buscar" type="submit">
                             <i class="bi bi-search"></i>
                         </button>
+                        <div id="sugerencias"
+                             class="list-group position-absolute w-100"
+                             style="top: 100%; z-index: 1000;"></div>
                     </div>
                 </form>
                 <div class="botones-nav">
+                    <button th:if="${tipoUsuario == 'cliente'}" class="btn btn-outline-secondary mx-1" type="button"
+                            data-bs-toggle="offcanvas"
+                            data-bs-target="#carritoOffcanvas" aria-controls="carritoOffcanvas">
+                        <i class="bi bi-cart3"></i>
+                    </button>
+
                     <a class="btn btn-outline-secondary mx-1" th:href="@{/nutriya-login}">
                         <i class="bi bi-person"></i>
                     </a>
@@ -72,11 +83,6 @@
                     <button class="btn btn-outline-secondary" type="button" data-bs-toggle="offcanvas"
                             data-bs-target="#menuLateral" aria-controls="menuLateral">
                         <i class="bi bi-list"></i>
-                    </button>
-
-                    <button class="btn btn-outline-secondary mx-1" type="button" data-bs-toggle="offcanvas"
-                            data-bs-target="#carritoOffcanvas" aria-controls="carritoOffcanvas">
-                        <i class="bi bi-cart3"></i>
                     </button>
                 </div>
             </div>
@@ -160,7 +166,8 @@
                                     Ver Detalle
                                 </a>
                                 <form th:action="@{/pedido/agregar}" method="post" class="d-inline agregar-plato-form"
-                                      th:attr="data-plato-id=${plato.getId()}">
+                                      th:attr="data-plato-id=${plato.getId()}"
+                                      th:attrappend="data-plato-nombre=${plato.getNombre()}">
                                     <input type="hidden" name="platoId" th:value="${plato.getId()}"/>
                                     <button type="submit" class="btn btn-success">Agregar</button>
                                 </form>
