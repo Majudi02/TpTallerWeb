@@ -73,9 +73,6 @@
                 <a class="nav-link" th:href="@{/mis-pedidos}">Mis pedidos</a>
             </li>
             <li class="nav-item" th:if="${tipoUsuario == null}">
-                <a class="nav-link" th:href="@{/medios-pago}">Medios de Pago</a>
-            </li>
-            <li class="nav-item" th:if="${tipoUsuario == null}">
                 <a class="nav-link " th:href="@{/nutriya-login}">Mi Perfil</a>
             </li>
 
@@ -91,9 +88,6 @@
             </li>
             <li class="nav-item" th:if="${tipoUsuario == 'cliente'}">
                 <a class="nav-link" th:href="@{/mis-pedidos}">Mis pedidos</a>
-            </li>
-            <li class="nav-item" th:if="${tipoUsuario == 'cliente'}">
-                <a class="nav-link" th:href="@{/medios-pago}">Medios de Pago</a>
             </li>
             <li class="nav-item" th:if="${tipoUsuario == 'cliente'}">
                 <a class="nav-link" th:href="@{/nutriya-login}">Mi Perfil</a>
@@ -180,14 +174,6 @@
                 </div>
             </div>
 
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="p-5 contenedor-info h-100 d-flex flex-column justify-content-center">
-                    <a th:href="@{/medios-pago}" class="text-decoration-none text-dark">
-                        <h2 class="fw-semibold">Medios de pago</h2>
-                        <h4 class="mt-2">¡Conocé todas las opciones de ahorro y promociones disponibles!</h4>
-                    </a>
-                </div>
-            </div>
         </section>
     </section>
 
