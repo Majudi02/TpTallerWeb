@@ -45,15 +45,26 @@
     <div class="container-fluid">
         <div class="d-flex w-100 justify-content-between align-items-center">
             <a class="navbar-brand" th:href="@{/nutriya}">Nutri<span style="color: #38BD48;">Ya</span></a>
-            <form class="d-none d-lg-flex mx-auto" role="search" style="width: 40%;">
-                <div class="input-group">
-                    <input class="form-control" type="search" placeholder="Buscá comidas, restaurantes..." aria-label="Buscar"/>
+            <form th:action="@{/buscar}" method="get" class="d-none d-lg-flex mx-auto" role="search" style="width: 40%;"
+                  accept-charset="UTF-8">
+                <div class="input-group position-relative">
+                    <input class="form-control" type="search" name="busqueda" id="busqueda"
+                           placeholder="Buscá comidas, restaurantes..."
+                           aria-label="Buscar" autocomplete="off"/>
                     <button class="btn buscar" type="submit">
                         <i class="bi bi-search"></i>
                     </button>
+                    <div id="sugerencias"
+                         class="list-group position-absolute w-100"
+                         style="top: 100%; z-index: 1000;"></div>
                 </div>
             </form>
             <div class="botones-nav">
+                <button th:if="${tipoUsuario == 'cliente'}" class="btn btn-outline-secondary mx-1" type="button"
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#carritoOffcanvas" aria-controls="carritoOffcanvas">
+                    <i class="bi bi-cart3"></i>
+                </button>
                 <a class="btn btn-outline-secondary mx-1" th:href="@{/nutriya-login}">
                     <i class="bi bi-person"></i>
                 </a>
@@ -210,10 +221,40 @@
             </a>
         </div>
     </div>
+    <div th:if="${tipoUsuario == 'cliente'}"
+         class="offcanvas offcanvas-end" tabindex="-1" id="carritoOffcanvas" aria-labelledby="carritoLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="carritoLabel">Tu Pedido</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column justify-content-between" style="height: 100%;">
+            <ul id="lista-carrito" class="list-group mb-3 flex-grow-1 overflow-auto">
+
+            </ul>
+            <div id="resumen-nutricional" class="mb-2" style="font-size: 0.9rem; color: #555;">
+                <strong>Valores nutricionales</strong>
+                <ul style="list-style-type: none; padding-left: 0; margin: 0;">
+                    <li>Calorías: 0</li>
+                    <li>Proteínas: 0 g</li>
+                    <li>Carbohidratos: 0 g</li>
+                    <li>Grasas: 0 g</li>
+                </ul>
+            </div>
+            <div class="d-flex justify-content-between align-items-center border-top pt-3">
+                <strong>Total:</strong>
+                <span id="precioTotal" class="fs-5">$0.00</span>
+            </div>
+            <form action="/pedido/confirmar" method="post" class="mt-3">
+                <button type="submit" class="btn btn-success w-100 fw-bold">Confirmar Pedido</button>
+            </form>
+        </div>
+    </div>
 </main>
+<script src="/resources/core/js/carrito.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 <script th:src="@{/js/chat-del-cliente.js}" type="text/javascript"></script>
 <script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/buscador.js}"></script>
 </body>
 </html>

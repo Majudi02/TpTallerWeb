@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio.entidades;
 
+import com.tallerwebi.dominio.RestauranteDto;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -42,6 +44,19 @@ public class Restaurante {
 
     }
 
+    public RestauranteDto obtenerDto() {
+        return new RestauranteDto(
+                this.id,
+                this.nombre,
+                this.descripcion,
+                this.rutaImagen,
+                this.calle,
+                this.numero,
+                this.localidad,
+                this.zona,
+                this.tiposComida
+        );
+    }
     public String getNombre() {
         return nombre;
     }
