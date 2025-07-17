@@ -143,7 +143,7 @@
                             : ' bg-success')))}">
                 </span>
                         </div>
-
+                        <p th:if="${pedido.estadoPedido.name() == 'EN_CAMINO'}">  Tiempo de entrega estimado: <span class="badge bg-primary"> 15 minutos </span></p>
                         <ul class="list-group list-group-flush mt-3 border-top pt-2">
                             <li class="list-group-item d-flex justify-content-between px-0"
                                 th:each="pp : ${pedido.pedidoPlatos}">

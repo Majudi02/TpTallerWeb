@@ -137,9 +137,13 @@
                                 <p class="card-text text-muted" th:text="${plato.descripcion}">
                                     Descripción del plato
                                 </p>
-                                <h4 class="text-success mt-3">
-                                    $<span th:text="${plato.precio}">0.00</span>
-                                </h4>
+                                <div class="mb-2">
+                                <span th:if="${plato.precioConDescuento != null}"
+                                      class="text-muted text-decoration-line-through me-2">$[[${plato.precio}]]</span>
+                                    <strong class="card-text"
+                                            th:text="${plato.precioConDescuento != null} ? '$' + ${plato.precioConDescuento} : '$' + ${plato.precio}">
+                                    </strong>
+                                </div>
 
                                 <h5 class="mt-4">Información nutricional</h5>
                                 <ul class="list-group list-group-flush">

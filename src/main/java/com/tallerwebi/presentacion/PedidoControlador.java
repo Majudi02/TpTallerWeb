@@ -3,6 +3,7 @@
     import com.mercadopago.resources.preference.Preference;
     import com.tallerwebi.dominio.*;
     import com.tallerwebi.dominio.entidades.Pago;
+    import com.tallerwebi.dominio.entidades.Plato;
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.http.ResponseEntity;
     import org.springframework.stereotype.Controller;
@@ -44,11 +45,32 @@
             UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("usuario");
             ModelMap modeloMap = new ModelMap();
 
+
             modeloMap.put("usuario", usuario);
             modeloMap.put("restaurantes", servicioRestaurante.traerRestaurantesDestacados());
             if (usuario != null) {
+                List<PlatoDto> platosMostrados = pedidoService.traerPlatosDestacadosPorLaEtiquetaDelCliente(usuario.getId());
+                List<PlatoDto> platosEnPromocion = pedidoService.traerPlatosEnPromocion();
+
+                /*
                 modeloMap.put("platos", pedidoService.traerPlatosDestacadosPorLaEtiquetaDelCliente(usuario.getId()));
                 modeloMap.put("platosEnPromocion" , pedidoService.traerPlatosEnPromocion());
+                 */
+                for (PlatoDto plato : platosMostrados) {
+                    Double promedio = servicioPedidoPlato.obtenerPromedioCalificacionPorPlato(plato.getId());
+                    promedio = Math.round(promedio * 10.0) / 10.0;
+                    plato.setCalificacionPromedio(promedio);
+                }
+
+                for (PlatoDto plato : platosEnPromocion) {
+                    Double promedio = servicioPedidoPlato.obtenerPromedioCalificacionPorPlato(plato.getId());
+                    promedio = Math.round(promedio * 10.0) / 10.0;
+                    plato.setCalificacionPromedio(promedio);
+                }
+
+                modeloMap.addAttribute("platos", platosMostrados);
+                modeloMap.addAttribute("platosEnPromocion", platosEnPromocion);
+
             }
 
             return new ModelAndView("pedido", modeloMap);
