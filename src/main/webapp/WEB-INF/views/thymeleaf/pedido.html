@@ -12,8 +12,32 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
+        .btn-agregar {
+            border: none;
+            background: none;
+            padding: 0;
+            cursor: pointer;
+        }
+        .star-rating {
+            font-size: 1.2rem;
+            color: #ccc;
+        }
+        .star-rating .fa {
+            margin-right: 2px;
+        }
+
+        .star-rating .checked {
+            color: gold;
+        }
+        .star-rating .half-checked::before {
+            content: '\f089';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: gold;
+        }
+
         .img-plato {
             width: 190px;
             height: 135px;
@@ -21,6 +45,7 @@
             border-radius: 15px;
         }
     </style>
+
 </head>
 <body>
 
@@ -142,11 +167,6 @@
                class="categoria-box d-flex justify-content-between align-items-center p-2 text-decoration-none">
                 <span class="fw-bold text-white ms-2">Platos</span>
                 <img th:src="@{/assets/restaurante-icono.png}" alt="Platos" class="img-categoria"/>
-            </a>
-            <a th:href="@{/medios-pago}"
-               class="categoria-box d-flex justify-content-between align-items-center p-2 text-decoration-none">
-                <span class="fw-bold text-white ms-2">Medios de pago</span>
-                <img th:src="@{/assets/restaurante-icono.png}" alt="Medios de pago" class="img-categoria"/>
             </a>
         </article>
     </section>

@@ -162,8 +162,13 @@
                     <div class="card-body">
                         <h5 class="card-title" th:text="${plato.nombre}"></h5>
                         <p class="card-text" th:text="${plato.descripcion}"></p>
-                        <p class="fw-bold">$<span
-                                th:text="${#numbers.formatDecimal(plato.precio, 0, 'POINT', 2, 'COMMA')}"></span></p>
+                        <div class="mb-2">
+                                <span th:if="${plato.precioConDescuento != null}"
+                                      class="text-muted text-decoration-line-through me-2">$[[${plato.precio}]]</span>
+                            <strong class="card-text"
+                                    th:text="${plato.precioConDescuento != null} ? '$' + ${plato.precioConDescuento} : '$' + ${plato.precio}">
+                            </strong>
+                        </div>
                         <div>
                             <span class="badge mx-1" th:each="etiqueta : ${plato.etiquetas}"
                                   th:text="${etiqueta.nombre}"></span>
