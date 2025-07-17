@@ -19,7 +19,9 @@
         <div class="card-body">
           <h2 class="card-title"  style="color: #38BD48;">Detalle del Pedido #<span th:text="${pedido.id}">0</span></h2>
           <p class="mb-2"><strong>Fecha:</strong> <span th:text="${pedido.fecha}">--</span></p>
-          <p class="mb-2"><strong>Total:</strong> $<span th:text="${pedido.precio}">0.00</span></p>
+          <div th:if="${pago != null}">
+            <p><strong>Precio:</strong> $<span th:text="${pago.monto}">0.00</span></p>
+          </div>
           <p class="mb-0"><strong>Estado:</strong> <span th:text="${pedido.estadoPedido}">--</span></p>
         </div>
       </div>
